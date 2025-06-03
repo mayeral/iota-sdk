@@ -1,6 +1,6 @@
 namespace iota_sdk_tests
 {
-    public class Tests
+    public class IotaClientBuilderTest
     {
         [SetUp]
         public void Setup()
