@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using iota_sdk.model;
 
 namespace iota_sdk.apis;
 
@@ -29,19 +29,3 @@ public class CoinReadApi : ICoinReadApi
 }
 
 // Balance model that matches the JSON-RPC response
-public class Balance
-{
-    [JsonProperty("coinType")]
-    public string CoinType { get; set; }
-
-    [JsonProperty("coinObjectCount")]
-    public int CoinObjectCount { get; set; }
-
-    [JsonProperty("totalBalance")]
-    public string TotalBalance { get; set; }
-
-    public override string ToString()
-    {
-        return $"CoinType: {CoinType}, Count: {CoinObjectCount}, Balance: {TotalBalance}";
-    }
-}

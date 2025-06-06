@@ -33,12 +33,12 @@ public class HttpClientMessageHandler : IJsonRpcMessageHandler
     /// <summary>
     /// The Content-Type header to use in requests.
     /// </summary>
-    private static readonly MediaTypeHeaderValue ContentTypeHeader = new MediaTypeHeaderValue(AllowedContentTypes[0]);
+    private static readonly MediaTypeHeaderValue ContentTypeHeader = new MediaTypeHeaderValue(AllowedContentTypes[1]);
 
     /// <summary>
     /// The Accept header to use in requests.
     /// </summary>
-    private static readonly MediaTypeWithQualityHeaderValue AcceptHeader = new MediaTypeWithQualityHeaderValue(AllowedContentTypes[0]);
+    private static readonly MediaTypeWithQualityHeaderValue AcceptHeader = new MediaTypeWithQualityHeaderValue(AllowedContentTypes[1]);
 
     private readonly HttpClient httpClient;
     private readonly Uri requestUri;
