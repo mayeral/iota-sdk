@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using iota_sdk;
-using iota_sdk.model;
+using iota_sdk.model.coin;
 
 Console.WriteLine("Hello, World!");
 
