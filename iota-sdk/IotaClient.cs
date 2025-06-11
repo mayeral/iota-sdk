@@ -1,4 +1,8 @@
 ﻿using iota_sdk.apis;
+using iota_sdk.apis.coin;
+using iota_sdk.apis.@event;
+using iota_sdk.apis.governance;
+using iota_sdk.apis.read;
 using StreamJsonRpc;
 
 namespace iota_sdk;
@@ -13,7 +17,12 @@ public class IotaClient : IIotaClient, IDisposable
     private readonly List<string> _rpcMethods;
     private readonly List<string> _subscriptions;
     private readonly bool _iotaSystemStateV2Support;
+
+    // APIs
     private readonly ICoinReadApi _coinReadApi;
+    private readonly IEventApi _eventApi;   
+    private readonly IGovernanceApi _governanceApi;
+    private readonly IReadApi _readApi;
 
 
     internal IotaClient(JsonRpc jsonRpc, IotaClientBuilder.ServerInfo serverInfo)
@@ -24,6 +33,9 @@ public class IotaClient : IIotaClient, IDisposable
         _subscriptions = serverInfo.Subscriptions;
         _iotaSystemStateV2Support = serverInfo.IotaSystemStateV2Support;
         _coinReadApi = new CoinReadApi(this);
+        _eventApi = new EventApi(this);
+        _governanceApi = new GovernanceApi(this);
+        _readApi = new ReadApi(this);
     }
 
     public string ApiVersion() => _version;
@@ -47,28 +59,30 @@ public class IotaClient : IIotaClient, IDisposable
 
     public IEventApi EventApi()
     {
-        throw new NotImplementedException();
+        return _eventApi;
     }
 
     public IGovernanceApi GovernanceApi()
     {
-        throw new NotImplementedException();
+        return _governanceApi;
     }
 
-    public IQuorumDriverApi QuorumDriverApi()
-    {
-        throw new NotImplementedException();
-    }
 
     public IReadApi ReadApi()
     {
-        throw new NotImplementedException();
+        return _readApi;
     }
 
-    public ITransactionBuilder TransactionBuilder()
-    {
-        throw new NotImplementedException();
-    }
+    // TODO
+    //public IQuorumDriverApi QuorumDriverApi()
+    //{
+    //    throw new NotImplementedException();
+    //}
+
+    //public ITransactionBuilder TransactionBuilder()
+    //{
+    //    throw new NotImplementedException();
+    //}
 
     public void Dispose()
     {
@@ -76,8 +90,8 @@ public class IotaClient : IIotaClient, IDisposable
     }
 
     // Internal method to make RPC calls - can be used by API implementations
-    internal async Task<T> InvokeRpcMethod<T>(string method, params object[] parameters)
+    internal Task<T> InvokeRpcMethod<T>(string method, params object[]? parameters)
     {
-        return await _jsonRpc.InvokeAsync<T>(method, parameters);
+        return _jsonRpc.InvokeAsync<T>(method, parameters);
     }
 }

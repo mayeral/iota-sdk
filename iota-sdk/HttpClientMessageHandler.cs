@@ -6,13 +6,14 @@ using System.Buffers;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft;
 using Microsoft.VisualStudio.Threading;
 using Nerdbank.Streams;
 using StreamJsonRpc;
 using StreamJsonRpc.Protocol;
+
+namespace iota_sdk;
 
 /// <summary>
 /// A <see cref="IJsonRpcMessageHandler"/> that sends requests and receives responses over HTTP using <see cref="HttpClient"/>.

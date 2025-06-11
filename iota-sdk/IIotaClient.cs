@@ -1,7 +1,11 @@
 ﻿using iota_sdk.apis;
+using iota_sdk.apis.coin;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using iota_sdk.apis.@event;
+using iota_sdk.apis.governance;
+using iota_sdk.apis.read;
 
 namespace iota_sdk
 {
@@ -54,21 +58,22 @@ namespace iota_sdk
         IGovernanceApi GovernanceApi();
 
         /// <summary>
-        /// Returns the quorum driver API for accessing transaction execution functionality.
-        /// </summary>
-        /// <returns>Quorum driver API</returns>
-        IQuorumDriverApi QuorumDriverApi();
-
-        /// <summary>
         /// Returns the read API for retrieving data about different objects and transactions.
         /// </summary>
         /// <returns>Read API</returns>
         IReadApi ReadApi();
 
-        /// <summary>
-        /// Returns the transaction builder API for building transactions.
-        /// </summary>
-        /// <returns>Transaction builder API</returns>
-        ITransactionBuilder TransactionBuilder();
+        // TODO
+        ///// <summary>
+        ///// Returns the transaction builder API for building transactions.
+        ///// </summary>
+        ///// <returns>Transaction builder API</returns>
+        //ITransactionBuilder TransactionBuilder();
+
+        ///// <summary>
+        ///// Returns the quorum driver API for accessing transaction execution functionality.
+        ///// </summary>
+        ///// <returns>Quorum driver API</returns>
+        //IQuorumDriverApi QuorumDriverApi();
     }
 }
