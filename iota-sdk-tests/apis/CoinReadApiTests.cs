@@ -1,15 +1,17 @@
 using iota_sdk;
 using iota_sdk.apis;
 using iota_sdk.model.coin;
+using iota_sdk_tests.utils;
+using System.Reflection;
 
-namespace iota_sdk_tests
+namespace iota_sdk_tests.apis
 {
     [TestFixture]
     public class CoinReadApiTests
     {
         private IotaClient _client;
         private ICoinReadApi target;
-        private readonly string _testAddress = "0x7b4a34f6a011794f0ecbe5e5beb96102d3eef6122eb929b9f50a8d757bfbdd67";
+        private string _testAddress = "";
         private readonly string _testInvalidAddress = "INVALID_ADDRESS";
         private readonly string _testCoinType = "0x2::iota::IOTA";
 
@@ -20,6 +22,9 @@ namespace iota_sdk_tests
             var clientBuilder = new IotaClientBuilder()
                 .RequestTimeout(TimeSpan.FromSeconds(30))
                 .MaxConcurrentRequests(10);
+
+            // initialize test address
+            _testAddress = TestsUtils.InitTestAddress();
 
             // Use the main net endpoint for testing purposes
             _client = (IotaClient)await clientBuilder.BuildMainnet().ConfigureAwait(false);
@@ -48,16 +53,15 @@ namespace iota_sdk_tests
         public async Task GetAllBalances_InvalidAddress_ReturnsBalancesList()
         {
             // Act
-            var result = await target.GetAllBalances(_testInvalidAddress);
 
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<List<Balance>>(result);
-            Assert.GreaterOrEqual(result.Count, 1);
+            // Capture the exception to check its message
+            var exception = Assert.ThrowsAsync<StreamJsonRpc.RemoteMethodNotFoundException>(async () => 
+            {
+                var result = await target.GetAllBalances(_testInvalidAddress);
+            });
 
-            Assert.IsNotNull(result[0].CoinType);
-            Assert.GreaterOrEqual(result[0].CoinObjectCount, 0);
-            Assert.IsNotNull(result[0].TotalBalance);
+            // Check that the exception message contains expected text
+            StringAssert.Contains("Invalid params", exception.Message);
         }
 
         [Test]
