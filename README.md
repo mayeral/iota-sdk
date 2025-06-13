@@ -1,2 +1,160 @@
-# iota-sdk
-Iota-sdk is a .NET implementation for Iota rebase RPC-API Interaction.
+﻿# IOTA .NET SDK
+
+This is a .NET implementation of the IOTA SDK, ported from the original [IOTA Rust SDK](https://docs.iota.org/references/rust-sdk). It provides a comprehensive set of APIs to interact with the IOTA network.
+
+## Overview
+
+The IOTA .NET SDK enables developers to build applications that interact with the IOTA network using C# and .NET. It communicates with IOTA nodes using the [IOTA JSON-RPC API](https://docs.iota.org/iota-api-ref) for accessing both full node and indexer functionality.
+
+## Implementation Status
+
+**⚠️ This implementation is Work in Progress ⚠️**
+
+The IOTA .NET SDK is currently under active development. !! Its a private project!!
+
+### Implementation Overview
+
+The following table shows the current implementation status of the various APIs:
+
+| API | Implemented | Tests |
+|-----|-------------|--------|
+| CoinReadApi | ✅ | ✅ |
+| GovernanceApi | ✅ | ✅ |
+| ReadApi | ❌ | ❌ |
+| EventApi | ❌ | ❌ |
+| TransactionBuilder | ❌ | ❌ |
+| QuorumDriverApi | ❌ | ❌ |
+
+## Getting Started
+
+### Installation
+
+Add the IOTA .NET SDK NuGet package to your project:
+
+```bash
+dotnet add package IOTA.SDK
+```
+
+### Basic Usage
+
+The main building block of the IOTA .NET SDK is the `IotaClientBuilder`, which provides a simple way to connect to an IOTA network and access the available APIs:
+
+```csharp
+using IOTA.SDK;
+using System;
+using System.Threading.Tasks;
+
+public class Program
+{
+    public static async Task Main()
+    {
+        try
+        {
+            // Connect to IOTA testnet
+            var iotaTestnet = await new IotaClientBuilder()
+                .BuildTestnet();
+            Console.WriteLine($"IOTA testnet version: {iotaTestnet.ApiVersion()}");
+
+            // Connect to IOTA devnet
+            var iotaDevnet = await new IotaClientBuilder()
+                .BuildDevnet();
+            Console.WriteLine($"IOTA devnet version: {iotaDevnet.ApiVersion()}");
+
+            // Connect to IOTA mainnet
+            var iotaMainnet = await new IotaClientBuilder()
+                .BuildMainnet();
+            Console.WriteLine($"IOTA mainnet version: {iotaMainnet.ApiVersion()}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+}
+```
+
+## Connecting to IOTA Network
+
+The SDK supports connecting to various IOTA networks:
+
+- Local: `http://127.0.0.1:9000`
+- Devnet: `https://api.devnet.iota.cafe:443`
+- Testnet: `https://api.testnet.iota.cafe:443`
+- Mainnet: `https://api.mainnet.iota.cafe:443`
+
+For indexer functionality, use the corresponding indexer endpoints:
+- Local: `http://127.0.0.1:9124`
+- Devnet: `https://indexer.devnet.iota.cafe:443`
+- Testnet: `https://indexer.testnet.iota.cafe:443`
+- Mainnet: `https://indexer.mainnet.iota.cafe:443`
+
+Example:
+
+```csharp
+// Connect to a specific node
+var client = await new IotaClientBuilder()
+    .Build("http://127.0.0.1:9000");
+
+// Or use convenience methods
+var localClient = await new IotaClientBuilder().BuildLocalnet();
+var devnetClient = await new IotaClientBuilder().BuildDevnet();
+var testnetClient = await new IotaClientBuilder().BuildTestnet();
+var mainnetClient = await new IotaClientBuilder().BuildMainnet();
+```
+
+## Reading Balances
+
+You can easily check balances for an address:
+
+```csharp
+using IOTA.SDK;
+using IOTA.SDK.Types;
+using System;
+using System.Threading.Tasks;
+
+public class Program
+{
+    public static async Task Main()
+    {
+        try
+        {
+            var client = await new IotaClientBuilder().BuildTestnet();
+            
+            var address = IotaAddress.FromString("<YOUR IOTA ADDRESS>");
+            var balances = await client.CoinReadApi().GetAllBalances(address);
+            
+            Console.WriteLine($"Balances for address {address}: {string.Join(", ", balances)}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+}
+```
+
+## Examples  // TODO implement different sampels
+
+The SDK includes several examples demonstrating how to:
+- Connect to different IOTA networks
+- Read account balances
+- Interact with governance
+- Subscribe to events
+- Use the read API
+- Create programmable transactions
+- Sign transactions
+
+## Documentation
+
+For more detailed documentation and examples, please refer to the inline code documentation and the original [IOTA Rust SDK documentation](https://github.com/iotaledger/iota/tree/develop/crates/iota-sdk) which this library is based on.
+
+## Disclaimer (Haftungsausschluss)
+
+This software is provided "as is" without warranty of any kind, either expressed or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
+
+The use of this software for financial transactions or interactions with the IOTA network is at your own risk. Make sure to thoroughly test your applications and understand the implications of interacting with distributed ledger technologies before deploying to production environments.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+// TODO LICENCE CHECK - MIT FOR HttpClientMessageHandler I.O.?
