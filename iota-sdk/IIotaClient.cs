@@ -1,8 +1,4 @@
 ﻿using iota_sdk.apis;
-using iota_sdk.apis.coin;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using iota_sdk.apis.@event;
 using iota_sdk.apis.governance;
 using iota_sdk.apis.read;
@@ -12,7 +8,7 @@ namespace iota_sdk
     /// <summary>
     /// Interface that provides all the necessary abstractions for interacting with the IOTA network.
     /// </summary>
-    public interface IIotaClient
+    public interface IIotaClient : IDisposable
     {
         /// <summary>
         /// Returns a list of RPC methods supported by the node the client is connected to.

@@ -10,7 +10,7 @@ namespace iota_sdk;
 /// <summary>
 /// Implementation of IIotaClient for interacting with the IOTA network
 /// </summary>
-public class IotaClient : IIotaClient, IDisposable
+public class IotaClient : IIotaClient
 {
     private readonly JsonRpc _jsonRpc;
     private readonly string _version;
@@ -46,7 +46,7 @@ public class IotaClient : IIotaClient, IDisposable
 
     public async Task CheckApiVersion()
     {
-        var clientVersion = GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0";
+        var clientVersion = GetType().Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
 
         if (_version != clientVersion) throw new Exception($"API version mismatch, expected {_version} but got {clientVersion}");
         //return _version == clientVersion;
@@ -90,7 +90,7 @@ public class IotaClient : IIotaClient, IDisposable
     }
 
     // Internal method to make RPC calls - can be used by API implementations
-    internal Task<T> InvokeRpcMethod<T>(string method, params object[]? parameters)
+    public Task<T> InvokeRpcMethod<T>(string method, params object[]? parameters)
     {
         return _jsonRpc.InvokeAsync<T>(method, parameters);
     }

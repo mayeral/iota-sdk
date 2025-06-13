@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using StreamJsonRpc;
+﻿using StreamJsonRpc;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -9,10 +7,12 @@ namespace iota_sdk
     public class IotaClientBuilder : IIotaClientBuilder
     {
         private TimeSpan _requestTimeout = TimeSpan.FromSeconds(60);
+        private (string username, string password)? _basicAuth = null;
+
+        // TODO : USE THOSE IND IOTA CLIENT
         private int? _maxConcurrentRequests = null;
         private string? _wsUrl = null;
         private TimeSpan? _wsPingInterval = null;
-        private (string username, string password)? _basicAuth = null;
 
         // Constants for network URLs
         private const string IOTA_LOCAL_NETWORK_URL = "http://127.0.0.1:9000";
