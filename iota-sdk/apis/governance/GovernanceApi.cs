@@ -68,15 +68,23 @@ namespace iota_sdk.apis.governance
         }
 
         /// <inheritdoc />
+        public Task<IotaSystemStateSummary> GetLatestIotaSystemStateV2Async()
+        {
+            // This method doesn't require any parameters
+            return _client.InvokeRpcMethod<IotaSystemStateSummary>("iotax_getLatestIotaSystemStateV2");
+        }
+
+        /// <inheritdoc />
         public Task<ulong> GetReferenceGasPriceAsync()
         {
             // This method doesn't require any parameters
             return _client.InvokeRpcMethod<ulong>("iotax_getReferenceGasPrice");
         }
 
-        public async Task<ValidatorApys> GetValidatorsApyAsync()
+        public Task<ValidatorApys> GetValidatorsApyAsync()
         {
-            throw new NotImplementedException();
+            // This method doesn't require any parameters
+            return _client.InvokeRpcMethod<ValidatorApys>("iotax_getValidatorsApy");
         }
     }
 }

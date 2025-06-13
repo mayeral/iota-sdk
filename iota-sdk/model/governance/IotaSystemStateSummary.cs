@@ -2,5 +2,5 @@
 
 public class IotaSystemStateSummary
 {
-    // TODO
+    // TODO V1? V2?
 }
