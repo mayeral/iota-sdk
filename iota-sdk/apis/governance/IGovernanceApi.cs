@@ -35,11 +35,10 @@ namespace iota_sdk.apis.governance
         /// Use this method to access system information, such as the current epoch,
         /// the protocol version, the reference gas price, the total stake, active
         /// validators, and much more.
-        /// Return the latest IOTA system state object on networks supporting protocol version &lt; 5. These are networks with node software release version &lt; 0.11.
-        /// This is the JSON-RPC type for the IotaSystemStateV1 object. It flattens all fields to make them top-level fields such that it as minimum dependencies to the internal data structures of the IOTA system state type.
         /// </summary>
-        /// <returns>The latest IOTA system state summary</returns>
-        Task<IotaSystemStateSummary> GetLatestIotaSystemStateAsync();
+        /// V1: Return the latest IOTA system state object on networks supporting protocol version &lt; 5. These are networks with node software release version &lt; 0.11.
+        /// V2: Return the latest IOTA system state object on networks supporting protocol version >= 5. These are networks with node software release version >= 0.11.
+        Task<IotaSystemStateSummary?> GetLatestIotaSystemStateAsync();
 
         /// <summary>
         /// Get the latest IOTA system state object on-chain.
@@ -47,9 +46,17 @@ namespace iota_sdk.apis.governance
         /// the protocol version, the reference gas price, the total stake, active
         /// validators, and much more.
         /// </summary>
-        /// <returns>The latest IOTA system state summary</returns>
-        /// Return the latest IOTA system state object on networks supporting protocol version >= 5. These are networks with node software release version >= 0.11.
-        Task<IotaSystemStateSummary> GetLatestIotaSystemStateV2Async();
+        /// The JSON-RPC type for the IotaSystemStateV1 object. It flattens all fields to make them top-level fields such that it as minimum dependencies to the internal data structures of the IOTA system state type.
+        /// Return the latest IOTA system state object on networks supporting protocol version &lt; 5. These are networks with node software release version &lt; 0.11.
+        Task<IotaSystemStateSummary?> GetlatestIotaSystemStateV1Async();
+
+        /// <summary>
+        /// Get the latest IOTA system state object on-chain.
+        /// Use this method to access system information, such as the current epoch,
+        /// the protocol version, the reference gas price, the total stake, active
+        /// validators, and much more.
+        /// </summary>
+        Task<IotaSystemStateSummary?> GetlatestIotaSystemStateV2Async(); 
 
         /// <summary>
         /// Get the reference gas price for the network.

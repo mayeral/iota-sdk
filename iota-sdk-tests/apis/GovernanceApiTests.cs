@@ -1,8 +1,9 @@
 using iota_sdk;
 using iota_sdk.apis.governance;
 using iota_sdk_tests.utils;
-using Microsoft.Extensions.Configuration;
 using System.Numerics;
+using iota_sdk.model.governance;
+
 // ReSharper disable AsyncApostle.AsyncWait
 
 namespace iota_sdk_tests.apis;
@@ -87,41 +88,200 @@ public class GovernanceApiTests
         return Task.CompletedTask;
     }
 
+
     [Test]
-    public Task GetLatestIotaSystemStateAsync_ReturnsSystemState()
+    public Task GetLatestIotaSystemStateAsync_ReturnsSystemStateV2()
     {
         // act
         var result = _target!.GetLatestIotaSystemStateAsync().Result;
 
         // assert
-        // TODO
-        Assert.Fail("Test not implemented");
+        Assert.That(result!.IsV1, Is.False);
+        Assert.That(result.IsV2, Is.True);
+        Assert.IsNotNull(result.V2);
+        Assert.IsNull(result.V1);
+
+        IotaSystemStateSummaryV2 systemState = result.V2;
+
+        // Basic system state properties
+        Assert.That(systemState.Epoch, Is.GreaterThan(new BigInteger(1)));
+        Assert.That(systemState.ProtocolVersion, Is.GreaterThan(0UL));
+        Assert.That(systemState.SystemStateVersion, Is.GreaterThan(0UL));
+        Assert.That(systemState.IotaTotalSupply, Is.GreaterThan(0UL));
+        Assert.IsNotNull(systemState.IotaTreasuryCapId);
+        Assert.That(systemState.StorageFundTotalObjectStorageRebates, Is.GreaterThanOrEqualTo(0UL));
+        Assert.That(systemState.StorageFundNonRefundableBalance, Is.GreaterThanOrEqualTo(0UL));
+        Assert.That(systemState.ReferenceGasPrice, Is.GreaterThan(0UL));
+
+        // Safe mode properties
+        Assert.That(systemState.SafeMode, Is.False);  // Assuming safe mode is off in normal testing
+        Assert.That(systemState.SafeModeStorageCharges, Is.GreaterThanOrEqualTo(0UL));
+        //Assert.That(systemState.SafeModeComputationRewards, Is.GreaterThanOrEqualTo(0UL)); // only v1
+        Assert.That(systemState.SafeModeComputationCharges, Is.GreaterThanOrEqualTo(0UL));
+        Assert.That(systemState.SafeModeComputationChargesBurned, Is.GreaterThanOrEqualTo(0UL));
+        Assert.That(systemState.SafeModeStorageRebates, Is.GreaterThanOrEqualTo(0UL));
+        Assert.That(systemState.SafeModeNonRefundableStorageFee, Is.GreaterThanOrEqualTo(0UL));
+
+        // Epoch properties
+        Assert.That(systemState.EpochStartTimestampMs, Is.GreaterThan(0UL));
+        Assert.That(systemState.EpochDurationMs, Is.GreaterThan(0UL));
+
+        // Validator constraints
+        Assert.That(systemState.MinValidatorCount, Is.GreaterThan(0UL));
+        Assert.That(systemState.MaxValidatorCount, Is.GreaterThan(systemState.MinValidatorCount));
+        Assert.That(systemState.MinValidatorJoiningStake, Is.GreaterThan(0UL));
+        Assert.That(systemState.ValidatorLowStakeThreshold, Is.GreaterThan(0UL));
+        Assert.That(systemState.ValidatorVeryLowStakeThreshold, Is.GreaterThan(0UL));
+        Assert.That(systemState.ValidatorLowStakeGracePeriod, Is.GreaterThan(0UL));
+
+        // Stake and validators
+        Assert.That(systemState.TotalStake, Is.GreaterThanOrEqualTo(0UL));
+        Assert.IsNotNull(systemState.ActiveValidators);
+        Assert.That(systemState.ActiveValidators.Count, Is.GreaterThan(0));
+
+        // Pending validators
+        Assert.IsNotNull(systemState.PendingActiveValidatorsId);
+        Assert.That(systemState.PendingActiveValidatorsSize, Is.GreaterThanOrEqualTo(0UL));
+        Assert.IsNotNull(systemState.PendingRemovals);
+
+        // Staking pool mappings
+        Assert.IsNotNull(systemState.StakingPoolMappingsId);
+        Assert.That(systemState.StakingPoolMappingsSize, Is.GreaterThanOrEqualTo(0UL));
+
+        // Inactive pools
+        Assert.IsNotNull(systemState.InactivePoolsId);
+        Assert.That(systemState.InactivePoolsSize, Is.GreaterThanOrEqualTo(0UL));
+
+        // Validator candidates
+        Assert.IsNotNull(systemState.ValidatorCandidatesId);
+        Assert.That(systemState.ValidatorCandidatesSize, Is.GreaterThanOrEqualTo(0UL));
+
+        // Risk and reporting
+        Assert.IsNotNull(systemState.AtRiskValidators);
+        Assert.IsNotNull(systemState.ValidatorReportRecords);
+
+        // Check the first active validator if there are any
+        if (systemState.ActiveValidators.Count > 0)
+        {
+            var firstValidator = systemState.ActiveValidators[0];
+            Assert.IsNotNull(firstValidator);
+            Assert.IsNotNull(firstValidator.IotaAddress);
+            Assert.IsNotNull(firstValidator.Name);
+            Assert.That(firstValidator.VotingPower, Is.GreaterThan(0UL));
+            Assert.IsNotNull(firstValidator.StakingPoolId);
+        }
+
+        // Check committee members' validators
+        foreach (var memberIndex in systemState.CommitteeMembers)
+        {
+            var validator = systemState.ActiveValidators[(int)memberIndex];
+            Assert.IsNotNull(validator);
+            Assert.IsNotNull(validator.IotaAddress);
+            Assert.IsNotNull(validator.Name);
+            Assert.That(validator.VotingPower, Is.GreaterThan(0UL));
+            Assert.IsNotNull(validator.StakingPoolId);
+        }
+
 
         return Task.CompletedTask;
     }
 
     [Test]
-    public Task GetLatestIotaSystemStateV2Async_ReturnsSystemState()
+    public Task GetLatestIotaSystemStateV1Async_ReturnsSystemStateV1()
     {
         // act
-        var result = _target!.GetLatestIotaSystemStateV2Async().Result;
+        var result = _target!.GetlatestIotaSystemStateV1Async().Result;
 
         // assert
-        // TODO
-        Assert.Fail("Test not implemented");
+        Assert.That(result!.IsV1, Is.True);
+        Assert.That(result.IsV2, Is.False);
+        Assert.IsNotNull(result.V1);
+        Assert.IsNull(result.V2);
+
+        IotaSystemStateSummaryV1 systemState = result.V1;
+
+        // Basic system state properties
+        Assert.That(systemState.Epoch, Is.GreaterThan(new BigInteger(1)));
+        Assert.That(systemState.ProtocolVersion, Is.GreaterThan(0UL));
+        Assert.That(systemState.SystemStateVersion, Is.GreaterThan(0UL));
+        Assert.That(systemState.IotaTotalSupply, Is.GreaterThan(0UL));
+        Assert.IsNotNull(systemState.IotaTreasuryCapId);
+        Assert.That(systemState.StorageFundTotalObjectStorageRebates, Is.GreaterThanOrEqualTo(0UL));
+        Assert.That(systemState.StorageFundNonRefundableBalance, Is.GreaterThanOrEqualTo(0UL));
+        Assert.That(systemState.ReferenceGasPrice, Is.GreaterThan(0UL));
+
+        // Safe mode properties
+        Assert.That(systemState.SafeMode, Is.False);  // Assuming safe mode is off in normal testing
+        Assert.That(systemState.SafeModeStorageCharges, Is.GreaterThanOrEqualTo(0UL));
+        Assert.That(systemState.SafeModeComputationRewards, Is.GreaterThanOrEqualTo(0UL));
+        //Assert.That(systemState.SafeModeComputationCharges, Is.GreaterThanOrEqualTo(0UL)); only v2
+        //Assert.That(systemState.SafeModeComputationChargesBurned, Is.GreaterThanOrEqualTo(0UL)); only v2
+        Assert.That(systemState.SafeModeStorageRebates, Is.GreaterThanOrEqualTo(0UL));
+        Assert.That(systemState.SafeModeNonRefundableStorageFee, Is.GreaterThanOrEqualTo(0UL));
+
+        // Epoch properties
+        Assert.That(systemState.EpochStartTimestampMs, Is.GreaterThan(0UL));
+        Assert.That(systemState.EpochDurationMs, Is.GreaterThan(0UL));
+
+        // Validator constraints
+        Assert.That(systemState.MinValidatorCount, Is.GreaterThan(0UL));
+        Assert.That(systemState.MaxValidatorCount, Is.GreaterThan(systemState.MinValidatorCount));
+        Assert.That(systemState.MinValidatorJoiningStake, Is.GreaterThan(0UL));
+        Assert.That(systemState.ValidatorLowStakeThreshold, Is.GreaterThan(0UL));
+        Assert.That(systemState.ValidatorVeryLowStakeThreshold, Is.GreaterThan(0UL));
+        Assert.That(systemState.ValidatorLowStakeGracePeriod, Is.GreaterThan(0UL));
+
+        // Stake and validators
+        Assert.That(systemState.TotalStake, Is.GreaterThanOrEqualTo(0UL));
+        Assert.IsNotNull(systemState.ActiveValidators);
+        Assert.That(systemState.ActiveValidators.Count, Is.GreaterThan(0));
+
+        // Pending validators
+        Assert.IsNotNull(systemState.PendingActiveValidatorsId);
+        Assert.That(systemState.PendingActiveValidatorsSize, Is.GreaterThanOrEqualTo(0UL));
+        Assert.IsNotNull(systemState.PendingRemovals);
+
+        // Staking pool mappings
+        Assert.IsNotNull(systemState.StakingPoolMappingsId);
+        Assert.That(systemState.StakingPoolMappingsSize, Is.GreaterThanOrEqualTo(0UL));
+
+        // Inactive pools
+        Assert.IsNotNull(systemState.InactivePoolsId);
+        Assert.That(systemState.InactivePoolsSize, Is.GreaterThanOrEqualTo(0UL));
+
+        // Validator candidates
+        Assert.IsNotNull(systemState.ValidatorCandidatesId);
+        Assert.That(systemState.ValidatorCandidatesSize, Is.GreaterThanOrEqualTo(0UL));
+
+        // Risk and reporting
+        Assert.IsNotNull(systemState.AtRiskValidators);
+        Assert.IsNotNull(systemState.ValidatorReportRecords);
+
+        // Check the first active validator if there are any
+        if (systemState.ActiveValidators.Count > 0)
+        {
+            var firstValidator = systemState.ActiveValidators[0];
+            Assert.IsNotNull(firstValidator);
+            Assert.IsNotNull(firstValidator.IotaAddress);
+            Assert.IsNotNull(firstValidator.Name);
+            Assert.That(firstValidator.VotingPower, Is.GreaterThan(0UL));
+            Assert.IsNotNull(firstValidator.StakingPoolId);
+        }
+
+        // Check committee members' validators
+        //foreach (var memberIndex in systemState.CommitteeMembers) // only v2
+        //{
+        //    var validator = systemState.ActiveValidators[(int)memberIndex];
+        //    Assert.IsNotNull(validator);
+        //    Assert.IsNotNull(validator.IotaAddress);
+        //    Assert.IsNotNull(validator.Name);
+        //    Assert.That(validator.VotingPower, Is.GreaterThan(0UL));
+        //    Assert.IsNotNull(validator.StakingPoolId);
+        //}
 
         return Task.CompletedTask;
     }
 
-
-    // get system state?!
-
-    //public Task GetIotaSystemStateAsync_ReturnsSystemState()
-    //{
-    //    target.
-
-    //        return Task.CompletedTask;
-    //}
 
     [Test]
     public Task GetReferenceGasPriceAsync_ReturnsGasPrice()

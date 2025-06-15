@@ -1,6 +1,4 @@
-﻿using iota_sdk.apis.read;
-using iota_sdk.model;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace iota_sdk.model.governance
 {

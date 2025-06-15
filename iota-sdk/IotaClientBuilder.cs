@@ -138,8 +138,7 @@ namespace iota_sdk
             }
 
             // Check for specific API support
-            serverInfo.IotaSystemStateV2Support =
-                serverInfo.RpcMethods.Contains("iotax_getLatestIotaSystemStateV2");
+            serverInfo.IotaSystemStateV2Support = serverInfo.RpcMethods.Contains("iotax_getLatestIotaSystemStateV2");
 
             return serverInfo;
         }

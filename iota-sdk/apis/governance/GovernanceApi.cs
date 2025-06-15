@@ -1,4 +1,6 @@
 ﻿using iota_sdk.model.governance;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace iota_sdk.apis.governance
 {
@@ -8,6 +10,7 @@ namespace iota_sdk.apis.governance
     public class GovernanceApi : IGovernanceApi
     {
         private readonly IotaClient _client;
+        private readonly bool _iotaSystemStateV2Support;
 
         /// <summary>
         /// Creates a new instance of <see cref="GovernanceApi"/>
@@ -16,6 +19,7 @@ namespace iota_sdk.apis.governance
         public GovernanceApi(IotaClient client)
         {
             _client = client;
+            _iotaSystemStateV2Support = client.ServerInfo.IotaSystemStateV2Support;
         }
 
         /// <inheritdoc />
@@ -61,17 +65,39 @@ namespace iota_sdk.apis.governance
         }
 
         /// <inheritdoc />
-        public Task<IotaSystemStateSummary> GetLatestIotaSystemStateAsync()
+        public async Task<IotaSystemStateSummary?> GetLatestIotaSystemStateAsync()
         {
-            // This method doesn't require any parameters
-            return _client.InvokeRpcMethod<IotaSystemStateSummary>("iotax_getLatestIotaSystemState");
+            if (_iotaSystemStateV2Support)
+            {
+                return await GetlatestIotaSystemStateV2Async().ConfigureAwait(false);
+            }
+            else
+            {
+                return await GetlatestIotaSystemStateV1Async().ConfigureAwait(false);
+            }
         }
 
         /// <inheritdoc />
-        public Task<IotaSystemStateSummary> GetLatestIotaSystemStateV2Async()
+        public async Task<IotaSystemStateSummary?> GetlatestIotaSystemStateV1Async()
         {
-            // This method doesn't require any parameters
-            return _client.InvokeRpcMethod<IotaSystemStateSummary>("iotax_getLatestIotaSystemStateV2");
+                var response = await _client.InvokeRpcMethod<JObject>("iotax_getLatestIotaSystemState").ConfigureAwait(false);
+
+                return JsonConvert.DeserializeObject<IotaSystemStateSummary>(response.ToString());
+        }
+
+        public async Task<IotaSystemStateSummary?> GetlatestIotaSystemStateV2Async()
+        {
+            if(_iotaSystemStateV2Support)
+            {
+                var response = await _client.InvokeRpcMethod<JObject>("iotax_getLatestIotaSystemStateV2").ConfigureAwait(false);
+
+                return JsonConvert.DeserializeObject<IotaSystemStateSummary>(response.ToString());
+
+            }
+            else
+            {
+                throw new InvalidOperationException("The protocol version does not support IOTA System State V2");
+            }
         }
 
         /// <inheritdoc />

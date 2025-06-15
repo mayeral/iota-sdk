@@ -4,6 +4,7 @@ using iota_sdk.apis.@event;
 using iota_sdk.apis.governance;
 using iota_sdk.apis.read;
 using StreamJsonRpc;
+using static iota_sdk.IotaClientBuilder;
 
 namespace iota_sdk;
 
@@ -28,6 +29,7 @@ public class IotaClient : IIotaClient
     internal IotaClient(JsonRpc jsonRpc, IotaClientBuilder.ServerInfo serverInfo)
     {
         _jsonRpc = jsonRpc;
+        ServerInfo = serverInfo;
         _version = serverInfo.Version;
         _rpcMethods = serverInfo.RpcMethods;
         _subscriptions = serverInfo.Subscriptions;
@@ -37,6 +39,8 @@ public class IotaClient : IIotaClient
         _governanceApi = new GovernanceApi(this);
         _readApi = new ReadApi(this);
     }
+
+    public IotaClientBuilder.ServerInfo ServerInfo { get; set; }
 
     public string ApiVersion() => _version;
 
