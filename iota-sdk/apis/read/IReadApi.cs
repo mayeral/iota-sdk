@@ -1,6 +1,7 @@
 ﻿using iota_sdk.model;
 using iota_sdk.model.read;
 using System.Numerics;
+using Iota.Model.Read;
 
 namespace iota_sdk.apis.read
 {
@@ -117,7 +118,7 @@ namespace iota_sdk.apis.read
         /// <param name="limit">Optional limit for results per page</param>
         /// <param name="descendingOrder">Whether to order results in descending order</param>
         /// <returns>Page of transaction blocks</returns>
-        Task<TransactionBlocksPage> QueryTransactionBlocksAsync(IotaTransactionBlockResponseQuery query, TransactionDigest cursor = null, int? limit = null, bool descendingOrder = false);
+        Task<TransactionBlocksPage> QueryTransactionBlocksAsync(IotaTransactionBlockResponseQuery query, TransactionDigest? cursor = null, int? limit = null, bool descendingOrder = false);
 
         /// <summary>
         /// Get the first four bytes of the chain's genesis checkpoint digest in hex format.
@@ -154,7 +155,7 @@ namespace iota_sdk.apis.read
         /// <param name="cursor">Optional cursor for pagination</param>
         /// <param name="descendingOrder">Whether to order results in descending order</param>
         /// <returns>Stream of transaction block responses</returns>
-        IAsyncEnumerable<IotaTransactionBlockResponse> GetTransactionsStreamAsync(IotaTransactionBlockResponseQuery query, TransactionDigest cursor = null, bool descendingOrder = false);
+        IAsyncEnumerable<IotaTransactionBlockResponse> GetTransactionsStreamAsync(IotaTransactionBlockResponseQuery query, TransactionDigest? cursor = null, bool descendingOrder = false);
 
         /// <summary>
         /// Subscribe to a stream of transactions.

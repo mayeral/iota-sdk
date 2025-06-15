@@ -1,4 +1,5 @@
-﻿using iota_sdk.model.governance;
+﻿using iota_sdk.model;
+using iota_sdk.model.governance;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

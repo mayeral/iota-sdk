@@ -2,7 +2,6 @@ using iota_sdk;
 using iota_sdk.apis;
 using iota_sdk.model.coin;
 using iota_sdk_tests.utils;
-using System.Reflection;
 
 namespace iota_sdk_tests.apis
 {
@@ -27,7 +26,7 @@ namespace iota_sdk_tests.apis
             _testAddress = TestsUtils.InitTestAddress();
 
             // Use the main net endpoint for testing purposes
-            _client = (IotaClient)await clientBuilder.BuildMainnet().ConfigureAwait(false);
+            _client = (IotaClient) await clientBuilder.BuildMainnet().ConfigureAwait(false);
 
             // Initialize the CoinReadApi with the client
             target = _client.CoinReadApi();

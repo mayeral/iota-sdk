@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Iota.Model.Read;
 using iota_sdk.model;
 using iota_sdk.model.read;
 
@@ -18,8 +19,7 @@ public class ReadApi : IReadApi
         _client = client;
     }
 
-    public async Task<ObjectsPage> GetOwnedObjectsAsync(IotaAddress address, IotaObjectResponseQuery query = null, ObjectID cursor = null,
-        int? limit = null)
+    public async Task<ObjectsPage> GetOwnedObjectsAsync(IotaAddress address, IotaObjectResponseQuery query = null, ObjectID cursor = null, int? limit = null)
     {
         throw new NotImplementedException();
     }
@@ -79,8 +79,7 @@ public class ReadApi : IReadApi
         throw new NotImplementedException();
     }
 
-    public async Task<TransactionBlocksPage> QueryTransactionBlocksAsync(IotaTransactionBlockResponseQuery query, TransactionDigest cursor = null,
-        int? limit = null, bool descendingOrder = false)
+    public async Task<TransactionBlocksPage> QueryTransactionBlocksAsync(IotaTransactionBlockResponseQuery query, TransactionDigest? cursor = null, int? limit = null, bool descendingOrder = false)
     {
         throw new NotImplementedException();
     }
@@ -105,8 +104,7 @@ public class ReadApi : IReadApi
         throw new NotImplementedException();
     }
 
-    public IAsyncEnumerable<IotaTransactionBlockResponse> GetTransactionsStreamAsync(IotaTransactionBlockResponseQuery query, TransactionDigest cursor = null,
-        bool descendingOrder = false)
+    public IAsyncEnumerable<IotaTransactionBlockResponse> GetTransactionsStreamAsync(IotaTransactionBlockResponseQuery query, TransactionDigest? cursor = null, bool descendingOrder = false)
     {
         throw new NotImplementedException();
     }
