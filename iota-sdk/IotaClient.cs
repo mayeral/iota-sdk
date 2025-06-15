@@ -4,7 +4,6 @@ using iota_sdk.apis.@event;
 using iota_sdk.apis.governance;
 using iota_sdk.apis.read;
 using StreamJsonRpc;
-using static iota_sdk.IotaClientBuilder;
 
 namespace iota_sdk;
 
@@ -17,11 +16,10 @@ public class IotaClient : IIotaClient
     private readonly string _version;
     private readonly List<string> _rpcMethods;
     private readonly List<string> _subscriptions;
-    private readonly bool _iotaSystemStateV2Support;
 
     // APIs
     private readonly ICoinReadApi _coinReadApi;
-    private readonly IEventApi _eventApi;   
+    private readonly IEventApi _eventApi;
     private readonly IGovernanceApi _governanceApi;
     private readonly IReadApi _readApi;
 
@@ -33,7 +31,6 @@ public class IotaClient : IIotaClient
         _version = serverInfo.Version;
         _rpcMethods = serverInfo.RpcMethods;
         _subscriptions = serverInfo.Subscriptions;
-        _iotaSystemStateV2Support = serverInfo.IotaSystemStateV2Support;
         _coinReadApi = new CoinReadApi(this);
         _eventApi = new EventApi(this);
         _governanceApi = new GovernanceApi(this);
@@ -48,11 +45,16 @@ public class IotaClient : IIotaClient
 
     public List<string> AvailableSubscriptions() => _subscriptions;
 
-    public async Task CheckApiVersion()
+    /// <summary>
+    /// Checks the API version against the client version
+    /// </summary>
+    /// <exception cref="Exception"></exception>
+    public Task CheckApiVersionAsync()
     {
         var clientVersion = GetType().Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
 
         if (_version != clientVersion) throw new Exception($"API version mismatch, expected {_version} but got {clientVersion}");
+        return Task.CompletedTask;
         //return _version == clientVersion;
     }
 
@@ -77,24 +79,18 @@ public class IotaClient : IIotaClient
         return _readApi;
     }
 
-    // TODO
-    //public IQuorumDriverApi QuorumDriverApi()
-    //{
-    //    throw new NotImplementedException();
-    //}
-
-    //public ITransactionBuilder TransactionBuilder()
-    //{
-    //    throw new NotImplementedException();
-    //}
-
     public void Dispose()
     {
         _jsonRpc.Dispose();
     }
 
-    // Internal method to make RPC calls - can be used by API implementations
-    public Task<T> InvokeRpcMethod<T>(string method, params object[]? parameters)
+    /// <summary>
+    /// Internal method to make RPC calls - can be used by API implementations
+    /// </summary>
+    /// <param name="method"></param>
+    /// <param name="parameters"></param>
+    /// <typeparam name="T"></typeparam>
+    public Task<T> InvokeRpcMethodAsync<T>(string method, params object[]? parameters)
     {
         return _jsonRpc.InvokeAsync<T>(method, parameters);
     }

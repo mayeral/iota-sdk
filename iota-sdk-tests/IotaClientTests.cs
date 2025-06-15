@@ -62,7 +62,7 @@ namespace iota_sdk_tests
         public async Task CheckApiVersion_DoesNotThrowException()
         {
             // Act & Assert
-            Assert.DoesNotThrowAsync(async () => await _client.CheckApiVersion());
+            Assert.DoesNotThrowAsync(async () => await _client.CheckApiVersionAsync());
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace iota_sdk_tests
             // Capture the exception to check its message
             var exception = Assert.ThrowsAsync<StreamJsonRpc.RemoteMethodNotFoundException>(async () => 
             {
-                await _client.InvokeRpcMethod<object>(methodName, parameters);
+                await _client.InvokeRpcMethodAsync<object>(methodName, parameters);
             });
 
             // Check that the exception message contains expected text

@@ -33,7 +33,7 @@ namespace iota_sdk
         /// Verifies if the API version matches the server version and returns an error if they do not match.
         /// </summary>
         /// <returns>Task representing the asynchronous operation</returns>
-        Task CheckApiVersion();
+        Task CheckApiVersionAsync();
 
         /// <summary>
         /// Returns the coin read API for accessing coin-related functionality.

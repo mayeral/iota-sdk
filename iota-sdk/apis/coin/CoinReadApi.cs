@@ -18,7 +18,7 @@ public class CoinReadApi : ICoinReadApi
     /// <inheritdoc />
     public Task<List<Balance>> GetAllBalances(string address)
     {
-        return _client.InvokeRpcMethod<List<Balance>>("iotax_getAllBalances", address);
+        return _client.InvokeRpcMethodAsync<List<Balance>>("iotax_getAllBalances", address);
     }
 
     /// <inheritdoc />
@@ -39,7 +39,7 @@ public class CoinReadApi : ICoinReadApi
         }
 
         // Invoke the RPC method with the parameters
-        return _client.InvokeRpcMethod<CoinPage>("iotax_getAllCoins", parameters.ToArray());
+        return _client.InvokeRpcMethodAsync<CoinPage>("iotax_getAllCoins", parameters.ToArray());
     }
 
 
@@ -55,14 +55,14 @@ public class CoinReadApi : ICoinReadApi
         }
 
         // Invoke the RPC method with the parameters
-        return _client.InvokeRpcMethod<Balance>("iotax_getBalance", parameters.ToArray());
+        return _client.InvokeRpcMethodAsync<Balance>("iotax_getBalance", parameters.ToArray());
     }
 
     /// <inheritdoc />
     public Task<IotaCirculatingSupply> GetCirculatingSupply()
     {
         // This method doesn't require any parameters
-        return _client.InvokeRpcMethod<IotaCirculatingSupply>("iotax_getCirculatingSupply");
+        return _client.InvokeRpcMethodAsync<IotaCirculatingSupply>("iotax_getCirculatingSupply");
     }
 
     /// <inheritdoc />
@@ -90,7 +90,7 @@ public class CoinReadApi : ICoinReadApi
         }
 
         // Invoke the RPC method with the parameters
-        return _client.InvokeRpcMethod<CoinPage>("iotax_getCoins", parameters.ToArray());
+        return _client.InvokeRpcMethodAsync<CoinPage>("iotax_getCoins", parameters.ToArray());
 
     }
 
@@ -104,7 +104,7 @@ public class CoinReadApi : ICoinReadApi
         }
 
         // Invoke the RPC method with the coinType parameter
-        return _client.InvokeRpcMethod<CoinMetadata>("iotax_getCoinMetadata", coinType);
+        return _client.InvokeRpcMethodAsync<CoinMetadata>("iotax_getCoinMetadata", coinType);
     }
 
     /// <inheritdoc />
@@ -117,6 +117,6 @@ public class CoinReadApi : ICoinReadApi
         }
 
         // Invoke the RPC method with the coinType parameter
-        return _client.InvokeRpcMethod<Supply>("iotax_getTotalSupply", coinType);
+        return _client.InvokeRpcMethodAsync<Supply>("iotax_getTotalSupply", coinType);
     }
 }

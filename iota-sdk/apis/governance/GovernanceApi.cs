@@ -32,7 +32,7 @@ namespace iota_sdk.apis.governance
             }
 
             // Invoke the RPC method with the address parameter
-            return _client.InvokeRpcMethod<IEnumerable<DelegatedStake>>("iotax_getStakes", address);
+            return _client.InvokeRpcMethodAsync<IEnumerable<DelegatedStake>>("iotax_getStakes", address);
         }
 
         /// <inheritdoc />
@@ -45,7 +45,7 @@ namespace iota_sdk.apis.governance
             }
 
             // Invoke the RPC method with the address parameter
-            return _client.InvokeRpcMethod<IEnumerable<DelegatedTimelockedStake>>("iotax_getTimelockedStakes", address);
+            return _client.InvokeRpcMethodAsync<IEnumerable<DelegatedTimelockedStake>>("iotax_getTimelockedStakes", address);
         }
 
         /// <inheritdoc />
@@ -61,7 +61,7 @@ namespace iota_sdk.apis.governance
             }
 
             // Invoke the RPC method with optional epoch parameter
-            return _client.InvokeRpcMethod<IotaCommittee>("iotax_getCommitteeInfo", parameters.Count > 0 ? parameters.ToArray() : null);
+            return _client.InvokeRpcMethodAsync<IotaCommittee>("iotax_getCommitteeInfo", parameters.Count > 0 ? parameters.ToArray() : null);
         }
 
         /// <inheritdoc />
@@ -80,7 +80,7 @@ namespace iota_sdk.apis.governance
         /// <inheritdoc />
         public async Task<IotaSystemStateSummary?> GetlatestIotaSystemStateV1Async()
         {
-                var response = await _client.InvokeRpcMethod<JObject>("iotax_getLatestIotaSystemState").ConfigureAwait(false);
+                var response = await _client.InvokeRpcMethodAsync<JObject>("iotax_getLatestIotaSystemState").ConfigureAwait(false);
 
                 return JsonConvert.DeserializeObject<IotaSystemStateSummary>(response.ToString());
         }
@@ -89,7 +89,7 @@ namespace iota_sdk.apis.governance
         {
             if(_iotaSystemStateV2Support)
             {
-                var response = await _client.InvokeRpcMethod<JObject>("iotax_getLatestIotaSystemStateV2").ConfigureAwait(false);
+                var response = await _client.InvokeRpcMethodAsync<JObject>("iotax_getLatestIotaSystemStateV2").ConfigureAwait(false);
 
                 return JsonConvert.DeserializeObject<IotaSystemStateSummary>(response.ToString());
 
@@ -104,13 +104,13 @@ namespace iota_sdk.apis.governance
         public Task<ulong> GetReferenceGasPriceAsync()
         {
             // This method doesn't require any parameters
-            return _client.InvokeRpcMethod<ulong>("iotax_getReferenceGasPrice");
+            return _client.InvokeRpcMethodAsync<ulong>("iotax_getReferenceGasPrice");
         }
 
         public Task<ValidatorApys> GetValidatorsApyAsync()
         {
             // This method doesn't require any parameters
-            return _client.InvokeRpcMethod<ValidatorApys>("iotax_getValidatorsApy");
+            return _client.InvokeRpcMethodAsync<ValidatorApys>("iotax_getValidatorsApy");
         }
     }
 }
