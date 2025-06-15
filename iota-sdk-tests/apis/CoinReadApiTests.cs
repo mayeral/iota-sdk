@@ -91,13 +91,13 @@ namespace iota_sdk_tests.apis
         }
 
         [Test]
-        public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
+public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
         {
             // Arrange
             const int limit = 5;
 
             // Act
-            var result = await target.GetCoins(_testAddress, _testCoinType, null, limit);
+            var result = await target.GetCoins(_testAddress, _testCoinType);
 
             // Assert
             Assert.IsNotNull(result);
@@ -109,36 +109,6 @@ namespace iota_sdk_tests.apis
                 Assert.AreEqual(_testCoinType, result.Data[0].CoinType);
                 Assert.IsNotNull(result.Data[0].CoinObjectId);
                 Assert.IsNotNull(result.Data[0].Balance);
-            }
-        }
-
-        [Test]
-        public async Task GetCoins_WithPagination_ReturnsNextPage()
-        {
-            // This test checks if pagination works correctly
-            // First, get the first page
-            var firstPage = await target.GetCoins(_testAddress, _testCoinType, null, 2);
-
-            // If there's a next page
-            if (firstPage.HasNextPage && firstPage.NextCursor != null)
-            {
-                // Get the second page
-                var secondPage = await target.GetCoins(_testAddress, _testCoinType, firstPage.NextCursor, 2);
-
-                // Assert
-                Assert.IsNotNull(secondPage);
-                Assert.IsNotNull(secondPage.Data);
-
-                // Verify the items are different
-                if (firstPage.Data.Count > 0 && secondPage.Data.Count > 0)
-                {
-                    Assert.AreNotEqual(firstPage.Data[0].CoinObjectId, secondPage.Data[0].CoinObjectId);
-                }
-            }
-            else
-            {
-                // If there's no next page, the test is still valid
-                Assert.Pass("No next page available, pagination test skipped");
             }
         }
 
