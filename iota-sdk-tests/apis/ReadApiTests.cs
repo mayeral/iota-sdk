@@ -227,14 +227,14 @@ public class ReadApiTests
 
         // Assert
         Assert.Greater(result, 0);
-    
+
         // Log the result
         Console.WriteLine($"Latest checkpoint sequence number: {result}");
-    
+
         // Optional: Verify we can fetch this checkpoint
         var checkpointId = new CheckpointId { SequenceNumber = result };
         var checkpoint = await _target!.GetCheckpointAsync(checkpointId).ConfigureAwait(false);
-    
+
         Assert.IsNotNull(checkpoint);
         Assert.AreEqual(result, checkpoint.SequenceNumber);
         Console.WriteLine($"Latest checkpoint digest: {checkpoint.Digest}");
@@ -249,7 +249,7 @@ public class ReadApiTests
 
         // Assert
         Assert.Greater(result, 0);
-    
+
         // Log the result
         Console.WriteLine($"Reference gas price: {result}");
     }
@@ -262,8 +262,76 @@ public class ReadApiTests
 
         // Assert
         Assert.Greater(result, 0);
-    
+
         // Log the result
         Console.WriteLine($"Total transaction blocks: {result}");
+    }
+
+    [Test]
+    public async Task GetProtocolConfigAsync_ReturnsValidConfig()
+    {
+        // Act
+        var result = await _target!.GetProtocolConfigAsync().ConfigureAwait(false);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.Greater(result.ProtocolVersion, 0);
+        Assert.GreaterOrEqual(result.MaxSupportedProtocolVersion, result.ProtocolVersion);
+        Assert.LessOrEqual(result.MinSupportedProtocolVersion, result.ProtocolVersion);
+
+        // Check feature flags and attributes
+        Assert.IsNotNull(result.FeatureFlags);
+        Assert.IsNotNull(result.Attributes);
+
+        // Log some information about the protocol config
+        Console.WriteLine($"Protocol version: {result.ProtocolVersion}");
+        Console.WriteLine($"Min supported version: {result.MinSupportedProtocolVersion}");
+        Console.WriteLine($"Max supported version: {result.MaxSupportedProtocolVersion}");
+        Console.WriteLine($"Number of feature flags: {result.FeatureFlags.Count}");
+        Console.WriteLine($"Number of attributes: {result.Attributes.Count}");
+
+        // Log some feature flags if available
+        if (result.FeatureFlags.Count > 0)
+        {
+            Console.WriteLine("Sample feature flags:");
+            foreach (var flag in result.FeatureFlags.Take(5))
+            {
+                Console.WriteLine($"  {flag.Key}: {flag.Value}");
+            }
+        }
+
+        // Log some attributes if available
+        if (result.Attributes.Count > 0)
+        {
+            Console.WriteLine("Sample attributes:");
+            foreach (var attr in result.Attributes.Take(5))
+            {
+                Console.WriteLine($"  {attr.Key}: {attr.Value?.Value}");
+            }
+        }
+    }
+
+    [Test]
+    public async Task GetProtocolConfigAsync_WithVersion_ReturnsSpecificConfig()
+    {
+        // Skip if we don't know what version to use
+        var currentConfig = await _target!.GetProtocolConfigAsync().ConfigureAwait(false);
+        if (currentConfig.ProtocolVersion <= 1)
+        {
+            Assert.Ignore("Test skipped - need a previous protocol version to test with");
+            return;
+        }
+
+        // Use previous version
+        var previousVersion = currentConfig.ProtocolVersion - 1;
+
+        // Act
+        var result = await _target!.GetProtocolConfigAsync(previousVersion).ConfigureAwait(false);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(previousVersion, result.ProtocolVersion);
+
+        Console.WriteLine($"Retrieved protocol config for version: {previousVersion}");
     }
 }

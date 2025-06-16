@@ -195,7 +195,12 @@ public class ReadApi : IReadApi
 
     public async Task<ProtocolConfigResponse> GetProtocolConfigAsync(BigInteger? version = null)
     {
-        throw new NotImplementedException();
+        // Create parameters array
+        object[] parameters = version.HasValue ? new object[] { version.Value.ToString() } : Array.Empty<object>();
+    
+        var response = await _client.InvokeRpcMethodAsync<ProtocolConfigResponse>("iota_getProtocolConfig", parameters).ConfigureAwait(false);
+    
+        return response;
     }
 
     public async Task<IotaPastObjectResponse> TryGetObjectBeforeVersionAsync(ObjectID objectId, SequenceNumber version)
