@@ -240,4 +240,30 @@ public class ReadApiTests
         Console.WriteLine($"Latest checkpoint digest: {checkpoint.Digest}");
         Console.WriteLine($"Latest checkpoint timestamp: {checkpoint.TimestampMs}");
     }
+
+    [Test]
+    public async Task GetReferenceGasPriceAsync_ReturnsValidGasPrice()
+    {
+        // Act
+        var result = await _target!.GetReferenceGasPriceAsync().ConfigureAwait(false);
+
+        // Assert
+        Assert.Greater(result, 0);
+    
+        // Log the result
+        Console.WriteLine($"Reference gas price: {result}");
+    }
+
+    [Test]
+    public async Task GetTotalTransactionBlocksAsync_ReturnsValidCount()
+    {
+        // Act
+        var result = await _target!.GetTotalTransactionBlocksAsync().ConfigureAwait(false);
+
+        // Assert
+        Assert.Greater(result, 0);
+    
+        // Log the result
+        Console.WriteLine($"Total transaction blocks: {result}");
+    }
 }

@@ -65,9 +65,13 @@ public class ReadApi : IReadApi
         throw new NotImplementedException();
     }
 
+
+    /// <inheritdoc/>
     public async Task<ulong> GetTotalTransactionBlocksAsync()
     {
-        throw new NotImplementedException();
+        var response = await _client.InvokeRpcMethodAsync<ulong>("iota_getTotalTransactionBlocks").ConfigureAwait(false);
+    
+        return response;
     }
 
     public async Task<IotaTransactionBlockResponse> GetTransactionWithOptionsAsync(TransactionDigest digest, IotaTransactionBlockResponseOptions options)
@@ -173,7 +177,9 @@ public class ReadApi : IReadApi
 
     public async Task<ulong> GetReferenceGasPriceAsync()
     {
-        throw new NotImplementedException();
+        var response = await _client.InvokeRpcMethodAsync<ulong>("iotax_getReferenceGasPrice").ConfigureAwait(false);
+    
+        return response;
     }
 
     public async Task<DryRunTransactionBlockResponse> DryRunTransactionBlockAsync(TransactionData tx)
