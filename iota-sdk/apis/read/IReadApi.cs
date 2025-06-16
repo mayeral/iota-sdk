@@ -2,6 +2,7 @@
 using iota_sdk.model.read;
 using System.Numerics;
 using Iota.Model.Read;
+using iota_sdk.apis.read.m;
 
 namespace iota_sdk.apis.read
 {

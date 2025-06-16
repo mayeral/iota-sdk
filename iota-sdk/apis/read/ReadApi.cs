@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Iota.Model.Read;
+using iota_sdk.apis.read.m;
 using iota_sdk.model;
 using iota_sdk.model.read;
 
@@ -86,12 +87,22 @@ public class ReadApi : IReadApi
 
     public async Task<string> GetChainIdentifierAsync()
     {
-        throw new NotImplementedException();
+        var response = await _client.InvokeRpcMethodAsync<string>("iota_getChainIdentifier").ConfigureAwait(false);
+        return response;
     }
 
     public async Task<Checkpoint> GetCheckpointAsync(CheckpointId id)
     {
-        throw new NotImplementedException();
+        // Create a request object with only one property set based on input
+        string? requestParam;
+
+        // Use sequence number if provided
+        requestParam = id.SequenceNumber.HasValue ? id.SequenceNumber.ToString() :
+            // Use digest if provided
+            id.Digest;
+
+        var response = await _client.InvokeRpcMethodAsync<Checkpoint>("iota_getCheckpoint", requestParam).ConfigureAwait(false);
+        return response;
     }
 
     public async Task<CheckpointPage> GetCheckpointsAsync(BigInteger? cursor = null, int? limit = null, bool descendingOrder = false)

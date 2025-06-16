@@ -1,4 +1,4 @@
-﻿namespace iota_sdk.apis.read;
+﻿namespace iota_sdk.apis.read.m;
 
 public class CheckpointSequenceNumber
 {
