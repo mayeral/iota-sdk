@@ -105,9 +105,48 @@ public class ReadApi : IReadApi
         return response;
     }
 
+    /// <summary>
+    /// Returns a paginated list of checkpoints
+    /// </summary>
+    /// <param name="cursor">An optional paging cursor. If provided, the query will start from the next item after the specified cursor.</param>
+    /// <param name="limit">Maximum items returned per page. If not specified, defaults to the server's maximum limit.</param>
+    /// <param name="descendingOrder">Query result ordering. False (default) for ascending order (oldest first), true for descending order.</param>
+    /// <returns>A page of checkpoints</returns>
     public async Task<CheckpointPage> GetCheckpointsAsync(BigInteger? cursor = null, int? limit = null, bool descendingOrder = false)
     {
-        throw new NotImplementedException();
+        // Create parameters array for the RPC call
+        var parameters = new List<object>();
+    
+        // Add cursor if provided
+        if (cursor.HasValue)
+        {
+            parameters.Add(cursor.Value.ToString());
+        }
+        else
+        {
+            parameters.Add(null);
+        }
+    
+        // Add limit if provided
+        if (limit.HasValue)
+        {
+            parameters.Add(limit.Value);
+        }
+        else
+        {
+            parameters.Add(null);
+        }
+    
+        // Add ordering parameter
+        parameters.Add(descendingOrder);
+    
+        // Make the RPC call
+        var response = await _client.InvokeRpcMethodAsync<CheckpointPage>(
+            "iota_getCheckpoints", 
+            parameters.ToArray()
+        ).ConfigureAwait(false);
+    
+        return response;
     }
 
     public async Task<CheckpointSequenceNumber> GetLatestCheckpointSequenceNumberAsync()
