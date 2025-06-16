@@ -149,9 +149,11 @@ public class ReadApi : IReadApi
         return response;
     }
 
-    public async Task<CheckpointSequenceNumber> GetLatestCheckpointSequenceNumberAsync()
+    /// <inheritdoc/>
+    public async Task<ulong> GetLatestCheckpointSequenceNumberAsync()
     {
-        throw new NotImplementedException();
+        var response = await _client.InvokeRpcMethodAsync<ulong>("iota_getLatestCheckpointSequenceNumber").ConfigureAwait(false);
+        return response;
     }
 
     public IAsyncEnumerable<IotaTransactionBlockResponse> GetTransactionsStreamAsync(IotaTransactionBlockResponseQuery query, TransactionDigest? cursor = null, bool descendingOrder = false)

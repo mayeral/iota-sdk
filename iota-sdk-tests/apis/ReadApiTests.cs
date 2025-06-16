@@ -218,4 +218,26 @@ public class ReadApiTests
             Console.WriteLine($"Ascending order - First checkpoint: #{result.Data[0].SequenceNumber}, Last checkpoint: #{result.Data[^1].SequenceNumber}");
         }
     }
+
+    [Test]
+    public async Task GetLatestCheckpointSequenceNumberAsync_ReturnsValidSequenceNumber()
+    {
+        // Act
+        var result = await _target!.GetLatestCheckpointSequenceNumberAsync().ConfigureAwait(false);
+
+        // Assert
+        Assert.Greater(result, 0);
+    
+        // Log the result
+        Console.WriteLine($"Latest checkpoint sequence number: {result}");
+    
+        // Optional: Verify we can fetch this checkpoint
+        var checkpointId = new CheckpointId { SequenceNumber = result };
+        var checkpoint = await _target!.GetCheckpointAsync(checkpointId).ConfigureAwait(false);
+    
+        Assert.IsNotNull(checkpoint);
+        Assert.AreEqual(result, checkpoint.SequenceNumber);
+        Console.WriteLine($"Latest checkpoint digest: {checkpoint.Digest}");
+        Console.WriteLine($"Latest checkpoint timestamp: {checkpoint.TimestampMs}");
+    }
 }

@@ -147,7 +147,7 @@ namespace iota_sdk.apis.read
         /// Get the sequence number of the latest checkpoint that has been executed.
         /// </summary>
         /// <returns>Latest checkpoint sequence number</returns>
-        Task<CheckpointSequenceNumber> GetLatestCheckpointSequenceNumberAsync();
+        Task<ulong> GetLatestCheckpointSequenceNumberAsync();
 
         /// <summary>
         /// Get a stream of transactions.
