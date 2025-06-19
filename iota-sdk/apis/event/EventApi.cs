@@ -1,6 +1,5 @@
-﻿using Iota.Model.Read;
-using iota_sdk.model.@event;
-using Newtonsoft.Json;
+﻿using iota_sdk.model.@event;
+using iota_sdk.model.read;
 using Newtonsoft.Json.Linq;
 
 namespace iota_sdk.apis.@event;
@@ -22,7 +21,9 @@ public class EventApi : IEventApi
 
     public async Task<IAsyncEnumerable<IotaEvent>> SubscribeEventAsync(EventFilter filter)
     {
-        throw new NotImplementedException();
+        // :::note The subscribeEvent and subscribeTransaction methods are deprecated.
+        // Please use queryEvents and queryTransactionBlocks instead. For more details see usage example. :::
+        throw new NotImplementedException("subscribe event is deprecated use query events method");
     }
 
     /// <summary>
@@ -48,127 +49,51 @@ public class EventApi : IEventApi
         return response;
     }
 
-    public async Task<EventPage> QueryEventsAsync(EventFilter query, EventId cursor = null, int? limit = null, bool descendingOrder = false)
+    public async Task<EventPage> QueryEventsAsync(EventFilter filter, EventId? cursor = null, int? limit = null, bool descendingOrder = false)
     {
-        throw new NotImplementedException();
+        // Create the parameters array for the RPC call
+        var parameters = new List<object> { filter };
+
+        // Add optional parameters if provided
+        if (cursor != null)
+        {
+            parameters.Add(cursor);
+
+            if (limit.HasValue)
+                parameters.Add(limit.Value);
+
+            parameters.Add(descendingOrder);
+        }
+
+        // Make the RPC call to iotax_queryEvents
+        var response = await _client.InvokeRpcMethodAsync<EventPage>("iotax_queryEvents", parameters.ToArray()).ConfigureAwait(false);
+
+        return response;
     }
 
-    public IAsyncEnumerable<IotaEvent> GetEventsStreamAsync(EventFilter query, EventId cursor = null, bool descendingOrder = false)
+    public async IAsyncEnumerable<IotaEvent> GetEventsStreamAsync(EventFilter query, EventId? cursor = null, bool descendingOrder = false)
     {
-        throw new NotImplementedException();
+        EventId? currentCursor = cursor;
+        bool hasMorePages = true;
+
+        while (hasMorePages)
+        {
+            // Query the next page of events
+            var page = await QueryEventsAsync(query, currentCursor, null, descendingOrder).ConfigureAwait(false);
+
+            // Yield each event in the page
+            foreach (var eventItem in page.Data)
+            {
+                yield return eventItem;
+            }
+
+            // Update cursor and check if more pages exist
+            hasMorePages = page.HasNextPage;
+            currentCursor = page.NextCursor;
+
+            // If no more pages or no next cursor, break the loop
+            if (!hasMorePages)
+                break;
+        }
     }
-}
-
-/// <summary>
-/// Response object for events query
-/// </summary>
-public class EventsResponse
-{
-    /// <summary>
-    /// List of events
-    /// </summary>
-    [JsonProperty("data")]
-    public List<IotaEvent>? Data { get; set; }
-
-    /// <summary>
-    /// Cursor for pagination
-    /// </summary>
-    [JsonProperty("nextCursor")]
-    public EventCursor NextCursor { get; set; }
-
-    /// <summary>
-    /// Indicates if there are more pages available
-    /// </summary>
-    [JsonProperty("hasNextPage")]
-    public bool HasNextPage { get; set; }
-}
-
-/// <summary>
-/// Cursor for event pagination
-/// </summary>
-public class EventCursor
-{
-    /// <summary>
-    /// Transaction digest
-    /// </summary>
-    [JsonProperty("txDigest")]
-    public string TxDigest { get; set; }
-
-    /// <summary>
-    /// Event sequence number
-    /// </summary>
-    [JsonProperty("eventSeq")]
-    public string EventSeq { get; set; }
-}
-
-/// <summary>
-/// Represents an IOTA event
-/// </summary>
-public class IotaEvent
-{
-    /// <summary>
-    /// Event identifier
-    /// </summary>
-    [JsonProperty("id")]
-    public EventId Id { get; set; }
-
-    /// <summary>
-    /// Package ID
-    /// </summary>
-    [JsonProperty("packageId")]
-    public string PackageId { get; set; }
-
-    /// <summary>
-    /// Transaction module
-    /// </summary>
-    [JsonProperty("transactionModule")]
-    public string TransactionModule { get; set; }
-
-    /// <summary>
-    /// Sender address
-    /// </summary>
-    [JsonProperty("sender")]
-    public string Sender { get; set; }
-
-    /// <summary>
-    /// Event type
-    /// </summary>
-    [JsonProperty("type")]
-    public string Type { get; set; }
-
-    /// <summary>
-    /// Parsed JSON content
-    /// </summary>
-    [JsonProperty("parsedJson")]
-    public dynamic ParsedJson { get; set; }
-
-    /// <summary>
-    /// BCS encoding format
-    /// </summary>
-    [JsonProperty("bcsEncoding")]
-    public string BcsEncoding { get; set; }
-
-    /// <summary>
-    /// BCS encoded data
-    /// </summary>
-    [JsonProperty("bcs")]
-    public string Bcs { get; set; }
-}
-
-/// <summary>
-/// Event identifier
-/// </summary>
-public class EventId
-{
-    /// <summary>
-    /// Transaction digest
-    /// </summary>
-    [JsonProperty("txDigest")]
-    public string TxDigest { get; set; }
-
-    /// <summary>
-    /// Event sequence number
-    /// </summary>
-    [JsonProperty("eventSeq")]
-    public string EventSeq { get; set; }
 }

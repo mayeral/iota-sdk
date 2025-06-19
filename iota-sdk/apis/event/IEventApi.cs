@@ -1,10 +1,5 @@
 ﻿using iota_sdk.model.@event;
 using iota_sdk.model.read;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Threading.Tasks;
-using Iota.Model.Read;
 
 namespace iota_sdk.apis.@event
 {
@@ -32,12 +27,12 @@ namespace iota_sdk.apis.@event
         /// Get a list of filtered events.
         /// The response is paginated and can be ordered ascending or descending.
         /// </summary>
-        /// <param name="query">The event filter to apply</param>
+        /// <param name="filter">The event filter to apply</param>
         /// <param name="cursor">Optional cursor for pagination</param>
         /// <param name="limit">Optional limit for results per page</param>
         /// <param name="descendingOrder">Whether to order results in descending order</param>
         /// <returns>A page of events</returns>
-        Task<EventPage> QueryEventsAsync(EventFilter query, EventId cursor = null, int? limit = null, bool descendingOrder = false);
+        Task<EventPage> QueryEventsAsync(EventFilter filter, EventId? cursor = null, int? limit = null, bool descendingOrder = false);
 
         /// <summary>
         /// Get a stream of filtered events which can be ordered ascending or descending.
@@ -46,6 +41,6 @@ namespace iota_sdk.apis.@event
         /// <param name="cursor">Optional cursor for pagination</param>
         /// <param name="descendingOrder">Whether to order results in descending order</param>
         /// <returns>A stream of events</returns>
-        IAsyncEnumerable<IotaEvent> GetEventsStreamAsync(EventFilter query, EventId cursor = null, bool descendingOrder = false);
+        IAsyncEnumerable<IotaEvent> GetEventsStreamAsync(EventFilter query, EventId? cursor = null, bool descendingOrder = false);
     }
 }

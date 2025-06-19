@@ -1,7 +1,8 @@
-﻿using Iota.Model.Read;
-using iota_sdk;
+﻿using iota_sdk;
 using iota_sdk.apis.@event;
 using iota_sdk.model;
+using iota_sdk.model.@event;
+using iota_sdk.model.read;
 using iota_sdk_tests.utils;
 
 namespace iota_sdk_tests.apis
@@ -29,7 +30,7 @@ namespace iota_sdk_tests.apis
             _client = await clientBuilder.BuildMainnet().ConfigureAwait(false);
 
             // Initialize the EventApi with the client
-            _target = _client.EventApi();
+            _target = (IEventApi)_client.EventApi();
         }
 
         [Test]
@@ -46,6 +47,42 @@ namespace iota_sdk_tests.apis
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
             Assert.IsNotEmpty(result.Data);
+        }
+
+        [Test]
+        public async Task QueryEventsAsync_WithSenderFilter_ReturnsEvents()
+        {
+            // Arrange
+            var filter = EventFilter.BySender(_testAddress);
+
+            // Act
+            var result = await _target.QueryEventsAsync(filter).ConfigureAwait(false);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Data);
+            Assert.IsNotEmpty(result.Data);
+
+            // Verify the results contain events from the expected sender
+            foreach (var eventItem in result.Data)
+            {
+                Assert.IsTrue(string.Equals(_testAddress, eventItem.Sender, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Verify some specific event data from the first event (based on the provided example)
+            var firstEvent = result.Data[0];
+
+            Assert.IsNotNull(firstEvent);
+            Assert.AreEqual("0x0000000000000000000000000000000000000000000000000000000000000003", firstEvent.PackageId);
+            Assert.AreEqual("iota_system", firstEvent.TransactionModule);
+            Assert.AreEqual("0x3::validator::StakingRequestEvent", firstEvent.Type);
+
+
+
+            // Verify pagination info
+            Assert.IsFalse(result.HasNextPage);
+            Assert.IsNotNull(result.NextCursor);
+            Assert.AreEqual("0", result.NextCursor.EventSeq);
         }
 
 
