@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Numerics;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Numerics;
 
-namespace iota_sdk.apis.read.m
+namespace iota_sdk.model.read
 {
     /// <summary>
     /// Response containing protocol configuration information

@@ -11,6 +11,11 @@ namespace iota_sdk
     public interface IIotaClient : IDisposable
     {
         /// <summary>
+        /// Server information
+        /// </summary>
+        public IotaClientBuilder.ServerInfo ServerInfo { get; set; }
+
+        /// <summary>
         /// Returns a list of RPC methods supported by the node the client is connected to.
         /// </summary>
         /// <returns>List of supported RPC methods</returns>

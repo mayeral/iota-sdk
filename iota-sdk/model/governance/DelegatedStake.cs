@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using iota_sdk.model.read;
 
 namespace iota_sdk.model.governance
 {
@@ -17,7 +18,7 @@ namespace iota_sdk.model.governance
         /// Staking pool object id.
         /// </summary>
         [JsonPropertyName("stakingPool")]
-        public ObjectID StakingPool { get; set; }
+        public ObjectId StakingPool { get; set; }
 
         /// <summary>
         /// List of stakes for this validator

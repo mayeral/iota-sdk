@@ -1,6 +1,6 @@
 ﻿using SimpleBase;
 
-namespace Iota.Model.Read
+namespace iota_sdk.model.read
 {
     /// <summary>
     /// A transaction will have a (unique) digest.

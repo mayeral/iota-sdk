@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
-using iota_sdk.apis.read.m;
 using Newtonsoft.Json;
+
+namespace iota_sdk.model.read;
 
 /// <summary>
 /// Represents a paginated response of checkpoints

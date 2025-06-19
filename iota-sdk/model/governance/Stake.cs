@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using iota_sdk.apis.read;
+using iota_sdk.model.read;
 
 namespace iota_sdk.model.governance;
 
@@ -12,7 +13,7 @@ public class Stake
     /// The ID of the staked IOTA
     /// </summary>
     [JsonPropertyName("stakedIotaId")]
-    public ObjectID StakedIotaId { get; set; }
+    public ObjectId StakedIotaId { get; set; }
 
     /// <summary>
     /// The epoch when the stake request was made

@@ -53,9 +53,8 @@ public class IotaClient : IIotaClient
     {
         var clientVersion = GetType().Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
 
-        if (_version != clientVersion) throw new Exception($"API version mismatch, expected {_version} but got {clientVersion}");
+        if (_version != clientVersion) throw new Exception($"API version mismatch, current version is {_version} but got nuget package version {clientVersion}");
         return Task.CompletedTask;
-        //return _version == clientVersion;
     }
 
     public ICoinReadApi CoinReadApi()

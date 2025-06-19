@@ -1,4 +1,4 @@
-﻿namespace iota_sdk.apis.read.m;
+﻿namespace iota_sdk.model.read;
 
 public class DryRunTransactionBlockResponse
 {

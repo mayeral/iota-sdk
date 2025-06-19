@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace iota_sdk.apis.read.m
+namespace iota_sdk.model.read
 {
     /// <summary>
     /// Filter either by the digest, or the sequence number, or neither, to get the latest checkpoint.

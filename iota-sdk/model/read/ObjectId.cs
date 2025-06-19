@@ -1,12 +1,10 @@
-﻿using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.ComponentModel;
-using System.Globalization;
+﻿using System.Globalization;
 using Newtonsoft.Json;
 
+namespace iota_sdk.model.read;
+
 [JsonConverter(typeof(ObjectIDConverter))]
-public class ObjectID : IEquatable<ObjectID>
+public class ObjectId : IEquatable<ObjectId>
 {
     // The number of bytes in an address
     public const int LENGTH = 32;
@@ -15,21 +13,21 @@ public class ObjectID : IEquatable<ObjectID>
     private readonly byte[] _bytes;
 
     // Static instances
-    public static readonly ObjectID ZERO = new ObjectID(new byte[LENGTH]);
-    public static readonly ObjectID MAX = new ObjectID(Enumerable.Repeat((byte)0xff, LENGTH).ToArray());
+    public static readonly ObjectId ZERO = new ObjectId(new byte[LENGTH]);
+    public static readonly ObjectId MAX = new ObjectId(Enumerable.Repeat((byte)0xff, LENGTH).ToArray());
 
     // Constructors
-    public ObjectID(byte[] bytes)
+    public ObjectId(byte[] bytes)
     {
         if (bytes == null || bytes.Length != LENGTH)
         {
-            throw new ArgumentException($"ObjectID must be {LENGTH} bytes");
+            throw new ArgumentException($"ObjectId must be {LENGTH} bytes");
         }
         _bytes = (byte[])bytes.Clone();
     }
 
-    // Parse an ObjectID from a hex string (with or without 0x prefix)
-    public static ObjectID Parse(string s)
+    // Parse an ObjectId from a hex string (with or without 0x prefix)
+    public static ObjectId Parse(string s)
     {
         if (string.IsNullOrEmpty(s))
         {
@@ -49,7 +47,7 @@ public class ObjectID : IEquatable<ObjectID>
         }
         else if (s.Length > LENGTH * 2)
         {
-            throw new ArgumentException($"Hex string is too long for ObjectID: {s}");
+            throw new ArgumentException($"Hex string is too long for ObjectId: {s}");
         }
 
         try
@@ -59,16 +57,16 @@ public class ObjectID : IEquatable<ObjectID>
             {
                 bytes[i] = byte.Parse(s.Substring(i * 2, 2), NumberStyles.HexNumber);
             }
-            return new ObjectID(bytes);
+            return new ObjectId(bytes);
         }
         catch (Exception ex)
         {
-            throw new ArgumentException($"Failed to parse ObjectID from hex: {s}", ex);
+            throw new ArgumentException($"Failed to parse ObjectId from hex: {s}", ex);
         }
     }
 
-    // Try to parse an ObjectID from a hex string
-    public static bool TryParse(string s, out ObjectID result)
+    // Try to parse an ObjectId from a hex string
+    public static bool TryParse(string s, out ObjectId result)
     {
         result = null;
         try
@@ -82,15 +80,15 @@ public class ObjectID : IEquatable<ObjectID>
         }
     }
 
-    // Generate a random ObjectID
-    public static ObjectID Random()
+    // Generate a random ObjectId
+    public static ObjectId Random()
     {
         byte[] bytes = new byte[LENGTH];
         new Random().NextBytes(bytes);
-        return new ObjectID(bytes);
+        return new ObjectId(bytes);
     }
 
-    // Get the bytes of the ObjectID
+    // Get the bytes of the ObjectId
     public byte[] ToBytes()
     {
         return (byte[])_bytes.Clone();
@@ -109,7 +107,7 @@ public class ObjectID : IEquatable<ObjectID>
     }
 
     // Equality methods
-    public bool Equals(ObjectID other)
+    public bool Equals(ObjectId other)
     {
         if (other == null) return false;
         return _bytes.SequenceEqual(other._bytes);
@@ -117,7 +115,7 @@ public class ObjectID : IEquatable<ObjectID>
 
     public override bool Equals(object obj)
     {
-        return obj is ObjectID other && Equals(other);
+        return obj is ObjectId other && Equals(other);
     }
 
     public override int GetHashCode()
@@ -126,31 +124,31 @@ public class ObjectID : IEquatable<ObjectID>
     }
 
     // Equality operators
-    public static bool operator ==(ObjectID left, ObjectID right)
+    public static bool operator ==(ObjectId left, ObjectId right)
     {
         if (ReferenceEquals(left, null))
             return ReferenceEquals(right, null);
         return left.Equals(right);
     }
 
-    public static bool operator !=(ObjectID left, ObjectID right)
+    public static bool operator !=(ObjectId left, ObjectId right)
     {
         return !(left == right);
     }
 
     // Implicit conversion from string
-    public static implicit operator ObjectID(string s)
+    public static implicit operator ObjectId(string s)
     {
         return Parse(s);
     }
 }
 
-// Custom JSON converter for ObjectID
+// Custom JSON converter for ObjectId
 public class ObjectIDConverter : JsonConverter
 {
     public override bool CanConvert(Type objectType)
     {
-        return objectType == typeof(ObjectID);
+        return objectType == typeof(ObjectId);
     }
 
     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -159,7 +157,7 @@ public class ObjectIDConverter : JsonConverter
             return null;
 
         var value = reader.Value.ToString();
-        return ObjectID.Parse(value);
+        return ObjectId.Parse(value);
     }
 
     public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -170,7 +168,7 @@ public class ObjectIDConverter : JsonConverter
             return;
         }
 
-        var id = (ObjectID)value;
+        var id = (ObjectId)value;
         writer.WriteValue(id.ToHexString());
     }
 }

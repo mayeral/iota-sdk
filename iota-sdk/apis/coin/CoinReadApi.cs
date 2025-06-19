@@ -1,5 +1,4 @@
-﻿using iota_sdk.model;
-using iota_sdk.model.coin;
+﻿using iota_sdk.model.coin;
 
 namespace iota_sdk.apis.coin;
 

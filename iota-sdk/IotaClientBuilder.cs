@@ -9,7 +9,7 @@ namespace iota_sdk
         private TimeSpan _requestTimeout = TimeSpan.FromSeconds(60);
         private (string username, string password)? _basicAuth = null;
 
-        // TODO : USE THOSE IND IOTA CLIENT
+        // TODO : USE THOSE PROPERTIES IN IOTA CLIENT
         private int? _maxConcurrentRequests = null;
         private string? _wsUrl = null;
         private TimeSpan? _wsPingInterval = null;
@@ -149,6 +149,11 @@ namespace iota_sdk
             public List<string> RpcMethods { get; set; } = new List<string>();
             public List<string> Subscriptions { get; set; } = new List<string>();
             public bool IotaSystemStateV2Support { get; set; }
+
+            public override string ToString()
+            {
+                return $"Version: {Version} IotaSystemStateV2Support: {IotaSystemStateV2Support} RpcMethods: {string.Join(", ", RpcMethods)} Subscriptions: {string.Join(", ", Subscriptions)}";
+            }
         }
     }
 }

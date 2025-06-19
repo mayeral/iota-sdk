@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace iota_sdk.apis.read.m
+namespace iota_sdk.model.read
 {
+    /// <summary>
+    /// The Checkpoint Class
+    /// </summary>
     public class Checkpoint
     {
         /// <summary>

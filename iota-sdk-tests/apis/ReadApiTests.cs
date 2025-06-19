@@ -1,6 +1,6 @@
 ﻿using iota_sdk;
 using iota_sdk.apis.read;
-using iota_sdk.apis.read.m;
+using iota_sdk.model.read;
 
 namespace iota_sdk_tests.apis;
 

@@ -1,8 +1,6 @@
 ﻿using iota_sdk.model;
 using iota_sdk.model.read;
 using System.Numerics;
-using Iota.Model.Read;
-using iota_sdk.apis.read.m;
 
 namespace iota_sdk.apis.read
 {
@@ -20,17 +18,17 @@ namespace iota_sdk.apis.read
         /// <param name="cursor">Optional cursor for pagination</param>
         /// <param name="limit">Optional limit for results per page</param>
         /// <returns>A page of objects</returns>
-        Task<ObjectsPage> GetOwnedObjectsAsync(IotaAddress address, IotaObjectResponseQuery query = null, ObjectID cursor = null, int? limit = null);
+        Task<ObjectsPage> GetOwnedObjectsAsync(IotaAddress address, IotaObjectResponseQuery query = null, ObjectId cursor = null, int? limit = null);
 
         /// <summary>
-        /// Get the dynamic fields owned by the given ObjectID.
+        /// Get the dynamic fields owned by the given ObjectId.
         /// Results are paginated.
         /// </summary>
         /// <param name="objectId">The object ID to query</param>
         /// <param name="cursor">Optional cursor for pagination</param>
         /// <param name="limit">Optional limit for results per page</param>
         /// <returns>A page of dynamic fields</returns>
-        Task<DynamicFieldPage> GetDynamicFieldsAsync(ObjectID objectId, ObjectID cursor = null, int? limit = null);
+        Task<DynamicFieldPage> GetDynamicFieldsAsync(ObjectId objectId, ObjectId cursor = null, int? limit = null);
 
         /// <summary>
         /// Get information for a specified dynamic field object by its parent object ID and field name.
@@ -38,7 +36,7 @@ namespace iota_sdk.apis.read
         /// <param name="parentObjectId">The parent object ID</param>
         /// <param name="name">The dynamic field name</param>
         /// <returns>Object response</returns>
-        Task<IotaObjectResponse> GetDynamicFieldObjectAsync(ObjectID parentObjectId, DynamicFieldName name);
+        Task<IotaObjectResponse> GetDynamicFieldObjectAsync(ObjectId parentObjectId, DynamicFieldName name);
 
         /// <summary>
         /// Get information for a specified dynamic field object by its parent object ID and field name with options.
@@ -47,7 +45,7 @@ namespace iota_sdk.apis.read
         /// <param name="name">The dynamic field name</param>
         /// <param name="options">Object data options</param>
         /// <returns>Object response</returns>
-        Task<IotaObjectResponse> GetDynamicFieldObjectV2Async(ObjectID parentObjectId, DynamicFieldName name, IotaObjectDataOptions options = null);
+        Task<IotaObjectResponse> GetDynamicFieldObjectV2Async(ObjectId parentObjectId, DynamicFieldName name, IotaObjectDataOptions options = null);
 
         /// <summary>
         /// Get a parsed past object and version for the provided object ID.
@@ -56,7 +54,7 @@ namespace iota_sdk.apis.read
         /// <param name="version">The version number</param>
         /// <param name="options">Object data options</param>
         /// <returns>Past object response</returns>
-        Task<IotaPastObjectResponse> TryGetParsedPastObjectAsync(ObjectID objectId, SequenceNumber version, IotaObjectDataOptions options);
+        Task<IotaPastObjectResponse> TryGetParsedPastObjectAsync(ObjectId objectId, SequenceNumber version, IotaObjectDataOptions options);
 
         /// <summary>
         /// Get a list of parsed past objects.
@@ -72,7 +70,7 @@ namespace iota_sdk.apis.read
         /// <param name="objectId">The object ID</param>
         /// <param name="options">Object data options</param>
         /// <returns>Object response</returns>
-        Task<IotaObjectResponse> GetObjectWithOptionsAsync(ObjectID objectId, IotaObjectDataOptions options);
+        Task<IotaObjectResponse> GetObjectWithOptionsAsync(ObjectId objectId, IotaObjectDataOptions options);
 
         /// <summary>
         /// Get a list of objects by their object IDs with optional fields enabled by IotaObjectDataOptions.
@@ -80,14 +78,14 @@ namespace iota_sdk.apis.read
         /// <param name="objectIds">List of object IDs</param>
         /// <param name="options">Object data options</param>
         /// <returns>List of object responses</returns>
-        Task<IEnumerable<IotaObjectResponse>> MultiGetObjectWithOptionsAsync(IEnumerable<ObjectID> objectIds, IotaObjectDataOptions options);
+        Task<IEnumerable<IotaObjectResponse>> MultiGetObjectWithOptionsAsync(IEnumerable<ObjectId> objectIds, IotaObjectDataOptions options);
 
         /// <summary>
         /// Get a BCS serialized object's bytes by object ID.
         /// </summary>
         /// <param name="objectId">The object ID</param>
         /// <returns>Serialized object bytes</returns>
-        Task<byte[]> GetMoveObjectBcsAsync(ObjectID objectId);
+        Task<byte[]> GetMoveObjectBcsAsync(ObjectId objectId);
 
         /// <summary>
         /// Get the total number of transaction blocks known to server.
@@ -171,7 +169,7 @@ namespace iota_sdk.apis.read
         /// </summary>
         /// <param name="package">The package object ID</param>
         /// <returns>Dictionary of module name to normalized module</returns>
-        Task<IDictionary<string, IotaMoveNormalizedModule>> GetNormalizedMoveModulesByPackageAsync(ObjectID package);
+        Task<IDictionary<string, IotaMoveNormalizedModule>> GetNormalizedMoveModulesByPackageAsync(ObjectId package);
 
         /// <summary>
         /// Get the reference gas price.
@@ -212,6 +210,6 @@ namespace iota_sdk.apis.read
         /// <param name="objectId">The object ID</param>
         /// <param name="version">The version number</param>
         /// <returns>Past object response</returns>
-        Task<IotaPastObjectResponse> TryGetObjectBeforeVersionAsync(ObjectID objectId, SequenceNumber version);
+        Task<IotaPastObjectResponse> TryGetObjectBeforeVersionAsync(ObjectId objectId, SequenceNumber version);
     }
 }

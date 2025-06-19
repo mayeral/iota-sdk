@@ -1,6 +1,4 @@
 ﻿using System.Numerics;
-using Iota.Model.Read;
-using iota_sdk.apis.read.m;
 using iota_sdk.model;
 using iota_sdk.model.read;
 
@@ -20,27 +18,27 @@ public class ReadApi : IReadApi
         _client = client;
     }
 
-    public async Task<ObjectsPage> GetOwnedObjectsAsync(IotaAddress address, IotaObjectResponseQuery query = null, ObjectID cursor = null, int? limit = null)
+    public async Task<ObjectsPage> GetOwnedObjectsAsync(IotaAddress address, IotaObjectResponseQuery query = null, ObjectId cursor = null, int? limit = null)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<DynamicFieldPage> GetDynamicFieldsAsync(ObjectID objectId, ObjectID cursor = null, int? limit = null)
+    public async Task<DynamicFieldPage> GetDynamicFieldsAsync(ObjectId objectId, ObjectId cursor = null, int? limit = null)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IotaObjectResponse> GetDynamicFieldObjectAsync(ObjectID parentObjectId, DynamicFieldName name)
+    public async Task<IotaObjectResponse> GetDynamicFieldObjectAsync(ObjectId parentObjectId, DynamicFieldName name)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IotaObjectResponse> GetDynamicFieldObjectV2Async(ObjectID parentObjectId, DynamicFieldName name, IotaObjectDataOptions options = null)
+    public async Task<IotaObjectResponse> GetDynamicFieldObjectV2Async(ObjectId parentObjectId, DynamicFieldName name, IotaObjectDataOptions options = null)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IotaPastObjectResponse> TryGetParsedPastObjectAsync(ObjectID objectId, SequenceNumber version, IotaObjectDataOptions options)
+    public async Task<IotaPastObjectResponse> TryGetParsedPastObjectAsync(ObjectId objectId, SequenceNumber version, IotaObjectDataOptions options)
     {
         throw new NotImplementedException();
     }
@@ -50,17 +48,17 @@ public class ReadApi : IReadApi
         throw new NotImplementedException();
     }
 
-    public async Task<IotaObjectResponse> GetObjectWithOptionsAsync(ObjectID objectId, IotaObjectDataOptions options)
+    public async Task<IotaObjectResponse> GetObjectWithOptionsAsync(ObjectId objectId, IotaObjectDataOptions options)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<IotaObjectResponse>> MultiGetObjectWithOptionsAsync(IEnumerable<ObjectID> objectIds, IotaObjectDataOptions options)
+    public async Task<IEnumerable<IotaObjectResponse>> MultiGetObjectWithOptionsAsync(IEnumerable<ObjectId> objectIds, IotaObjectDataOptions options)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<byte[]> GetMoveObjectBcsAsync(ObjectID objectId)
+    public async Task<byte[]> GetMoveObjectBcsAsync(ObjectId objectId)
     {
         throw new NotImplementedException();
     }
@@ -145,9 +143,7 @@ public class ReadApi : IReadApi
         parameters.Add(descendingOrder);
     
         // Make the RPC call
-        var response = await _client.InvokeRpcMethodAsync<CheckpointPage>(
-            "iota_getCheckpoints", 
-            parameters.ToArray()
+        var response = await _client.InvokeRpcMethodAsync<CheckpointPage>("iota_getCheckpoints", parameters.ToArray()
         ).ConfigureAwait(false);
     
         return response;
@@ -170,7 +166,7 @@ public class ReadApi : IReadApi
         throw new NotImplementedException();
     }
 
-    public async Task<IDictionary<string, IotaMoveNormalizedModule>> GetNormalizedMoveModulesByPackageAsync(ObjectID package)
+    public async Task<IDictionary<string, IotaMoveNormalizedModule>> GetNormalizedMoveModulesByPackageAsync(ObjectId package)
     {
         throw new NotImplementedException();
     }
@@ -203,7 +199,7 @@ public class ReadApi : IReadApi
         return response;
     }
 
-    public async Task<IotaPastObjectResponse> TryGetObjectBeforeVersionAsync(ObjectID objectId, SequenceNumber version)
+    public async Task<IotaPastObjectResponse> TryGetObjectBeforeVersionAsync(ObjectId objectId, SequenceNumber version)
     {
         throw new NotImplementedException();
     }
