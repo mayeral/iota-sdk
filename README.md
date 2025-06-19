@@ -10,7 +10,7 @@ The IOTA .NET SDK enables developers to build applications that interact with th
 
 **⚠️ This implementation is Work in Progress ⚠️**
 
-The IOTA .NET SDK is currently under active development. !! Its a private project!!
+The IOTA .NET SDK is currently under active development. Its a private project.
 
 ### Implementation Overview
 
@@ -21,7 +21,7 @@ The following table shows the current implementation status of the various APIs:
 | CoinReadApi | ✅ | ✅ |
 | GovernanceApi | ✅ | ✅ |
 | ReadApi | ❌ | ❌ |
-| EventApi | ❌ | ❌ |
+| EventApi | ✅ | ✅ |
 | TransactionBuilder | ❌ | ❌ |
 | QuorumDriverApi | ❌ | ❌ |
 
@@ -156,5 +156,75 @@ The use of this software for financial transactions or interactions with the IOT
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-// TODO LICENCE CHECK - MIT FOR HttpClientMessageHandler I.O.?
+This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT).
+
+
+# API Implementation Status Table
+
+| API Method | Category | Implemented | UTest |
+|------------|----------|------------|-------|
+| iota_devInspectTransactionBlock | Write API | ❌ | ❌ |
+| iota_dryRunTransactionBlock | Write API | ❌ | ❌ |
+| iota_executeTransactionBlock | Write API | ❌ | ❌ |
+| iota_getChainIdentifier | Read API | ✅ | ✅ |
+| iota_getCheckpoint | Read API | ✅ | ✅ |
+| iota_getCheckpoints | Read API | ✅ | ✅ |
+| iota_getEvents | Event API | ✅ | ✅ |
+| iota_getLatestCheckpointSequenceNumber | Read API | ✅ | ✅ |
+| iota_getMoveFunctionArgTypes | Move Utils | ❌ | ❌ |
+| iota_getNormalizedMoveFunction | Move Utils | ❌ | ❌ |
+| iota_getNormalizedMoveModule | Move Utils | ❌ | ❌ |
+| iota_getNormalizedMoveModulesByPackage | Move Utils | ❌ | ❌ |
+| iota_getNormalizedMoveStruct | Move Utils | ❌ | ❌ |
+| iota_getObject | Read API | ❌ | ❌ |
+| iota_getProtocolConfig | Read API | ✅ | ✅ |
+| iota_getTotalTransactionBlocks | Read API | ✅ | ✅ |
+| iota_getTransactionBlock | Read API | ❌ | ❌ |
+| iota_multiGetObjects | Read API | ❌ | ❌ |
+| iota_multiGetTransactionBlocks | Read API | ❌ | ❌ |
+| iota_tryGetPastObject | Read API | ❌ | ❌ |
+| iota_tryMultiGetPastObjects | Read API | ❌ | ❌ |
+| iotax_getAllBalances | Coin Query API | ✅ | ✅ |
+| iotax_getAllCoins | Coin Query API | ✅ | ✅ |
+| iotax_getBalance | Coin Query API | ✅ | ✅ |
+| iotax_getBridgeObjectInitialSharedVersion | Read API | ❌ | ❌ |
+| iotax_getCirculatingSupply | Coin Query API | ✅ | ✅ |
+| iotax_getCoinMetadata | Coin Query API | ✅ | ✅ |
+| iotax_getCoins | Coin Query API | ✅ | ✅ |
+| iotax_getCommitteeInfo | Governance Read API | ✅ | ✅ |
+| iotax_getDynamicFieldObject | Read API | ❌ | ❌ |
+| iotax_getDynamicFieldObjectV2 | Read API | ❌ | ❌ |
+| iotax_getDynamicFields | Read API | ❌ | ❌ |
+| iotax_getLatestBridge | Read API | ❌ | ❌ |
+| iotax_getLatestIotaSystemState | Governance Read API | ✅ | ✅ |
+| iotax_getLatestIotaSystemStateV2 | Governance Read API | ✅ | ✅ |
+| iotax_getOwnedObjects | Read API | ❌ | ❌ |
+| iotax_getReferenceGasPrice | Governance Read API | ✅ | ✅ |
+| iotax_getStakes | Governance Read API | ✅ | ✅ |
+| iotax_getStakesByIds | Governance Read API | ❌ | ❌ |
+| iotax_getTimelockedStakes | Governance Read API | ✅ | ✅ |
+| iotax_getTimelockedStakesByIds | Governance Read API | ❌ | ❌ |
+| iotax_getTotalSupply | Coin Query API | ✅ | ✅ |
+| iotax_getValidatorsApy | Governance Read API | ✅ | ✅ |
+| iotax_iotaNamesFindAllRegistrationNFTs | Read API | ❌ | ❌ |
+| iotax_iotaNamesLookup | Read API | ❌ | ❌ |
+| iotax_iotaNamesReverseLookup | IOTA Names API | ❌ | ❌ |
+| iotax_queryEvents | Event API | ✅ | ✅ |
+| iotax_queryTransactionBlocks | Read API | ❌ | ❌ |
+| iotax_subscribeEvent | Read API | ❌ | ❌ |
+| iotax_subscribeTransaction | Read API | ❌ | ❌ |
+| unsafe_batchTransaction | Transaction API | ❌ | ❌ |
+| unsafe_mergeCoins | Transaction API | ❌ | ❌ |
+| unsafe_moveCall | Transaction API | ❌ | ❌ |
+| unsafe_pay | Transaction API | ❌ | ❌ |
+| unsafe_payAllIota | Transaction API | ❌ | ❌ |
+| unsafe_payIota | Transaction API | ❌ | ❌ |
+| unsafe_publish | Transaction API | ❌ | ❌ |
+| unsafe_requestAddStake | Transaction API | ❌ | ❌ |
+| unsafe_requestAddTimelockedStake | Transaction API | ❌ | ❌ |
+| unsafe_requestWithdrawStake | Transaction API | ❌ | ❌ |
+| unsafe_requestWithdrawTimelockedStake | Transaction API | ❌ | ❌ |
+| unsafe_splitCoin | Transaction API | ❌ | ❌ |
+| unsafe_splitCoinEqual | Transaction API | ❌ | ❌ |
+| unsafe_transferIota | Transaction API | ❌ | ❌ |
+| unsafe_transferObject | Transaction API | ❌ | ❌ |
