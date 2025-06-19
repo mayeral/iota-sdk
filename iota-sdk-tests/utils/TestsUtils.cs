@@ -1,4 +1,5 @@
 
+using iota_sdk.model.read;
 using iota_sdk_tests.apis;
 using Microsoft.Extensions.Configuration;
 
@@ -21,5 +22,21 @@ public static class TestsUtils
             "dotnet user-secrets set \"TestSettings:Address\" \"0xIOTA_ADDRESS\" --project iota-sdk-tests\r\n");
 
         return testAddress;
+    }
+
+    public static ObjectId InitTestObjectId()
+    {
+        string objectId;       
+
+            var configuration = new ConfigurationBuilder()
+            .AddUserSecrets<GovernanceApiTests>()
+            .Build();
+
+            objectId = configuration["TestSettings:ObjectId"] ?? throw new InvalidOperationException(
+                "Test address not found in user secrets. Set the TestSettings:Address key in user secrets.\r\n" +
+                "Example: dotnet user-secrets init --project iota-sdk-tests\r\n" +
+                "dotnet user-secrets set \"TestSettings:ObjectId\" \"0xIOTA_ADDRESS\" --project iota-sdk-tests\r\n");
+
+        return new ObjectId(objectId);
     }
 }

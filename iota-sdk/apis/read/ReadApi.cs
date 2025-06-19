@@ -1,6 +1,8 @@
 ﻿using System.Numerics;
+using Iota.Sdk.Model.Read;
 using iota_sdk.model;
 using iota_sdk.model.read;
+using Newtonsoft.Json.Linq;
 
 namespace iota_sdk.apis.read;
 
@@ -25,6 +27,7 @@ public class ReadApi : IReadApi
 
     public async Task<DynamicFieldPage> GetDynamicFieldsAsync(ObjectId objectId, ObjectId cursor = null, int? limit = null)
     {
+        // iotax_getDynamicFieldObject TODO
         throw new NotImplementedException();
     }
 
@@ -48,9 +51,30 @@ public class ReadApi : IReadApi
         throw new NotImplementedException();
     }
 
-    public async Task<IotaObjectResponse> GetObjectWithOptionsAsync(ObjectId objectId, IotaObjectDataOptions options)
+    public async Task<IotaObjectResponse> GetObjectAsync(ObjectId objectId, IotaObjectDataOptions options)
     {
-        throw new NotImplementedException();
+        // Create parameters array for the RPC call
+        var parameters = new object[]
+        {
+        objectId.ToString(),  // First parameter: object_id (required)
+        options               // Second parameter: options (optional)
+        };
+
+        // Make the RPC call to iota_getObject
+        var response = await _client.InvokeRpcMethodAsync<JObject>("iota_getObject", parameters)
+            .ConfigureAwait(false);
+
+        // Convert JObject to string
+        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
+
+        // Use System.Text.Json to deserialize
+        var jsonSerializerOptions = new System.Text.Json.JsonSerializerOptions
+        {
+            PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true
+        };
+
+        return System.Text.Json.JsonSerializer.Deserialize<IotaObjectResponse>(jsonString, jsonSerializerOptions)!;
     }
 
     public async Task<IEnumerable<IotaObjectResponse>> MultiGetObjectWithOptionsAsync(IEnumerable<ObjectId> objectIds, IotaObjectDataOptions options)
@@ -68,7 +92,7 @@ public class ReadApi : IReadApi
     public async Task<ulong> GetTotalTransactionBlocksAsync()
     {
         var response = await _client.InvokeRpcMethodAsync<ulong>("iota_getTotalTransactionBlocks").ConfigureAwait(false);
-    
+
         return response;
     }
 
@@ -118,7 +142,7 @@ public class ReadApi : IReadApi
     {
         // Create parameters array for the RPC call
         var parameters = new List<object>();
-    
+
         // Add cursor if provided
         if (cursor.HasValue)
         {
@@ -128,7 +152,7 @@ public class ReadApi : IReadApi
         {
             parameters.Add(null);
         }
-    
+
         // Add limit if provided
         if (limit.HasValue)
         {
@@ -138,14 +162,14 @@ public class ReadApi : IReadApi
         {
             parameters.Add(null);
         }
-    
+
         // Add ordering parameter
         parameters.Add(descendingOrder);
-    
+
         // Make the RPC call
         var response = await _client.InvokeRpcMethodAsync<CheckpointPage>("iota_getCheckpoints", parameters.ToArray()
         ).ConfigureAwait(false);
-    
+
         return response;
     }
 
@@ -174,7 +198,7 @@ public class ReadApi : IReadApi
     public async Task<ulong> GetReferenceGasPriceAsync()
     {
         var response = await _client.InvokeRpcMethodAsync<ulong>("iotax_getReferenceGasPrice").ConfigureAwait(false);
-    
+
         return response;
     }
 
@@ -193,9 +217,9 @@ public class ReadApi : IReadApi
     {
         // Create parameters array
         object[] parameters = version.HasValue ? new object[] { version.Value.ToString() } : Array.Empty<object>();
-    
+
         var response = await _client.InvokeRpcMethodAsync<ProtocolConfigResponse>("iota_getProtocolConfig", parameters).ConfigureAwait(false);
-    
+
         return response;
     }
 

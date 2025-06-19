@@ -176,7 +176,7 @@ This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT)
 | iota_getNormalizedMoveModule | Move Utils | ❌ | ❌ |
 | iota_getNormalizedMoveModulesByPackage | Move Utils | ❌ | ❌ |
 | iota_getNormalizedMoveStruct | Move Utils | ❌ | ❌ |
-| iota_getObject | Read API | ❌ | ❌ |
+| iota_getObject | Read API | ✅ | ✅ |
 | iota_getProtocolConfig | Read API | ✅ | ✅ |
 | iota_getTotalTransactionBlocks | Read API | ✅ | ✅ |
 | iota_getTransactionBlock | Read API | ❌ | ❌ |

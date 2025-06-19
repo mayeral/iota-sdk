@@ -1,174 +1,130 @@
-﻿using System.Globalization;
-using Newtonsoft.Json;
+﻿namespace iota_sdk.model.read;
 
-namespace iota_sdk.model.read;
-
-[JsonConverter(typeof(ObjectIDConverter))]
-public class ObjectId : IEquatable<ObjectId>
+/// <summary>
+/// Represents an object identifier in the IOTA system.
+/// </summary>
+[Serializable]
+public class ObjectId : IEquatable<ObjectId>, IComparable<ObjectId>
 {
-    // The number of bytes in an address
-    public const int LENGTH = 32;
+    private readonly string _value;
 
-    // The underlying byte array representing the address
-    private readonly byte[] _bytes;
-
-    // Static instances
-    public static readonly ObjectId ZERO = new ObjectId(new byte[LENGTH]);
-    public static readonly ObjectId MAX = new ObjectId(Enumerable.Repeat((byte)0xff, LENGTH).ToArray());
-
-    // Constructors
-    public ObjectId(byte[] bytes)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ObjectId"/> class.
+    /// </summary>
+    /// <param name="value">The hex string representation of the object ID.</param>
+    public ObjectId(string value)
     {
-        if (bytes == null || bytes.Length != LENGTH)
-        {
-            throw new ArgumentException($"ObjectId must be {LENGTH} bytes");
-        }
-        _bytes = (byte[])bytes.Clone();
+        if (string.IsNullOrEmpty(value))
+            throw new ArgumentNullException(nameof(value));
+
+        // Ensure the value is a valid hex string
+        if (!value.StartsWith("0x"))
+            _value = "0x" + value;
+        else
+            _value = value;
     }
 
-    // Parse an ObjectId from a hex string (with or without 0x prefix)
-    public static ObjectId Parse(string s)
-    {
-        if (string.IsNullOrEmpty(s))
-        {
-            throw new ArgumentException("Cannot parse empty string");
-        }
-
-        // Check if the string has 0x prefix and remove it
-        if (s.StartsWith("0x", StringComparison.OrdinalIgnoreCase))
-        {
-            s = s.Substring(2);
-        }
-
-        // Pad with leading zeros if needed
-        if (s.Length < LENGTH * 2)
-        {
-            s = s.PadLeft(LENGTH * 2, '0');
-        }
-        else if (s.Length > LENGTH * 2)
-        {
-            throw new ArgumentException($"Hex string is too long for ObjectId: {s}");
-        }
-
-        try
-        {
-            byte[] bytes = new byte[LENGTH];
-            for (int i = 0; i < LENGTH; i++)
-            {
-                bytes[i] = byte.Parse(s.Substring(i * 2, 2), NumberStyles.HexNumber);
-            }
-            return new ObjectId(bytes);
-        }
-        catch (Exception ex)
-        {
-            throw new ArgumentException($"Failed to parse ObjectId from hex: {s}", ex);
-        }
-    }
-
-    // Try to parse an ObjectId from a hex string
-    public static bool TryParse(string s, out ObjectId result)
-    {
-        result = null;
-        try
-        {
-            result = Parse(s);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    // Generate a random ObjectId
-    public static ObjectId Random()
-    {
-        byte[] bytes = new byte[LENGTH];
-        new Random().NextBytes(bytes);
-        return new ObjectId(bytes);
-    }
-
-    // Get the bytes of the ObjectId
-    public byte[] ToBytes()
-    {
-        return (byte[])_bytes.Clone();
-    }
-
-    // Convert to hex string with 0x prefix
-    public string ToHexString()
-    {
-        return "0x" + BitConverter.ToString(_bytes).Replace("-", "").ToLowerInvariant();
-    }
-
-    // Override ToString to return hex representation
+    /// <summary>
+    /// Converts the ObjectId to its string representation.
+    /// </summary>
+    /// <returns>The string representation of the ObjectId.</returns>
     public override string ToString()
     {
-        return ToHexString();
+        return _value;
     }
 
-    // Equality methods
-    public bool Equals(ObjectId other)
-    {
-        if (other == null) return false;
-        return _bytes.SequenceEqual(other._bytes);
-    }
-
+    /// <summary>
+    /// Determines whether the specified object is equal to the current object.
+    /// </summary>
+    /// <param name="obj">The object to compare with the current object.</param>
+    /// <returns>true if the specified object is equal to the current object; otherwise, false.</returns>
     public override bool Equals(object obj)
     {
-        return obj is ObjectId other && Equals(other);
+        if (obj is ObjectId other)
+            return Equals(other);
+        return false;
     }
 
+    /// <summary>
+    /// Determines whether the specified ObjectId is equal to the current ObjectId.
+    /// </summary>
+    /// <param name="other">The ObjectId to compare with the current ObjectId.</param>
+    /// <returns>true if the specified ObjectId is equal to the current ObjectId; otherwise, false.</returns>
+    public bool Equals(ObjectId other)
+    {
+        if (other is null)
+            return false;
+        return string.Equals(_value, other._value, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Returns a hash code for this instance.
+    /// </summary>
+    /// <returns>A hash code for this instance.</returns>
     public override int GetHashCode()
     {
-        return BitConverter.ToInt32(_bytes, 0);
+        return _value.GetHashCode(StringComparison.OrdinalIgnoreCase);
     }
 
-    // Equality operators
+    /// <summary>
+    /// Compares the current instance with another object of the same type.
+    /// </summary>
+    /// <param name="other">An object to compare with this instance.</param>
+    /// <returns>A value that indicates the relative order of the objects being compared.</returns>
+    public int CompareTo(ObjectId other)
+    {
+        if (other is null)
+            return 1;
+        return string.Compare(_value, other._value, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Equality operator.
+    /// </summary>
     public static bool operator ==(ObjectId left, ObjectId right)
     {
-        if (ReferenceEquals(left, null))
-            return ReferenceEquals(right, null);
+        if (left is null)
+            return right is null;
         return left.Equals(right);
     }
 
+    /// <summary>
+    /// Inequality operator.
+    /// </summary>
     public static bool operator !=(ObjectId left, ObjectId right)
     {
         return !(left == right);
     }
 
-    // Implicit conversion from string
-    public static implicit operator ObjectId(string s)
+    /// <summary>
+    /// Less than operator.
+    /// </summary>
+    public static bool operator <(ObjectId left, ObjectId right)
     {
-        return Parse(s);
-    }
-}
-
-// Custom JSON converter for ObjectId
-public class ObjectIDConverter : JsonConverter
-{
-    public override bool CanConvert(Type objectType)
-    {
-        return objectType == typeof(ObjectId);
+        return left is null ? right is not null : left.CompareTo(right) < 0;
     }
 
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    /// <summary>
+    /// Greater than operator.
+    /// </summary>
+    public static bool operator >(ObjectId left, ObjectId right)
     {
-        if (reader.TokenType == JsonToken.Null)
-            return null;
-
-        var value = reader.Value.ToString();
-        return ObjectId.Parse(value);
+        return left is not null && left.CompareTo(right) > 0;
     }
 
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    /// <summary>
+    /// Less than or equal operator.
+    /// </summary>
+    public static bool operator <=(ObjectId left, ObjectId right)
     {
-        if (value == null)
-        {
-            writer.WriteNull();
-            return;
-        }
+        return left is null || left.CompareTo(right) <= 0;
+    }
 
-        var id = (ObjectId)value;
-        writer.WriteValue(id.ToHexString());
+    /// <summary>
+    /// Greater than or equal operator.
+    /// </summary>
+    public static bool operator >=(ObjectId left, ObjectId right)
+    {
+        return left is null ? right is null : left.CompareTo(right) >= 0;
     }
 }

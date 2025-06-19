@@ -1,6 +1,8 @@
 ﻿using iota_sdk.model;
 using iota_sdk.model.read;
 using System.Numerics;
+using Iota.Sdk.Model.Read;
+using IotaPastObjectResponse = iota_sdk.model.read.IotaPastObjectResponse;
 
 namespace iota_sdk.apis.read
 {
@@ -70,7 +72,7 @@ namespace iota_sdk.apis.read
         /// <param name="objectId">The object ID</param>
         /// <param name="options">Object data options</param>
         /// <returns>Object response</returns>
-        Task<IotaObjectResponse> GetObjectWithOptionsAsync(ObjectId objectId, IotaObjectDataOptions options);
+        Task<IotaObjectResponse> GetObjectAsync(ObjectId objectId, IotaObjectDataOptions options);
 
         /// <summary>
         /// Get a list of objects by their object IDs with optional fields enabled by IotaObjectDataOptions.

@@ -1,6 +1,8 @@
-﻿using iota_sdk;
+﻿using Iota.Sdk.Model.Read;
+using iota_sdk;
 using iota_sdk.apis.read;
 using iota_sdk.model.read;
+using iota_sdk_tests.utils;
 
 namespace iota_sdk_tests.apis;
 
@@ -9,6 +11,8 @@ public class ReadApiTests
 {
     private IotaClient _client;
     private ReadApi _target;
+
+    private ObjectId _testObjectId;
 
     [SetUp]
     public async Task Setup()
@@ -23,6 +27,8 @@ public class ReadApiTests
 
         // Initialize the ReadApi with the client
         _target = (ReadApi)_client.ReadApi();
+
+        _testObjectId = TestsUtils.InitTestObjectId();
     }
 
     [Test]
@@ -334,4 +340,129 @@ public class ReadApiTests
 
         Console.WriteLine($"Retrieved protocol config for version: {previousVersion}");
     }
+
+    [Test]
+    public async Task GetObjectWithOptionsAsync_ShouldReturnObjectData()
+    {
+        // Arrange
+        var options = new IotaObjectDataOptions
+        {
+            ShowType = true,
+            ShowOwner = true,
+            ShowPreviousTransaction = true,
+            ShowContent = true,
+            ShowStorageRebate = true,
+            ShowBcs = true,
+            ShowDisplay = true
+        };
+
+        // Act
+        var result = await _target.GetObjectAsync(_testObjectId, options);
+
+        // Assert
+        Assert.IsNotNull(result, "Response should not be null");
+        Assert.IsNotNull(result.Data, "Response data should not be null");
+
+        // Validate object ID
+        Assert.AreEqual(_testObjectId.ToString(), result.Data.ObjectId, "Object ID should match");
+
+        // Validate version
+        Assert.IsNotNull(result.Data.Version, "Version should not be null");
+
+        // Validate digest
+        Assert.IsNotNull(result.Data.Digest, "Digest should not be null");
+
+        // Validate type (if requested)
+        if (options.ShowType == true)
+        {
+            Assert.IsNotNull(result.Data.Type, "Type should not be null when ShowType is true");
+        }
+
+        // Validate owner (if requested)
+        if (options.ShowOwner == true)
+        {
+            Assert.IsNotNull(result.Data.Owner, "Owner should not be null when ShowOwner is true");
+        }
+
+        // Validate previous transaction (if requested)
+        if (options.ShowPreviousTransaction == true)
+        {
+            Assert.IsNotNull(result.Data.PreviousTransaction, "Previous transaction should not be null when ShowPreviousTransaction is true");
+        }
+
+        // Validate storage rebate (if requested)
+        if (options.ShowStorageRebate == true)
+        {
+            Assert.IsNotNull(result.Data.StorageRebate, "Storage rebate should not be null when ShowStorageRebate is true");
+        }
+
+        // Validate content (if requested)
+        if (options.ShowContent == true)
+        {
+            Assert.IsNotNull(result.Data.Content, "Content should not be null when ShowContent is true");
+
+            // If content is a MoveObjectContent, validate its properties
+            if (result.Data.Content is MoveObjectContent moveContent)
+            {
+                Assert.AreEqual("moveObject", moveContent.DataType, "Content data type should be 'moveObject'");
+                Assert.IsNotNull(moveContent.Type, "Move content type should not be null");
+            }
+            // If content is a PackageContent, validate its properties
+            else if (result.Data.Content is PackageContent packageContent)
+            {
+                Assert.AreEqual("package", packageContent.DataType, "Content data type should be 'package'");
+                Assert.IsNotNull(packageContent.Disassembled, "Package disassembled content should not be null");
+            }
+        }
+
+        // Log the result
+        Console.WriteLine($"Successfully retrieved object data for ID: {_testObjectId}");
+        Console.WriteLine($"Object Type: {result.Data.Type}");
+        Console.WriteLine($"Version: {result.Data.Version}");
+    }
+
+    [Test]
+    public async Task GetObjectWithMinimalOptionsAsync_ShouldReturnBasicObjectData()
+    {
+        // Arrange
+        var options = new IotaObjectDataOptions
+        {
+            ShowType = false,
+            ShowOwner = false,
+            ShowPreviousTransaction = false,
+            ShowContent = false,
+            ShowStorageRebate = false,
+            ShowBcs = false,
+            ShowDisplay = false
+        };
+
+        // Act
+        var result = await _target.GetObjectAsync(_testObjectId, options);
+
+        // Assert
+        Assert.IsNotNull(result, "Response should not be null");
+        Assert.IsNotNull(result.Data, "Response data should not be null");
+
+        // Validate object ID
+        Assert.AreEqual(_testObjectId.ToString(), result.Data.ObjectId, "Object ID should match");
+
+        // Validate basic required fields are present
+        Assert.IsNotNull(result.Data.Version, "Version should not be null");
+        Assert.IsNotNull(result.Data.Digest, "Digest should not be null");
+
+        // Validate optional fields are not present when not requested
+        Assert.IsNull(result.Data.Type, "Type should be null when ShowType is false");
+        Assert.IsNull(result.Data.Owner, "Owner should be null when ShowOwner is false");
+        Assert.IsNull(result.Data.PreviousTransaction, "Previous transaction should be null when ShowPreviousTransaction is false");
+        Assert.IsNull(result.Data.Content, "Content should be null when ShowContent is false");
+        Assert.IsNull(result.Data.StorageRebate, "Storage rebate should be null when ShowStorageRebate is false");
+        Assert.IsNull(result.Data.Bcs, "BCS data should be null when ShowBcs is false");
+        Assert.IsNull(result.Data.Display, "Display data should be null when ShowDisplay is false");
+
+        // Log basic information about the object
+        Console.WriteLine($"Retrieved object with ID: {result.Data.ObjectId}");
+        Console.WriteLine($"Object version: {result.Data.Version}");
+        Console.WriteLine($"Object digest: {result.Data.Digest}");
+    }
+
 }

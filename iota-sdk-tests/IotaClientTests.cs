@@ -44,6 +44,11 @@ namespace iota_sdk_tests
             Assert.IsNotNull(methods);
             Assert.IsInstanceOf<List<string>>(methods);
             Assert.GreaterOrEqual(methods.Count, 1);
+            // print list ordered
+            foreach (var method in methods.OrderBy(m => m))
+            {
+                Console.WriteLine($"- {method}");
+            }   
         }
 
         [Test]
@@ -118,7 +123,7 @@ namespace iota_sdk_tests
 
             // Act & Assert
             // Capture the exception to check its message
-            var exception = Assert.ThrowsAsync<StreamJsonRpc.RemoteMethodNotFoundException>(async () => 
+            var exception = Assert.ThrowsAsync<StreamJsonRpc.RemoteMethodNotFoundException>(async () =>
             {
                 await _client.InvokeRpcMethodAsync<object>(methodName, parameters);
             });
@@ -136,6 +141,68 @@ namespace iota_sdk_tests
 
             // Act & Assert
             Assert.DoesNotThrow(() => client.Dispose());
+        }
+
+
+        [Test]
+        public async Task CompareAvailableRpcMethods_DevNetVsMainNet()
+        {
+            // Create clients for both networks using the client builder
+            var devNetClient = new IotaClientBuilder()
+                .RequestTimeout(TimeSpan.FromSeconds(30)).
+                BuildDevnet().Result;
+
+
+            var mainNetClient = new IotaClientBuilder()
+                .RequestTimeout(TimeSpan.FromSeconds(30)).
+                BuildMainnet().Result;
+
+            // Get available methods for both networks
+            var devNetMethods = devNetClient.AvailableRpcMethods();
+            var mainNetMethods = mainNetClient.AvailableRpcMethods();
+
+            // Print all methods for DevNet
+            Console.WriteLine("===== DevNet Available RPC Methods =====");
+            foreach (var method in devNetMethods.OrderBy(m => m))
+            {
+                Console.WriteLine($"- {method}");
+            }
+
+            // Print all methods for MainNet
+            Console.WriteLine("\n===== MainNet Available RPC Methods =====");
+            foreach (var method in mainNetMethods.OrderBy(m => m))
+            {
+                Console.WriteLine($"- {method}");
+            }
+
+            // Find and print differences
+            Console.WriteLine("\n===== Methods only in DevNet =====");
+            var onlyInDevNet = devNetMethods.Except(mainNetMethods).OrderBy(m => m);
+            foreach (var method in onlyInDevNet)
+            {
+                Console.WriteLine($"- {method}");
+            }
+
+            Console.WriteLine("\n===== Methods only in MainNet =====");
+            var onlyInMainNet = mainNetMethods.Except(devNetMethods).OrderBy(m => m);
+            foreach (var method in onlyInMainNet)
+            {
+                Console.WriteLine($"- {method}");
+            }
+
+            // Get and print API version from ServerInfo
+            Console.WriteLine("\n===== API Version Information =====");
+            //var devNetInfo = await devNetClient.ServerInfo
+            //var mainNetInfo = await mainNetClient.GetInfo();
+
+            Console.WriteLine($"DevNet API Version: {devNetClient.ServerInfo}");
+            Console.WriteLine($"MainNet API Version: {mainNetClient.ServerInfo}");
+
+            // Assertions to make this a proper test
+            Assert.IsNotNull(devNetMethods, "DevNet methods should not be null");
+            Assert.IsNotNull(mainNetMethods, "MainNet methods should not be null");
+            Assert.IsTrue(devNetMethods.Count > 0, "DevNet should have available methods");
+            Assert.IsTrue(mainNetMethods.Count > 0, "MainNet should have available methods");
         }
 
         [TearDown]
