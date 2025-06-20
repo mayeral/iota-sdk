@@ -1,9 +1,10 @@
-﻿using System.Numerics;
-using System.Text.Json;
-using Iota.Sdk.Model.Read;
+﻿using Iota.Sdk.Model.Read;
 using iota_sdk.model;
 using iota_sdk.model.read;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Numerics;
+using System.Text.Json;
 
 namespace iota_sdk.apis.read;
 
@@ -69,13 +70,13 @@ public class ReadApi : IReadApi
         string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
 
         // Use System.Text.Json to deserialize
-        var jsonSerializerOptions = new System.Text.Json.JsonSerializerOptions
+        var jsonSerializerOptions = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true
         };
 
-        return System.Text.Json.JsonSerializer.Deserialize<IotaObjectResponse>(jsonString, jsonSerializerOptions)!;
+        return JsonSerializer.Deserialize<IotaObjectResponse>(jsonString, jsonSerializerOptions)!;
     }
 
 
@@ -99,7 +100,7 @@ public class ReadApi : IReadApi
 
         // Convert object IDs to strings
         var objectIdStrings = objectIdsList.Select(id => id.ToString()).ToArray();
-    
+
         var response = await _client.InvokeRpcMethodAsync<JArray>("iota_multiGetObjects", new object[] { objectIdStrings, options }).ConfigureAwait(false);
 
         // Convert JObject to string
@@ -148,18 +149,51 @@ public class ReadApi : IReadApi
         string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
 
         // Use System.Text.Json to deserialize
-        var jsonSerializerOptions = new System.Text.Json.JsonSerializerOptions
+        var jsonSerializerOptions = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true
         };
 
-        return System.Text.Json.JsonSerializer.Deserialize<IotaTransactionBlockResponse>(jsonString, jsonSerializerOptions)!;
+        return JsonSerializer.Deserialize<IotaTransactionBlockResponse>(jsonString, jsonSerializerOptions)!;
     }
 
-    public async Task<IEnumerable<IotaTransactionBlockResponse>> MultiGetTransactionsWithOptionsAsync(IEnumerable<TransactionDigest> digests, IotaTransactionBlockResponseOptions options)
+
+    public async Task<IEnumerable<IotaTransactionBlockResponse>> MultiGetTransactionsAsync(IEnumerable<TransactionDigest> digests, IotaTransactionBlockResponseOptions options)
     {
-        throw new NotImplementedException();
+        if (digests == null)
+        {
+            throw new ArgumentNullException(nameof(digests));
+        }
+
+        if (options == null)
+        {
+            throw new ArgumentNullException(nameof(options));
+        }
+
+        var digestsList = digests.ToList();
+        if (!digestsList.Any())
+        {
+            throw new ArgumentException("At least one transaction digest must be provided", nameof(digests));
+        }
+
+        // Convert digests to strings
+        var digestStrings = digestsList.Select(d => d.ToString()).ToArray();
+
+        var response = await _client.InvokeRpcMethodAsync<JArray>("iota_multiGetTransactionBlocks", new object[] { digestStrings, options }).ConfigureAwait(false);
+
+        // Convert JObject to string
+        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
+
+        // use System.Text.Json to deserialize
+        var jsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true
+        };
+
+        // Deserialize the response into a collection of IotaTransactionBlockResponse objects
+        return JsonSerializer.Deserialize<List<IotaTransactionBlockResponse>>(jsonString, jsonSerializerOptions) ?? new List<IotaTransactionBlockResponse>();
     }
 
     public async Task<TransactionBlocksPage> QueryTransactionBlocksAsync(IotaTransactionBlockResponseQuery query, TransactionDigest? cursor = null, int? limit = null, bool descendingOrder = false)

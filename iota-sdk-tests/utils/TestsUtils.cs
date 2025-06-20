@@ -60,6 +60,22 @@ public static class TestsUtils
         return TransactionDigest.Parse(transactionDigest);
     }
 
+    public static TransactionDigest InitTransactionDigest2()
+    {
+        string transactionDigest;
+
+        var configuration = new ConfigurationBuilder()
+            .AddUserSecrets<GovernanceApiTests>()
+            .Build();
+
+        transactionDigest = configuration["TestSettings:TransactionDigest2"] ?? throw new InvalidOperationException(
+            "Second test transaction digest not found in user secrets. Set the TestSettings:TransactionDigest2 key in user secrets.\r\n" +
+            "Example: dotnet user-secrets init --project iota-sdk-tests\r\n" +
+            "dotnet user-secrets set \"TestSettings:TransactionDigest2\" \"YOUR_TRANSACTION_DIGEST\" --project iota-sdk-tests\r\n");
+
+        return TransactionDigest.Parse(transactionDigest);
+    }
+
     public static ObjectId InitTestObjectId2()
     {
         string objectId;
@@ -75,4 +91,6 @@ public static class TestsUtils
 
         return new ObjectId(objectId);
     }
+
+
 }

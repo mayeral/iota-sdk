@@ -170,7 +170,7 @@ This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT)
 | iota_getTotalTransactionBlocks | Read API | ✅ | ✅ |
 | iota_getTransactionBlock | Read API | ✅ | ✅ |
 | iota_multiGetObjects | Read API | ✅ | ✅ |
-| iota_multiGetTransactionBlocks | Read API | ❌ | ❌ |
+| iota_multiGetTransactionBlocks | Read API | ✅ | ✅ |
 | iota_tryGetPastObject | Read API | ❌ | ❌ |
 | iota_tryMultiGetPastObjects | Read API | ❌ | ❌ |
 | iotax_getAllBalances | Coin Query API | ✅ | ✅ |

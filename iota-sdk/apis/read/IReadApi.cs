@@ -109,7 +109,7 @@ namespace iota_sdk.apis.read
         /// <param name="digests">List of transaction digests</param>
         /// <param name="options">Transaction response options</param>
         /// <returns>List of transaction block responses</returns>
-        Task<IEnumerable<IotaTransactionBlockResponse>> MultiGetTransactionsWithOptionsAsync(IEnumerable<TransactionDigest> digests, IotaTransactionBlockResponseOptions options);
+        Task<IEnumerable<IotaTransactionBlockResponse>> MultiGetTransactionsAsync(IEnumerable<TransactionDigest> digests, IotaTransactionBlockResponseOptions options);
 
         /// <summary>
         /// Get filtered transaction blocks information. Results are paginated.

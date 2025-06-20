@@ -634,4 +634,58 @@ public class ReadApiTests
             Console.WriteLine("---");
         }
     }
+
+    [Test]
+    public async Task MultiGetTransactionsWithOptionsAsync_ReturnsValidTransactions()
+    {
+        // Arrange
+        var digests = new List<TransactionDigest>
+        {
+            TestsUtils.InitTransactionDigest(),
+            TestsUtils.InitTransactionDigest2()
+        };
+    
+        var options = new IotaTransactionBlockResponseOptions
+        {
+            ShowInput = true,
+            ShowRawInput = true,
+            ShowEffects = true,
+            ShowEvents = true,
+            ShowObjectChanges = true,
+            ShowBalanceChanges = true,
+            ShowRawEffects = true
+        };
+
+        // Act
+        var result = await _target!.MultiGetTransactionsAsync(digests, options).ConfigureAwait(false);
+
+        // Assert
+        Assert.NotNull(result);
+        var resultList = result.ToList();
+        Assert.AreEqual(2, resultList.Count);
+    
+        // Verify that the returned transactions match our requested digests
+        var returnedDigests = resultList.Select(tx => tx.Digest).ToList();
+        Assert.Contains(digests[0].ToString(), returnedDigests);
+        Assert.Contains(digests[1].ToString(), returnedDigests);
+    
+        // Log some details with more information based on the options
+        foreach (var tx in resultList)
+        {
+            Console.WriteLine($"Transaction Digest: {tx.Digest}");
+            Console.WriteLine($"Transaction Timestamp: {tx.TimestampMs}");
+        
+            if (tx.Transaction != null)
+            {
+                Console.WriteLine($"Transaction Sender: {tx.Transaction.Data.Sender}");
+            }
+            
+            if (tx.Events != null && tx.Events.Any())
+            {
+                Console.WriteLine($"Number of Events: {tx.Events.Count}");
+            }
+        
+            Console.WriteLine("---");
+        }
+    }
 }

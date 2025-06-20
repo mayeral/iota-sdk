@@ -284,7 +284,7 @@ public class IotaObjectRef
     /// </summary>
     public class NewtonsoftVersionConverter : Newtonsoft.Json.JsonConverter<string>
     {
-        public override string ReadJson(Newtonsoft.Json.JsonReader reader, Type objectType, string existingValue, bool hasExistingValue, Newtonsoft.Json.JsonSerializer serializer)
+        public override string ReadJson(JsonReader reader, Type objectType, string existingValue, bool hasExistingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             var token = JToken.Load(reader);
             
@@ -300,7 +300,7 @@ public class IotaObjectRef
             throw new Newtonsoft.Json.JsonException($"Unexpected token type: {token.Type}");
         }
 
-        public override void WriteJson(Newtonsoft.Json.JsonWriter writer, string value, Newtonsoft.Json.JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, string value, Newtonsoft.Json.JsonSerializer serializer)
         {
             if (long.TryParse(value, out var number))
             {
