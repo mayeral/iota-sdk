@@ -13,6 +13,7 @@ public class ReadApiTests
     private ReadApi _target;
 
     private ObjectId _testObjectId;
+    private TransactionDigest _testDigest;
 
     [SetUp]
     public async Task Setup()
@@ -29,6 +30,7 @@ public class ReadApiTests
         _target = (ReadApi)_client.ReadApi();
 
         _testObjectId = TestsUtils.InitTestObjectId();
+        _testDigest = TestsUtils.InitTransactionDigest();
     }
 
     [Test]
@@ -463,6 +465,131 @@ public class ReadApiTests
         Console.WriteLine($"Retrieved object with ID: {result.Data.ObjectId}");
         Console.WriteLine($"Object version: {result.Data.Version}");
         Console.WriteLine($"Object digest: {result.Data.Digest}");
+    }
+
+    [Test]
+    public async Task GetTransactionAsync_ReturnsValidTransaction()
+    {
+        // Arrange
+        var transactionDigest = TestsUtils.InitTransactionDigest();
+
+        // Act
+        var result = await _target!.GetTransactionAsync(transactionDigest).ConfigureAwait(false);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.AreEqual(transactionDigest.ToString(), result.Digest);
+
+        // Log some details about the transaction
+        Console.WriteLine($"Transaction Digest: {result.Digest}");
+        Console.WriteLine($"Transaction Timestamp: {result.TimestampMs}");
+        if (result.Transaction != null)
+        {
+            Console.WriteLine($"Sender: {result.Transaction.Data.Sender}");
+        }
+    }
+
+    [Test]
+    public async Task GetTransactionWithOptionsAsync_AllOptionsTrue_ReturnsDetailedTransaction()
+    {
+        // Arrange
+        var transactionDigest = TestsUtils.InitTransactionDigest();
+        var options = new IotaTransactionBlockResponseOptions
+        {
+            ShowInput = true,
+            ShowEffects = true,
+            ShowEvents = true,
+            ShowObjectChanges = true,
+            ShowBalanceChanges = true,
+            ShowRawEffects = true,
+            ShowRawInput = true,
+        };
+
+        // Act
+        var result = await _target!.GetTransactionAsync(transactionDigest, options).ConfigureAwait(false);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.AreEqual(transactionDigest.ToString(), result.Digest);
+
+        // Additional assertions based on the options
+        if ((bool)options.ShowInput)
+        {
+            Assert.NotNull(result.Transaction, "Transaction should be included with ShowInput=true");
+        }
+
+        if ((bool)options.ShowEffects)
+        {
+            Assert.NotNull(result.Effects, "Effects should be included with ShowEffects=true");
+        }
+
+        if ((bool)options.ShowEvents)
+        {
+            Assert.NotNull(result.Events, "Events should be included with ShowEvents=true");
+        }
+
+        if ((bool)options.ShowObjectChanges)
+        {
+            Assert.NotNull(result.ObjectChanges, "ObjectChanges should be included with ShowObjectChanges=true");
+        }
+
+        if ((bool)options.ShowBalanceChanges)
+        {
+            Assert.NotNull(result.BalanceChanges, "BalanceChanges should be included with ShowBalanceChanges=true");
+        }
+
+        if ((bool)options.ShowRawInput)
+        {
+            Assert.NotNull(result.RawTransaction, "RawInput should be included with ShowRawInput=true");
+        }
+
+        if ((bool)options.ShowRawEffects)
+        {
+            Assert.NotNull(result.RawEffects, "RawEffects should be included with ShowRawEffects=true");
+        }
+
+        // Log some details
+        Console.WriteLine($"Transaction Digest: {result.Digest}");
+        Console.WriteLine($"Transaction has effects: {result.Effects != null}");
+        Console.WriteLine($"Transaction has events: {result.Events?.Count > 0}");
+        Console.WriteLine($"Transaction has object changes: {result.ObjectChanges?.Count > 0}");
+        Console.WriteLine($"Transaction has balance changes: {result.BalanceChanges?.Count > 0}");
+    }
+
+    [Test]
+    public async Task GetTransactionWithOptionsAsync_AllOptionsFalse_ReturnsMinimalTransaction()
+    {
+        // Arrange
+        var transactionDigest = TestsUtils.InitTransactionDigest();
+        var options = new IotaTransactionBlockResponseOptions
+        {
+            ShowInput = false,
+            ShowEffects = false,
+            ShowEvents = false,
+            ShowObjectChanges = false,
+            ShowBalanceChanges = false
+        };
+
+        // Act
+        var result = await _target!.GetTransactionAsync(transactionDigest, options).ConfigureAwait(false);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.AreEqual(transactionDigest.ToString(), result.Digest);
+
+        // Log minimal details
+        Console.WriteLine($"Transaction Digest: {result.Digest}");
+        Console.WriteLine($"Transaction Checkpoint: {result.Checkpoint}");
+        Console.WriteLine($"Transaction Timestamp: {result.TimestampMs}");
+
+        // Note: With all options set to false, we expect minimal data
+        // These assertions might fail if the API returns data regardless of options
+        // In that case, you might want to comment them out
+        Assert.Null(result.Transaction, "Transaction should not be included with ShowInput=false");
+        Assert.Null(result.Effects, "Effects should not be included with ShowEffects=false");
+        Assert.Null(result.Events, "Events should not be included with ShowEvents=false");
+        Assert.Null(result.ObjectChanges, "Object changes should not be included with ShowObjectChanges=false");
+        Assert.Null(result.BalanceChanges, "Balance changes should not be included with ShowBalanceChanges=false");
     }
 
 }

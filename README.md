@@ -179,7 +179,7 @@ This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT)
 | iota_getObject | Read API | ✅ | ✅ |
 | iota_getProtocolConfig | Read API | ✅ | ✅ |
 | iota_getTotalTransactionBlocks | Read API | ✅ | ✅ |
-| iota_getTransactionBlock | Read API | ❌ | ❌ |
+| iota_getTransactionBlock | Read API | ✅ | ✅ |
 | iota_multiGetObjects | Read API | ❌ | ❌ |
 | iota_multiGetTransactionBlocks | Read API | ❌ | ❌ |
 | iota_tryGetPastObject | Read API | ❌ | ❌ |

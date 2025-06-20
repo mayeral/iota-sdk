@@ -101,7 +101,7 @@ namespace iota_sdk.apis.read
         /// <param name="digest">Transaction digest</param>
         /// <param name="options">Transaction response options</param>
         /// <returns>Transaction block response</returns>
-        Task<IotaTransactionBlockResponse> GetTransactionWithOptionsAsync(TransactionDigest digest, IotaTransactionBlockResponseOptions options);
+        Task<IotaTransactionBlockResponse> GetTransactionAsync(TransactionDigest digest, IotaTransactionBlockResponseOptions options);
 
         /// <summary>
         /// Get a list of transactions and their effects by their digests with optional fields.

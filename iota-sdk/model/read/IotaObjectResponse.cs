@@ -259,11 +259,20 @@ namespace Iota.Sdk.Model.Read
                     }
 
                     reader.Read(); // Move to the value
-                    if (reader.TokenType != JsonTokenType.String)
+                    string initialVersion;
+                    if (reader.TokenType == JsonTokenType.String)
                     {
-                        throw new JsonException("Expected string value for initial_shared_version");
+                        initialVersion = reader.GetString() ?? string.Empty;
                     }
-                    string initialVersion = reader.GetString() ?? string.Empty;
+                    else if (reader.TokenType == JsonTokenType.Number)
+                    {
+                        // Handle numeric version
+                        initialVersion = reader.GetInt64().ToString();
+                    }
+                    else
+                    {
+                        throw new JsonException($"Expected string or number value for initial_shared_version, but got {reader.TokenType}");
+                    }
 
                     reader.Read(); // Move to EndObject for Shared
                     reader.Read(); // Move to EndObject for the wrapper

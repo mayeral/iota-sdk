@@ -26,17 +26,37 @@ public static class TestsUtils
 
     public static ObjectId InitTestObjectId()
     {
-        string objectId;       
+        string objectId;
 
-            var configuration = new ConfigurationBuilder()
+        var configuration = new ConfigurationBuilder()
+        .AddUserSecrets<GovernanceApiTests>()
+        .Build();
+
+        objectId = configuration["TestSettings:ObjectId"] ?? throw new InvalidOperationException(
+            "Test address not found in user secrets. Set the TestSettings:Address key in user secrets.\r\n" +
+            "Example: dotnet user-secrets init --project iota-sdk-tests\r\n" +
+            "dotnet user-secrets set \"TestSettings:ObjectId\" \"0xIOTA_ADDRESS\" --project iota-sdk-tests\r\n");
+
+        return new ObjectId(objectId);
+    }
+
+    /// <summary>
+    /// Initializes a TransactionDigest using a value from user secrets.
+    /// </summary>
+    /// <returns>A TransactionDigest initialized with the value from user secrets.</returns>
+    public static TransactionDigest InitTransactionDigest()
+    {
+        string transactionDigest;
+
+        var configuration = new ConfigurationBuilder()
             .AddUserSecrets<GovernanceApiTests>()
             .Build();
 
-            objectId = configuration["TestSettings:ObjectId"] ?? throw new InvalidOperationException(
-                "Test address not found in user secrets. Set the TestSettings:Address key in user secrets.\r\n" +
-                "Example: dotnet user-secrets init --project iota-sdk-tests\r\n" +
-                "dotnet user-secrets set \"TestSettings:ObjectId\" \"0xIOTA_ADDRESS\" --project iota-sdk-tests\r\n");
+        transactionDigest = configuration["TestSettings:TransactionDigest"] ?? throw new InvalidOperationException(
+            "Test transaction digest not found in user secrets. Set the TestSettings:TransactionDigest key in user secrets.\r\n" +
+            "Example: dotnet user-secrets init --project iota-sdk-tests\r\n" +
+            "dotnet user-secrets set \"TestSettings:TransactionDigest\" \"YOUR_TRANSACTION_DIGEST\" --project iota-sdk-tests\r\n");
 
-        return new ObjectId(objectId);
+        return TransactionDigest.Parse(transactionDigest);
     }
 }

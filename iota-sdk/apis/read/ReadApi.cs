@@ -96,9 +96,31 @@ public class ReadApi : IReadApi
         return response;
     }
 
-    public async Task<IotaTransactionBlockResponse> GetTransactionWithOptionsAsync(TransactionDigest digest, IotaTransactionBlockResponseOptions options)
+    //TODO NULL FOR OPTIONS / AS WELL FOR GET OBJECT
+    public async Task<IotaTransactionBlockResponse> GetTransactionAsync(TransactionDigest digest, IotaTransactionBlockResponseOptions? options = null)
     {
-        throw new NotImplementedException();
+        // Create parameters array for the RPC call
+        var parameters = new object[]
+        {
+            digest.ToString(),  // First parameter: transaction digest (required)
+            options             // Second parameter: options (optional)
+        };
+
+        // Make the RPC call to iota_getTransactionBlock
+        var response = await _client.InvokeRpcMethodAsync<JObject>("iota_getTransactionBlock", parameters)
+            .ConfigureAwait(false);
+
+        // Convert JObject to string
+        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
+
+        // Use System.Text.Json to deserialize
+        var jsonSerializerOptions = new System.Text.Json.JsonSerializerOptions
+        {
+            PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true
+        };
+
+        return System.Text.Json.JsonSerializer.Deserialize<IotaTransactionBlockResponse>(jsonString, jsonSerializerOptions)!;
     }
 
     public async Task<IEnumerable<IotaTransactionBlockResponse>> MultiGetTransactionsWithOptionsAsync(IEnumerable<TransactionDigest> digests, IotaTransactionBlockResponseOptions options)
