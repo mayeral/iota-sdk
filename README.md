@@ -133,17 +133,6 @@ public class Program
 }
 ```
 
-## Examples  // TODO implement different sampels
-
-The SDK includes several examples demonstrating how to:
-- Connect to different IOTA networks
-- Read account balances
-- Interact with governance
-- Subscribe to events
-- Use the read API
-- Create programmable transactions
-- Sign transactions
-
 ## Documentation
 
 For more detailed documentation and examples, please refer to the inline code documentation and the original [IOTA Rust SDK documentation](https://github.com/iotaledger/iota/tree/develop/crates/iota-sdk) which this library is based on.
@@ -180,7 +169,7 @@ This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT)
 | iota_getProtocolConfig | Read API | ✅ | ✅ |
 | iota_getTotalTransactionBlocks | Read API | ✅ | ✅ |
 | iota_getTransactionBlock | Read API | ✅ | ✅ |
-| iota_multiGetObjects | Read API | ❌ | ❌ |
+| iota_multiGetObjects | Read API | ✅ | ✅ |
 | iota_multiGetTransactionBlocks | Read API | ❌ | ❌ |
 | iota_tryGetPastObject | Read API | ❌ | ❌ |
 | iota_tryMultiGetPastObjects | Read API | ❌ | ❌ |

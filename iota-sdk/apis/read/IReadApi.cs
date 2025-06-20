@@ -80,7 +80,7 @@ namespace iota_sdk.apis.read
         /// <param name="objectIds">List of object IDs</param>
         /// <param name="options">Object data options</param>
         /// <returns>List of object responses</returns>
-        Task<IEnumerable<IotaObjectResponse>> MultiGetObjectWithOptionsAsync(IEnumerable<ObjectId> objectIds, IotaObjectDataOptions options);
+        Task<IEnumerable<IotaObjectResponse>> MultiGetObjectsAsync(IEnumerable<ObjectId> objectIds, IotaObjectDataOptions options);
 
         /// <summary>
         /// Get a BCS serialized object's bytes by object ID.

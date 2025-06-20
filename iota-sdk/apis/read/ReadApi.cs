@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Text.Json;
 using Iota.Sdk.Model.Read;
 using iota_sdk.model;
 using iota_sdk.model.read;
@@ -77,9 +78,42 @@ public class ReadApi : IReadApi
         return System.Text.Json.JsonSerializer.Deserialize<IotaObjectResponse>(jsonString, jsonSerializerOptions)!;
     }
 
-    public async Task<IEnumerable<IotaObjectResponse>> MultiGetObjectWithOptionsAsync(IEnumerable<ObjectId> objectIds, IotaObjectDataOptions options)
+
+    public async Task<IEnumerable<IotaObjectResponse>> MultiGetObjectsAsync(IEnumerable<ObjectId> objectIds, IotaObjectDataOptions options)
     {
-        throw new NotImplementedException();
+        if (objectIds == null)
+        {
+            throw new ArgumentNullException(nameof(objectIds));
+        }
+
+        if (options == null)
+        {
+            throw new ArgumentNullException(nameof(options));
+        }
+
+        var objectIdsList = objectIds.ToList();
+        if (!objectIdsList.Any())
+        {
+            throw new ArgumentException("At least one object ID must be provided", nameof(objectIds));
+        }
+
+        // Convert object IDs to strings
+        var objectIdStrings = objectIdsList.Select(id => id.ToString()).ToArray();
+    
+        var response = await _client.InvokeRpcMethodAsync<JArray>("iota_multiGetObjects", new object[] { objectIdStrings, options }).ConfigureAwait(false);
+
+        // Convert JObject to string
+        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
+
+        // Use System.Text.Json to deserialize
+        var jsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true
+        };
+        // Deserialize the response into a list of IotaObjectResponse objects
+        return JsonSerializer.Deserialize<List<IotaObjectResponse>>(jsonString, jsonSerializerOptions) ?? new List<IotaObjectResponse>();
+
     }
 
     public async Task<byte[]> GetMoveObjectBcsAsync(ObjectId objectId)

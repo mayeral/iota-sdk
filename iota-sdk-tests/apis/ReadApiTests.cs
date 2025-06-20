@@ -592,4 +592,46 @@ public class ReadApiTests
         Assert.Null(result.BalanceChanges, "Balance changes should not be included with ShowBalanceChanges=false");
     }
 
+    [Test]
+    public async Task MultiGetObjectsWithOptionsAsync_ReturnsValidObjects()
+    {
+        // Arrange
+        var objectIds = new List<ObjectId>
+        {
+            TestsUtils.InitTestObjectId(),
+            TestsUtils.InitTestObjectId2()
+        };
+    
+        var options = new IotaObjectDataOptions
+        {
+            ShowType = true,
+            ShowOwner = true,
+            ShowContent = true,
+            ShowDisplay = true,
+            ShowBcs = true,
+            ShowStorageRebate = true,
+            ShowPreviousTransaction = true
+        };
+
+        // Act
+        var result = await _target!.MultiGetObjectsAsync(objectIds, options).ConfigureAwait(false);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.AreEqual(2, result.ToList().Count);
+    
+        // Verify that the returned objects match our requested IDs
+        var returnedIds = result.Select(obj => obj.Data.ObjectId).ToList();
+        Assert.Contains(objectIds[0].ToString(), returnedIds);
+        Assert.Contains(objectIds[1].ToString(), returnedIds);
+    
+        // Log some details
+        foreach (var obj in result)
+        {
+            Console.WriteLine($"Object ID: {obj.Data.ObjectId}");
+            Console.WriteLine($"Object Type: {obj.Data.Type}");
+            Console.WriteLine($"Object Owner: {obj.Data.Owner}");
+            Console.WriteLine("---");
+        }
+    }
 }

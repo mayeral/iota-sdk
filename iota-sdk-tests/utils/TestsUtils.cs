@@ -59,4 +59,20 @@ public static class TestsUtils
 
         return TransactionDigest.Parse(transactionDigest);
     }
+
+    public static ObjectId InitTestObjectId2()
+    {
+        string objectId;
+
+        var configuration = new ConfigurationBuilder()
+            .AddUserSecrets<GovernanceApiTests>()
+            .Build();
+
+        objectId = configuration["TestSettings:ObjectId2"] ?? throw new InvalidOperationException(
+            "Second test object ID not found in user secrets. Set the TestSettings:ObjectId2 key in user secrets.\r\n" +
+            "Example: dotnet user-secrets init --project iota-sdk-tests\r\n" +
+            "dotnet user-secrets set \"TestSettings:ObjectId2\" \"YOUR_OBJECT_ID\" --project iota-sdk-tests\r\n");
+
+        return new ObjectId(objectId);
+    }
 }
