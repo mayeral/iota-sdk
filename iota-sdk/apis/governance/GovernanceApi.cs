@@ -1,5 +1,5 @@
-﻿using iota_sdk.model;
-using iota_sdk.model.governance;
+﻿using iota_sdk.model.governance;
+using iota_sdk.model.read;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -48,6 +48,39 @@ namespace iota_sdk.apis.governance
             // Invoke the RPC method with the address parameter
             return _client.InvokeRpcMethodAsync<IEnumerable<DelegatedTimelockedStake>>("iotax_getTimelockedStakes", address);
         }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<DelegatedStake>> GetStakesByIdsAsync(string[] stakedIotaIds)
+        {
+            // Validate input
+            if (stakedIotaIds == null || stakedIotaIds.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(stakedIotaIds), "Staked IOTA IDs must be specified");
+            }
+
+            // Convert ObjectIds to strings
+            string[] stakedIotaIdStrings = stakedIotaIds.Select(id => id.ToString()).ToArray();
+
+            // Invoke the RPC method with the array of ID strings
+            return _client.InvokeRpcMethodAsync<IEnumerable<DelegatedStake>>("iotax_getStakesByIds", new object[] { stakedIotaIdStrings });
+        }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<DelegatedTimelockedStake>> GetTimelockedStakesByIdsAsync(string[] timelockedStakedIotaIds)
+        {
+            // Validate input
+            if (timelockedStakedIotaIds == null || timelockedStakedIotaIds.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(timelockedStakedIotaIds), "Timelocked staked IOTA IDs must be specified");
+            }
+
+            // Convert ObjectIds to strings
+            string[] timelockedStakedIotaIdStrings = timelockedStakedIotaIds.Select(id => id.ToString()).ToArray();
+
+            // Invoke the RPC method with the array of ID strings
+            return _client.InvokeRpcMethodAsync<IEnumerable<DelegatedTimelockedStake>>("iotax_getTimelockedStakesByIds", new object[] { timelockedStakedIotaIdStrings });
+        }
+
 
         /// <inheritdoc />
         public Task<IotaCommittee> GetCommitteeInfoAsync(System.Numerics.BigInteger? epoch = null)

@@ -10,7 +10,7 @@ public class Coin
     /// <summary>
     /// The type of the coin.
     /// </summary>
-    [JsonPropertyName("coinType")]
+    [JsonPropertyName("coinType")] // TODO NEWTONSOFT JSON VS SYSTEM.TEXT.JSON
     public string CoinType { get; set; }
 
     /// <summary>

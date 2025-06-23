@@ -2,6 +2,7 @@
 using iota_sdk.model.read;
 using Newtonsoft.Json.Linq;
 
+
 namespace iota_sdk.apis.@event;
 
 public class EventApi : IEventApi
@@ -22,7 +23,7 @@ public class EventApi : IEventApi
     public async Task<IAsyncEnumerable<IotaEvent>> SubscribeEventAsync(EventFilter filter)
     {
         // :::note The subscribeEvent and subscribeTransaction methods are deprecated.
-        // Please use queryEvents and queryTransactionBlocks instead. For more details see usage example. :::
+        // Please use queryEvents and queryTransactionBlocks instead.
         throw new NotImplementedException("subscribe event is deprecated use query events method");
     }
 

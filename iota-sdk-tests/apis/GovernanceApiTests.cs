@@ -46,12 +46,108 @@ public class GovernanceApiTests
     }
 
     [Test]
+    public Task GetStakesByIds_ReturnsStakes()
+    {
+        // First get stakes for our test address
+        var delegatedStakes = _target!.GetStakesAsync(_testAddress).Result;
+        Assert.IsNotNull(delegatedStakes, "Should return delegated stakes");
+
+        // Skip test if no stakes found
+        Assume.That(delegatedStakes.Any(), "No stakes found for test address");
+
+        // Extract staked IOTA IDs from the delegated stakes
+        var stakedIotaIds = delegatedStakes
+            .SelectMany(delegatedStake => delegatedStake.Stakes)
+            .Select(stake => stake.StakedIotaId)
+            .ToArray();
+
+        Console.WriteLine($"Found {stakedIotaIds.Length} staked IOTA IDs");
+
+        // Call GetStakesByIdsAsync with the IDs we found
+        var result = _target!.GetStakesByIdsAsync(stakedIotaIds).Result;
+
+        // Assert
+        Assert.IsNotNull(result, "Result should not be null");
+        Assert.IsTrue(result.Any(), "Result should contain stakes");
+
+        // Verify that all requested IDs are present in the result
+        foreach (var id in stakedIotaIds)
+        {
+            Assert.IsTrue(result.Any(delegatedStake =>
+                    delegatedStake.Stakes.Any(stake => stake.StakedIotaId == id)),
+                $"Requested stake ID {id} not found in results");
+        }
+
+        // Verify basic properties of returned stakes
+        foreach (var delegatedStake in result)
+        {
+            Assert.IsNotNull(delegatedStake.Stakes, "Stakes collection should not be null");
+
+            foreach (var stake in delegatedStake.Stakes)
+            {
+                Assert.IsNotNull(stake.StakedIotaId, "StakedIotaId should not be null");
+                Assert.IsNotNull(stake.Status, "Status should not be null");
+            }
+        }
+
+        return Task.CompletedTask;
+    }
+
+    [Test]
     public Task GetTimelockedStakesAsync_ReturnsTimelockedStakes()
     {
         // act
         var result = _target!.GetTimelockedStakesAsync(_testAddress).Result;
         // assert
         Assert.IsNotNull(result);
+
+        return Task.CompletedTask;
+    }
+
+    [Test]
+    public Task GetTimelockedStakesByIds_ReturnsStakes()
+    {
+        // First get timelocked stakes for our test address
+        var delegatedTimelockedStakes = _target!.GetTimelockedStakesAsync(_testAddress).Result;
+        Assert.IsNotNull(delegatedTimelockedStakes, "Should return delegated timelocked stakes");
+
+        // Skip test if no timelocked stakes found
+        Assume.That(delegatedTimelockedStakes.Any(), "No timelocked stakes found for test address");
+
+        // Extract timelocked staked IOTA IDs from the delegated stakes
+        var timelockedStakedIotaIds = delegatedTimelockedStakes
+            .SelectMany(delegatedStake => delegatedStake.Stakes)
+            .Select(stake => stake.TimelockedStakedIotaId)
+            .ToArray();
+
+        Console.WriteLine($"Found {timelockedStakedIotaIds.Length} timelocked staked IOTA IDs");
+
+        // Call GetTimelockedStakesByIdsAsync with the IDs we found
+        var result = _target!.GetTimelockedStakesByIdsAsync(timelockedStakedIotaIds).Result;
+
+        // Assert
+        Assert.IsNotNull(result, "Result should not be null");
+        Assert.IsTrue(result.Any(), "Result should contain timelocked stakes");
+
+        // Verify that all requested IDs are present in the result
+        foreach (var id in timelockedStakedIotaIds)
+        {
+            Assert.IsTrue(result.Any(delegatedStake =>
+                    delegatedStake.Stakes.Any(stake => stake.TimelockedStakedIotaId == id)),
+                $"Requested timelocked stake ID {id} not found in results");
+        }
+
+        // Verify basic properties of returned timelocked stakes
+        foreach (var delegatedStake in result)
+        {
+            Assert.IsNotNull(delegatedStake.Stakes, "Stakes collection should not be null");
+
+            foreach (var stake in delegatedStake.Stakes)
+            {
+                Assert.IsNotNull(stake.TimelockedStakedIotaId, "TimelockedStakedIotaId should not be null");
+                Assert.IsNotNull(stake.Status, "Status should not be null");
+            }
+        }
 
         return Task.CompletedTask;
     }

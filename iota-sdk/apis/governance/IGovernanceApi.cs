@@ -1,5 +1,6 @@
 ﻿using iota_sdk.model.governance;
 using System.Numerics;
+using iota_sdk.model.read;
 
 namespace iota_sdk.apis.governance
 {
@@ -21,6 +22,27 @@ namespace iota_sdk.apis.governance
         /// <param name="address">The IOTA address</param>
         /// <returns>A list of delegated timelocked stakes</returns>
         Task<IEnumerable<DelegatedTimelockedStake>> GetTimelockedStakesAsync(string address);
+
+
+        /// <summary>
+        /// Returns staking information for the specified staked IOTA object IDs.
+        /// </summary>
+        /// <param name="stakedIotaIds">Array of object IDs to get staking information for</param>
+        /// <returns>Collection of delegated stakes</returns>
+        /// <remarks>
+        /// If a Stake was withdrawn its status will be Unstaked.
+        /// </remarks>
+        Task<IEnumerable<DelegatedStake>> GetStakesByIdsAsync(string[] stakedIotaIds);
+
+        /// <summary>
+        /// Returns timelocked staking information for the specified timelocked staked IOTA object IDs.
+        /// </summary>
+        /// <param name="timelockedStakedIotaIds">Array of object IDs to get timelocked staking information for</param>
+        /// <returns>Collection of delegated timelocked stakes</returns>
+        /// <remarks>
+        /// If a Stake was withdrawn its status will be Unstaked.
+        /// </remarks>
+        Task<IEnumerable<DelegatedTimelockedStake>> GetTimelockedStakesByIdsAsync(string[] timelockedStakedIotaIds);
 
         /// <summary>
         /// Get committee information for the given epoch.
@@ -56,7 +78,7 @@ namespace iota_sdk.apis.governance
         /// the protocol version, the reference gas price, the total stake, active
         /// validators, and much more.
         /// </summary>
-        Task<IotaSystemStateSummary?> GetlatestIotaSystemStateV2Async(); 
+        Task<IotaSystemStateSummary?> GetlatestIotaSystemStateV2Async();
 
         /// <summary>
         /// Get the reference gas price for the network.

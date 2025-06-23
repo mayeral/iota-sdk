@@ -18,7 +18,7 @@ namespace iota_sdk.model.governance
         /// Staking pool object id.
         /// </summary>
         [JsonPropertyName("stakingPool")]
-        public ObjectId StakingPool { get; set; }
+        public string StakingPool { get; set; }
 
         /// <summary>
         /// List of stakes for this validator

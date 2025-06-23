@@ -190,9 +190,9 @@ This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT)
 | iotax_getOwnedObjects | Read API | ✅ | ✅ |
 | iotax_getReferenceGasPrice | Governance Read API | ✅ | ✅ |
 | iotax_getStakes | Governance Read API | ✅ | ✅ |
-| iotax_getStakesByIds | Governance Read API | ❌ | ❌ |
+| iotax_getStakesByIds | Governance Read API | ✅ | ✅ |
 | iotax_getTimelockedStakes | Governance Read API | ✅ | ✅ |
-| iotax_getTimelockedStakesByIds | Governance Read API | ❌ | ❌ |
+| iotax_getTimelockedStakesByIds | Governance Read API | ✅ | ✅ |
 | iotax_getTotalSupply | Coin Query API | ✅ | ✅ |
 | iotax_getValidatorsApy | Governance Read API | ✅ | ✅ |
 | iotax_iotaNamesFindAllRegistrationNFTs | Read API | ❌ | ❌ |

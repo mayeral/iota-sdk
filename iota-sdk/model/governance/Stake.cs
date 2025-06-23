@@ -13,7 +13,7 @@ public class Stake
     /// The ID of the staked IOTA
     /// </summary>
     [JsonPropertyName("stakedIotaId")]
-    public ObjectId StakedIotaId { get; set; }
+    public string StakedIotaId { get; set; }
 
     /// <summary>
     /// The epoch when the stake request was made
