@@ -176,15 +176,15 @@ This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT)
 | iotax_getAllBalances | Coin Query API | ✅ | ✅ |
 | iotax_getAllCoins | Coin Query API | ✅ | ✅ |
 | iotax_getBalance | Coin Query API | ✅ | ✅ |
-| iotax_getBridgeObjectInitialSharedVersion | Read API | ❌ | ❌ |
+| iotax_getBridgeObjectInitialSharedVersion API DOC? | Read API | ❌ | ❌ |
 | iotax_getCirculatingSupply | Coin Query API | ✅ | ✅ |
 | iotax_getCoinMetadata | Coin Query API | ✅ | ✅ |
 | iotax_getCoins | Coin Query API | ✅ | ✅ |
 | iotax_getCommitteeInfo | Governance Read API | ✅ | ✅ |
 | iotax_getDynamicFieldObject | Read API | ❌ | ❌ |
 | iotax_getDynamicFieldObjectV2 | Read API | ❌ | ❌ |
-| iotax_getDynamicFields | Read API | ❌ | ❌ |
-| iotax_getLatestBridge | Read API | ❌ | ❌ |
+| iotax_getDynamicFields API DOC? | Read API | ❌ | ❌ | 
+| iotax_getLatestBridge API DOC? | Read API | ❌ | ❌ | 
 | iotax_getLatestIotaSystemState | Governance Read API | ✅ | ✅ |
 | iotax_getLatestIotaSystemStateV2 | Governance Read API | ✅ | ✅ |
 | iotax_getOwnedObjects | Read API | ✅ | ✅ |
