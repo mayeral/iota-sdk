@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace iota_sdk_tests.apis
+namespace iota_sdk_tests.model
 {
     [TestFixture]
     public class IotaSystemStateSummaryConverterTests

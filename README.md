@@ -187,7 +187,7 @@ This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT)
 | iotax_getLatestBridge | Read API | ❌ | ❌ |
 | iotax_getLatestIotaSystemState | Governance Read API | ✅ | ✅ |
 | iotax_getLatestIotaSystemStateV2 | Governance Read API | ✅ | ✅ |
-| iotax_getOwnedObjects | Read API | ❌ | ❌ |
+| iotax_getOwnedObjects | Read API | ✅ | ✅ |
 | iotax_getReferenceGasPrice | Governance Read API | ✅ | ✅ |
 | iotax_getStakes | Governance Read API | ✅ | ✅ |
 | iotax_getStakesByIds | Governance Read API | ❌ | ❌ |

@@ -22,14 +22,66 @@ public class ReadApi : IReadApi
         _client = client;
     }
 
-    public async Task<ObjectsPage> GetOwnedObjectsAsync(IotaAddress address, IotaObjectResponseQuery query = null, ObjectId cursor = null, int? limit = null)
+    public async Task<ObjectsPage> GetOwnedObjectsAsync(IotaAddress address, IotaObjectResponseQuery? query = null, ObjectId? cursor = null, int? limit = null)
     {
-        throw new NotImplementedException();
+        if (address == null)
+        {
+            throw new ArgumentNullException(nameof(address));
+        }
+
+        // Prepare the parameters
+        var parameters = new List<object?> { address.ToString() };
+
+        if (query != null)
+        {
+            parameters.Add(query);
+        }
+
+        if (cursor != null)
+        {
+            // Add null placeholders if needed
+            if (query == null)
+            {
+                parameters.Add(null);
+            }
+
+            parameters.Add(cursor.ToString());
+        }
+
+        if (limit.HasValue)
+        {
+            // Add null placeholders if needed
+            if (query == null && cursor == null)
+            {
+                parameters.Add(null);
+                parameters.Add(null);
+            }
+            else if (cursor == null)
+            {
+                parameters.Add(null);
+            }
+
+            parameters.Add(limit.Value);
+        }
+
+        var response = await _client.InvokeRpcMethodAsync<JObject>("iotax_getOwnedObjects", parameters.ToArray()).ConfigureAwait(false);
+
+        // Convert JObject to string
+        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
+
+        // Use System.Text.Json to deserialize
+        var jsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNameCaseInsensitive = true
+        };
+
+        // Deserialize the response into an ObjectsPage
+        return JsonSerializer.Deserialize<ObjectsPage>(jsonString, jsonSerializerOptions) ?? new ObjectsPage();
     }
 
     public async Task<DynamicFieldPage> GetDynamicFieldsAsync(ObjectId objectId, ObjectId cursor = null, int? limit = null)
     {
-        // iotax_getDynamicFieldObject TODO
         throw new NotImplementedException();
     }
 
@@ -112,6 +164,7 @@ public class ReadApi : IReadApi
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true
         };
+
         // Deserialize the response into a list of IotaObjectResponse objects
         return JsonSerializer.Deserialize<List<IotaObjectResponse>>(jsonString, jsonSerializerOptions) ?? new List<IotaObjectResponse>();
 
@@ -277,7 +330,7 @@ public class ReadApi : IReadApi
 
     public async Task<IAsyncEnumerable<IotaTransactionBlockEffects>> SubscribeTransactionAsync(TransactionFilter filter)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException("Deprecated use GetTransactionsAsync instead");
     }
 
     public async Task<IDictionary<string, IotaMoveNormalizedModule>> GetNormalizedMoveModulesByPackageAsync(ObjectId package)

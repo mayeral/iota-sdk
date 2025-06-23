@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Iota.Sdk.Model.Read
+namespace iota_sdk.model.read
 {
     /// <summary>
     /// Represents a response containing IOTA object data or an error.
