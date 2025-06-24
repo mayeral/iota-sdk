@@ -1,16 +1,16 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace iota_sdk.model.@event;
 
 // EventPage class to match the response structure
 public class EventPage
 {
-    [JsonPropertyName("data")]
+    [JsonProperty("data")]
     public List<IotaEvent> Data { get; set; }
     
-    [JsonPropertyName("hasNextPage")]
+    [JsonProperty("hasNextPage")]
     public bool HasNextPage { get; set; }
     
-    [JsonPropertyName("nextCursor")]
+    [JsonProperty("nextCursor")]
     public EventId? NextCursor { get; set; }
 }

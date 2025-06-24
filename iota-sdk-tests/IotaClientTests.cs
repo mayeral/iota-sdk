@@ -1,5 +1,6 @@
 using iota_sdk;
 using iota_sdk.apis;
+using iota_sdk.apis.coin;
 using iota_sdk.apis.@event;
 using iota_sdk.apis.governance;
 using iota_sdk.apis.read;

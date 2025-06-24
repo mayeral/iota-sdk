@@ -63,7 +63,7 @@ namespace iota_sdk
             jsonRpc.StartListening();
 
             // Get server information
-            var serverInfo = await GetServerInfo(jsonRpc);
+            var serverInfo = await GetServerInfo(jsonRpc).ConfigureAwait(false);
 
             return new IotaClient(jsonRpc, serverInfo);
         }
@@ -98,24 +98,24 @@ namespace iota_sdk
             return httpClient;
         }
 
-        public async Task<IIotaClient> BuildLocalnet()
+        public Task<IIotaClient> BuildLocalnet()
         {
-            return await Build(IOTA_LOCAL_NETWORK_URL);
+            return Build(IOTA_LOCAL_NETWORK_URL);
         }
 
-        public async Task<IIotaClient> BuildDevnet()
+        public Task<IIotaClient> BuildDevnet()
         {
-            return await Build(IOTA_DEVNET_URL);
+            return Build(IOTA_DEVNET_URL);
         }
 
-        public async Task<IIotaClient> BuildTestnet()
+        public Task<IIotaClient> BuildTestnet()
         {
-            return await Build(IOTA_TESTNET_URL);
+            return Build(IOTA_TESTNET_URL);
         }
 
-        public async Task<IIotaClient> BuildMainnet()
+        public Task<IIotaClient> BuildMainnet()
         {
-            return await Build(IOTA_MAINNET_URL);
+            return Build(IOTA_MAINNET_URL);
         }
 
         private async Task<ServerInfo> GetServerInfo(JsonRpc rpcClient)

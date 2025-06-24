@@ -16,13 +16,13 @@ public class CoinReadApi : ICoinReadApi
     }
 
     /// <inheritdoc />
-    public Task<List<Balance>> GetAllBalances(string address)
+    public Task<List<Balance>> GetAllBalancesAsync(string address)
     {
         return _client.InvokeRpcMethodAsync<List<Balance>>("iotax_getAllBalances", address);
     }
 
     /// <inheritdoc />
-    public Task<CoinPage> GetAllCoins(string address, string? cursor = null, int? limit = null)
+    public Task<CoinPage> GetAllCoinsAsync(string address, string? cursor = null, int? limit = null)
     {
         // Create the parameters array for the RPC call
         var parameters = new List<object> { address };
@@ -43,7 +43,7 @@ public class CoinReadApi : ICoinReadApi
     }
 
 
-    public Task<Balance> GetBalance(string address, string? coinType = null)
+    public Task<Balance> GetBalanceAsync(string address, string? coinType = null)
     {
         // Create the parameters array for the RPC call
         var parameters = new List<object> { address };
@@ -59,14 +59,14 @@ public class CoinReadApi : ICoinReadApi
     }
 
     /// <inheritdoc />
-    public Task<IotaCirculatingSupply> GetCirculatingSupply()
+    public Task<IotaCirculatingSupply> GetCirculatingSupplyAsync()
     {
         // This method doesn't require any parameters
         return _client.InvokeRpcMethodAsync<IotaCirculatingSupply>("iotax_getCirculatingSupply");
     }
 
     /// <inheritdoc />
-    public Task<CoinPage> GetCoins(string address, string? coinType = null, string? cursor = null, int? limit = null)
+    public Task<CoinPage> GetCoinsAsync(string address, string? coinType = null, string? cursor = null, int? limit = null)
     {
         // Create the parameters array for the RPC call
         var parameters = new List<object> { address };
@@ -95,7 +95,7 @@ public class CoinReadApi : ICoinReadApi
     }
 
     /// <inheritdoc />
-    public Task<CoinMetadata> GetCoinMetadata(string coinType)
+    public Task<CoinMetadata> GetCoinMetadataAsync(string coinType)
     {
         // The coinType parameter is required
         if (string.IsNullOrEmpty(coinType))
@@ -108,7 +108,7 @@ public class CoinReadApi : ICoinReadApi
     }
 
     /// <inheritdoc />
-    public Task<Supply> GetTotalSupply(string coinType)
+    public Task<Supply> GetTotalSupplyAsync(string coinType)
     {
         // The coinType parameter is required
         if (string.IsNullOrEmpty(coinType))

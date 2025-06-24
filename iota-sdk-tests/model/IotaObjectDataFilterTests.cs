@@ -1,19 +1,19 @@
-﻿using System.Text.Json;
-using Iota.Sdk.Model.Read;
+﻿using iota_sdk.model.read;
+using Newtonsoft.Json;
 
 namespace iota_sdk_tests.model
 {
     [TestFixture]
     public class IotaObjectDataFilterTests
     {
-        private JsonSerializerOptions _options;
+        private JsonSerializerSettings _settings;
 
         [SetUp]
         public void Setup()
         {
-            _options = new JsonSerializerOptions
+            _settings = new JsonSerializerSettings
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                Formatting = Formatting.Indented
             };
         }
 
@@ -24,8 +24,8 @@ namespace iota_sdk_tests.model
             var filter = new PackageFilter { Package = "0x123456789abcdef" };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<PackageFilter>(deserializedFilter);
@@ -47,8 +47,8 @@ namespace iota_sdk_tests.model
             };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<MoveModuleFilter>(deserializedFilter);
@@ -64,8 +64,8 @@ namespace iota_sdk_tests.model
             var filter = new StructTypeFilter { StructType = "0x2::coin::Coin<0x2::iota::IOTA>" };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<StructTypeFilter>(deserializedFilter);
@@ -80,8 +80,8 @@ namespace iota_sdk_tests.model
             var filter = new AddressOwnerFilter { AddressOwner = "0x123456789abcdef" };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<AddressOwnerFilter>(deserializedFilter);
@@ -96,8 +96,8 @@ namespace iota_sdk_tests.model
             var filter = new ObjectOwnerFilter { ObjectOwner = "0x123456789abcdef" };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<ObjectOwnerFilter>(deserializedFilter);
@@ -112,8 +112,8 @@ namespace iota_sdk_tests.model
             var filter = new ObjectIdFilter { ObjectId = "0x123456789abcdef" };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<ObjectIdFilter>(deserializedFilter);
@@ -128,8 +128,8 @@ namespace iota_sdk_tests.model
             var filter = new ObjectIdsFilter { ObjectIds = new[] { "0x123", "0x456", "0x789" } };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<ObjectIdsFilter>(deserializedFilter);
@@ -148,8 +148,8 @@ namespace iota_sdk_tests.model
             var filter = new VersionFilter { Version = "1234567" };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<VersionFilter>(deserializedFilter);
@@ -171,8 +171,8 @@ namespace iota_sdk_tests.model
             };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<MatchAllFilter>(deserializedFilter);
@@ -195,8 +195,8 @@ namespace iota_sdk_tests.model
             };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<MatchAnyFilter>(deserializedFilter);
@@ -220,8 +220,8 @@ namespace iota_sdk_tests.model
             };
 
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<MatchNoneFilter>(deserializedFilter);
@@ -238,7 +238,7 @@ namespace iota_sdk_tests.model
             string json = "{\"Package\":\"0x123456789abcdef\"}";
 
             // Act
-            var filter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            var filter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<PackageFilter>(filter);
@@ -253,7 +253,7 @@ namespace iota_sdk_tests.model
             string json = "{\"MoveModule\":{\"module\":\"TestModule\",\"package\":\"0xabcdef123456\"}}";
 
             // Act
-            var filter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            var filter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<MoveModuleFilter>(filter);
@@ -281,7 +281,7 @@ namespace iota_sdk_tests.model
     }";
 
             // Act
-            var filter = JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options);
+            var filter = JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings);
 
             // Assert
             Assert.IsInstanceOf<MatchAllFilter>(filter);
@@ -307,7 +307,7 @@ namespace iota_sdk_tests.model
             string json = "{\"invalid_filter_type\":\"value\"}";
 
             // Assert
-            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<IotaObjectDataFilter>(json, _options));
+            Assert.Throws<JsonSerializationException>(() => JsonConvert.DeserializeObject<IotaObjectDataFilter>(json, _settings));
         }
 
         [Test]
@@ -322,8 +322,8 @@ namespace iota_sdk_tests.model
             };
 
             // Act
-            string json = JsonSerializer.Serialize(filters, _options);
-            var deserializedFilters = JsonSerializer.Deserialize<List<IotaObjectDataFilter>>(json, _options);
+            string json = JsonConvert.SerializeObject(filters, _settings);
+            var deserializedFilters = JsonConvert.DeserializeObject<List<IotaObjectDataFilter>>(json, _settings);
 
             // Assert
             Assert.AreEqual(3, deserializedFilters.Count);

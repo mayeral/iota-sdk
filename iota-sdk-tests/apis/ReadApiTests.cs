@@ -1,10 +1,10 @@
-﻿using System.Text.Json;
-using Iota.Sdk.Model.Read;
+﻿using Iota.Sdk.Model.Read;
 using iota_sdk;
 using iota_sdk.apis.read;
 using iota_sdk.model;
 using iota_sdk.model.read;
 using iota_sdk_tests.utils;
+using Newtonsoft.Json;
 
 namespace iota_sdk_tests.apis;
 
@@ -605,7 +605,7 @@ public class ReadApiTests
             TestsUtils.InitTestObjectId(),
             TestsUtils.InitTestObjectId2()
         };
-    
+
         var options = new IotaObjectDataOptions
         {
             ShowType = true,
@@ -623,12 +623,12 @@ public class ReadApiTests
         // Assert
         Assert.NotNull(result);
         Assert.AreEqual(2, result.ToList().Count);
-    
+
         // Verify that the returned objects match our requested IDs
         var returnedIds = result.Select(obj => obj.Data.ObjectId).ToList();
         Assert.Contains(objectIds[0].ToString(), returnedIds);
         Assert.Contains(objectIds[1].ToString(), returnedIds);
-    
+
         // Log some details
         foreach (var obj in result)
         {
@@ -648,7 +648,7 @@ public class ReadApiTests
             TestsUtils.InitTransactionDigest(),
             TestsUtils.InitTransactionDigest2()
         };
-    
+
         var options = new IotaTransactionBlockResponseOptions
         {
             ShowInput = true,
@@ -667,159 +667,159 @@ public class ReadApiTests
         Assert.NotNull(result);
         var resultList = result.ToList();
         Assert.AreEqual(2, resultList.Count);
-    
+
         // Verify that the returned transactions match our requested digests
         var returnedDigests = resultList.Select(tx => tx.Digest).ToList();
         Assert.Contains(digests[0].ToString(), returnedDigests);
         Assert.Contains(digests[1].ToString(), returnedDigests);
-    
+
         // Log some details with more information based on the options
         foreach (var tx in resultList)
         {
             Console.WriteLine($"Transaction Digest: {tx.Digest}");
             Console.WriteLine($"Transaction Timestamp: {tx.TimestampMs}");
-        
+
             if (tx.Transaction != null)
             {
                 Console.WriteLine($"Transaction Sender: {tx.Transaction.Data.Sender}");
             }
-            
+
             if (tx.Events != null && tx.Events.Any())
             {
                 Console.WriteLine($"Number of Events: {tx.Events.Count}");
             }
-        
+
             Console.WriteLine("---");
         }
     }
 
     [Test]
-public async Task GetOwnedObjectsAsync_ReturnsValidObjects()
-{
-    // Arrange
-    var address = new IotaAddress(TestsUtils.InitTestAddress());
-    var query = new IotaObjectResponseQuery
+    public async Task GetOwnedObjectsAsync_ReturnsValidObjects()
     {
-        Options = new IotaObjectDataOptions
+        // Arrange
+        var address = new IotaAddress(TestsUtils.InitTestAddress());
+        var query = new IotaObjectResponseQuery
         {
-            ShowType = true,
-            ShowOwner = true,
-            ShowContent = true,
-            ShowDisplay = false,
-            ShowBcs = false,
-            ShowStorageRebate = true,
-            ShowPreviousTransaction = true
-        }
-    };
-    int limit = 10;
+            Options = new IotaObjectDataOptions
+            {
+                ShowType = true,
+                ShowOwner = true,
+                ShowContent = true,
+                ShowDisplay = false,
+                ShowBcs = false,
+                ShowStorageRebate = true,
+                ShowPreviousTransaction = true
+            }
+        };
+        int limit = 10;
 
-    // Act
-    var result = await _target!.GetOwnedObjectsAsync(address, query, null, limit).ConfigureAwait(false);
+        // Act
+        var result = await _target!.GetOwnedObjectsAsync(address, query, null, limit).ConfigureAwait(false);
 
-    // Assert
-    Assert.NotNull(result);
-    Assert.NotNull(result.Data);
-    
-    Console.WriteLine($"Objects found: {result.Data.Count}");
-    Console.WriteLine($"Has next page: {result.HasNextPage}");
-    Console.WriteLine($"Next cursor: {result.NextCursor}");
-    
-    // Log details of returned objects
-    foreach (var obj in result.Data)
-    {
-        Console.WriteLine($"Object ID: {obj.Data.ObjectId}");
-        Console.WriteLine($"Object Type: {obj.Data.Type}");
-        Console.WriteLine($"Object Owner: {obj.Data.Owner}");
-        Console.WriteLine("---");
-    }
-}
+        // Assert
+        Assert.NotNull(result);
+        Assert.NotNull(result.Data);
 
-[Test]
-public async Task GetOwnedObjectsAsync_WithPagination_ReturnsValidObjects()
-{
-    // Arrange
-    int limit = 2; // Small limit to test pagination
-    ObjectId? cursor = null;
-    
-    // Act & Assert - First page
-    ObjectsPage firstPage = await _target!.GetOwnedObjectsAsync(_testAddress, null, cursor, limit).ConfigureAwait(false);
-    
-    Assert.NotNull(firstPage);
-    Assert.NotNull(firstPage.Data);
-    Assert.LessOrEqual(firstPage.Data.Count, limit);
-    
-    Console.WriteLine("First Page:");
-    Console.WriteLine($"Objects found: {firstPage.Data.Count}");
-    Console.WriteLine($"Has next page: {firstPage.HasNextPage}");
-    
-    if (firstPage.HasNextPage && !string.IsNullOrEmpty(firstPage.NextCursor))
-    {
-        // Act & Assert - Second page
-        cursor = new ObjectId(firstPage.NextCursor);
-        var secondPage = await _target!.GetOwnedObjectsAsync(_testAddress, null, cursor, limit).ConfigureAwait(false);
-        
-        Assert.NotNull(secondPage);
-        Assert.NotNull(secondPage.Data);
-        Assert.LessOrEqual(secondPage.Data.Count, limit);
-        
-        Console.WriteLine("\nSecond Page:");
-        Console.WriteLine($"Objects found: {secondPage.Data.Count}");
-        Console.WriteLine($"Has next page: {secondPage.HasNextPage}");
-        
-        // Verify the objects from the first and second pages are different
-        var firstPageIds = firstPage.Data.Select(o => o.Data.ObjectId).ToList();
-        var secondPageIds = secondPage.Data.Select(o => o.Data.ObjectId).ToList();
-        
-        foreach (var id in secondPageIds)
+        Console.WriteLine($"Objects found: {result.Data.Count}");
+        Console.WriteLine($"Has next page: {result.HasNextPage}");
+        Console.WriteLine($"Next cursor: {result.NextCursor}");
+
+        // Log details of returned objects
+        foreach (var obj in result.Data)
         {
-            Assert.IsFalse(firstPageIds.Contains(id), "Second page contains duplicate objects from first page");
+            Console.WriteLine($"Object ID: {obj.Data.ObjectId}");
+            Console.WriteLine($"Object Type: {obj.Data.Type}");
+            Console.WriteLine($"Object Owner: {obj.Data.Owner}");
+            Console.WriteLine("---");
         }
     }
-}
 
-[Test]
-public async Task GetObjectsWithFilter_ReturnsObjects()
-{
-    
-    // Arrange
-    var address = _testAddress;
-    var filter = new MatchAllFilter
+    [Test]
+    public async Task GetOwnedObjectsAsync_WithPagination_ReturnsValidObjects()
     {
-        MatchAll = new IotaObjectDataFilter[]
+        // Arrange
+        int limit = 2; // Small limit to test pagination
+        ObjectId? cursor = null;
+
+        // Act & Assert - First page
+        ObjectsPage firstPage = await _target!.GetOwnedObjectsAsync(_testAddress, null, cursor, limit).ConfigureAwait(false);
+
+        Assert.NotNull(firstPage);
+        Assert.NotNull(firstPage.Data);
+        Assert.LessOrEqual(firstPage.Data.Count, limit);
+
+        Console.WriteLine("First Page:");
+        Console.WriteLine($"Objects found: {firstPage.Data.Count}");
+        Console.WriteLine($"Has next page: {firstPage.HasNextPage}");
+
+        if (firstPage.HasNextPage && !string.IsNullOrEmpty(firstPage.NextCursor))
         {
+            // Act & Assert - Second page
+            cursor = new ObjectId(firstPage.NextCursor);
+            var secondPage = await _target!.GetOwnedObjectsAsync(_testAddress, null, cursor, limit).ConfigureAwait(false);
+
+            Assert.NotNull(secondPage);
+            Assert.NotNull(secondPage.Data);
+            Assert.LessOrEqual(secondPage.Data.Count, limit);
+
+            Console.WriteLine("\nSecond Page:");
+            Console.WriteLine($"Objects found: {secondPage.Data.Count}");
+            Console.WriteLine($"Has next page: {secondPage.HasNextPage}");
+
+            // Verify the objects from the first and second pages are different
+            var firstPageIds = firstPage.Data.Select(o => o.Data.ObjectId).ToList();
+            var secondPageIds = secondPage.Data.Select(o => o.Data.ObjectId).ToList();
+
+            foreach (var id in secondPageIds)
+            {
+                Assert.IsFalse(firstPageIds.Contains(id), "Second page contains duplicate objects from first page");
+            }
+        }
+    }
+
+    [Test]
+    public async Task GetObjectsWithFilter_ReturnsObjects()
+    {
+
+        // Arrange
+        var address = _testAddress;
+        var filter = new MatchAllFilter
+        {
+            MatchAll = new IotaObjectDataFilter[]
+            {
             new StructTypeFilter { StructType = "0x107a::nft::Nft" },
             new AddressOwnerFilter { AddressOwner = address }
-        }
-    };
-    
-    var query = new IotaObjectResponseQuery
-    {
-        Filter = filter,
-        Options = new IotaObjectDataOptions
+            }
+        };
+
+        var query = new IotaObjectResponseQuery
         {
-            ShowContent = true,
-            ShowType = true,
-            ShowOwner = true,
-            ShowDisplay = true
+            Filter = filter,
+            Options = new IotaObjectDataOptions
+            {
+                ShowContent = true,
+                ShowType = true,
+                ShowOwner = true,
+                ShowDisplay = true
+            }
+        };
+
+        // Act
+        var result = await _target!.GetOwnedObjectsAsync(_testAddress, query).ConfigureAwait(false);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Console.WriteLine($"Found {result.Data.Count} NFT objects owned by {address}");
+
+        // Verify each returned object matches our filter criteria
+        foreach (var item in result.Data)
+        {
+            Assert.IsNotNull(item.Data?.Type);
+            Assert.IsTrue(item.Data?.Type.Contains("0x107a::nft::Nft"), $"Type {item.Data?.Type} doesn't match expected 0x107a::nft::Nft");
+
+            Assert.IsNotNull(item.Data?.Owner);
+            string ownerJson = JsonConvert.SerializeObject(item.Data?.Owner);
+            Assert.IsTrue(ownerJson.Contains(address), $"Owner {ownerJson} doesn't contain expected address {address}");
         }
-    };
-    
-    // Act
-    var result = await _target!.GetOwnedObjectsAsync(_testAddress, query).ConfigureAwait(false);
-    
-    // Assert
-    Assert.IsNotNull(result);
-    Console.WriteLine($"Found {result.Data.Count} NFT objects owned by {address}");
-    
-    // Verify each returned object matches our filter criteria
-    foreach (var item in result.Data)
-    {
-        Assert.IsNotNull(item.Data?.Type);
-        Assert.IsTrue(item.Data?.Type.Contains("0x107a::nft::Nft"), $"Type {item.Data?.Type} doesn't match expected 0x107a::nft::Nft");
-        
-        Assert.IsNotNull(item.Data?.Owner);
-        var ownerJson = JsonSerializer.Serialize(item.Data?.Owner);
-        Assert.IsTrue(ownerJson.Contains(address), $"Owner {ownerJson} doesn't contain expected address {address}");
     }
-}
 }

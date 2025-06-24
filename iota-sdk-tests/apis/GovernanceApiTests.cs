@@ -41,6 +41,19 @@ public class GovernanceApiTests
         var result = _target!.GetStakesAsync(_testAddress).Result;
         // assert
         Assert.IsNotNull(result);
+        Assert.IsNotNull(result.First().StakingPool);
+        Assert.IsNotNull(result.First().ValidatorAddress);
+        Assert.IsNotNull(result.First().Stakes);
+        
+        foreach (var stake in result.First().Stakes)
+        {
+            Assert.IsNotNull(stake.EstimatedReward);
+            Assert.IsNotNull(stake.Principal);
+            Assert.IsNotNull(stake.StakeActiveEpoch);
+            Assert.IsNotNull(stake.StakedIotaId);
+            Assert.IsNotNull(stake.StakeRequestEpoch);
+            Assert.IsNotNull(stake.Status);
+        }   
 
         return Task.CompletedTask;
     }
@@ -100,6 +113,21 @@ public class GovernanceApiTests
         var result = _target!.GetTimelockedStakesAsync(_testAddress).Result;
         // assert
         Assert.IsNotNull(result);
+        Assert.IsNotNull(result.First().StakingPool);
+        Assert.IsNotNull(result.First().ValidatorAddress);
+        Assert.IsNotNull(result.First().Stakes);
+
+        foreach (var timelockedStakes in result.First().Stakes)
+        {
+            Assert.IsNotNull(timelockedStakes.TimelockedStakedIotaId);
+            Assert.IsNotNull(timelockedStakes.StakeRequestEpoch);
+            Assert.IsNotNull(timelockedStakes.StakeActiveEpoch);
+            Assert.Greater(timelockedStakes.Principal, 0);
+            Assert.IsNotNull(timelockedStakes.Status);
+            Assert.IsNotNull(timelockedStakes.EstimatedReward);
+            Assert.Greater(timelockedStakes.ExpirationTimestampMs, 0);
+            Assert.IsNotNull(timelockedStakes.Label);
+        }
 
         return Task.CompletedTask;
     }

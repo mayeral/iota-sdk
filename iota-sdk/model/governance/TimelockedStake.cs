@@ -1,5 +1,5 @@
 ﻿using System.Numerics;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace iota_sdk.model.governance;
 
@@ -11,49 +11,48 @@ public class TimelockedStake
     /// <summary>
     /// Gets or sets the timelocked staked IOTA ID.
     /// </summary>
-    [JsonPropertyName("timelockedStakedIotaId")]
+    [JsonProperty("timelockedStakedIotaId")]
     public string TimelockedStakedIotaId { get; set; }
 
     /// <summary>
     /// Gets or sets the stake request epoch.
     /// </summary>
-    [JsonPropertyName("stakeRequestEpoch")]
+    [JsonProperty("stakeRequestEpoch")]
     public BigInteger StakeRequestEpoch { get; set; }
 
     /// <summary>
     /// Gets or sets the stake active epoch.
     /// </summary>
-    [JsonPropertyName("stakeActiveEpoch")]
+    [JsonProperty("stakeActiveEpoch")]
     public BigInteger StakeActiveEpoch { get; set; }
 
     /// <summary>
     /// Gets or sets the principal amount.
     /// </summary>
-    [JsonPropertyName("principal")]
+    [JsonProperty("principal")]
     public ulong Principal { get; set; }
 
     /// <summary>
     /// Gets or sets the stake status.
     /// </summary>
-    [JsonPropertyName("status")]
+    [JsonProperty("status")]
     public StakeStatus Status { get; set; }
 
     /// <summary>
     /// The estimated reward for the stake (if applicable)
     /// </summary>
-    [JsonPropertyName("estimatedReward")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonProperty("estimatedReward", NullValueHandling = NullValueHandling.Ignore)]
     public ulong? EstimatedReward { get; set; }
 
     /// <summary>
     /// Gets or sets the expiration timestamp in milliseconds.
     /// </summary>
-    [JsonPropertyName("expirationTimestampMs")]
+    [JsonProperty("expirationTimestampMs")]
     public ulong ExpirationTimestampMs { get; set; }
 
     /// <summary>
     /// Gets or sets the optional label for the stake.
     /// </summary>
-    [JsonPropertyName("label")]
+    [JsonProperty("label")]
     public string Label { get; set; }
 }

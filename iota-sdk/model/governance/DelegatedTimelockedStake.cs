@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace iota_sdk.model.governance;
 
@@ -10,18 +10,18 @@ public class DelegatedTimelockedStake
     /// <summary>
     /// Gets or sets the validator address.
     /// </summary>
-    [JsonPropertyName("validatorAddress")]
+    [JsonProperty("validatorAddress")]
     public string ValidatorAddress { get; set; }
 
     /// <summary>
     /// Gets or sets the staking pool object ID.
     /// </summary>
-    [JsonPropertyName("stakingPool")]
+    [JsonProperty("stakingPool")]
     public string StakingPool { get; set; }
 
     /// <summary>
     /// Gets or sets the collection of timelocked stakes.
     /// </summary>
-    [JsonPropertyName("stakes")]
+    [JsonProperty("stakes")]
     public List<TimelockedStake> Stakes { get; set; }
 }

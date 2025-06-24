@@ -1,7 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using iota_sdk.apis.read;
-using iota_sdk.model.read;
-
+﻿using Newtonsoft.Json;
 namespace iota_sdk.model.governance;
 
 /// <summary>
@@ -12,37 +9,36 @@ public class Stake
     /// <summary>
     /// The ID of the staked IOTA
     /// </summary>
-    [JsonPropertyName("stakedIotaId")]
+    [JsonProperty("stakedIotaId")]
     public string StakedIotaId { get; set; }
 
     /// <summary>
     /// The epoch when the stake request was made
     /// </summary>
-    [JsonPropertyName("stakeRequestEpoch")]
+    [JsonProperty("stakeRequestEpoch")]
     public string StakeRequestEpoch { get; set; }
 
     /// <summary>
     /// The epoch when the stake becomes active
     /// </summary>
-    [JsonPropertyName("stakeActiveEpoch")]
+    [JsonProperty("stakeActiveEpoch")]
     public string StakeActiveEpoch { get; set; }
 
     /// <summary>
     /// The principal amount staked
     /// </summary>
-    [JsonPropertyName("principal")]
+    [JsonProperty("principal")]
     public string Principal { get; set; }
 
     /// <summary>
     /// The status of the stake (Active, Pending, Unstaked)
     /// </summary>
-    [JsonPropertyName("status")]
+    [JsonProperty("status")]
     public string Status { get; set; }
 
     /// <summary>
     /// The estimated reward for the stake (if applicable)
     /// </summary>
-    [JsonPropertyName("estimatedReward")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonProperty("estimatedReward", NullValueHandling = NullValueHandling.Ignore)]
     public string EstimatedReward { get; set; }
 }

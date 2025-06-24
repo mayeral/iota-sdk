@@ -1,7 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using Iota.Sdk.Model.Read;
-using iota_sdk.model.read;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+
+namespace iota_sdk.model.read;
 
 /// <summary>
 /// Represents a page of IOTA objects.
@@ -16,14 +15,12 @@ public class ObjectsPage
     /// Gets or sets the list of IOTA object responses in this page.
     /// </summary>
     [JsonProperty("data")]
-    [JsonPropertyName("data")]
     public List<IotaObjectResponse> Data { get; set; } = new List<IotaObjectResponse>();
 
     /// <summary>
     /// Gets or sets a value indicating whether there are more pages available.
     /// </summary>
     [JsonProperty("hasNextPage")]
-    [JsonPropertyName("hasNextPage")]
     public bool HasNextPage { get; set; }
 
     /// <summary>
@@ -31,6 +28,5 @@ public class ObjectsPage
     /// When used in a subsequent request, the response will start from the next item after this cursor.
     /// </summary>
     [JsonProperty("nextCursor")]
-    [JsonPropertyName("nextCursor")]
     public string? NextCursor { get; set; }
 }

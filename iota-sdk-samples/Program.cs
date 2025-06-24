@@ -19,7 +19,7 @@ foreach (var method in rpcMethods)
 Console.WriteLine("Coins:");
 // Get balances for an address
 string address = "0x7b4a34f6a011794f0ecbe5e5beb96102d3eef6122eb929b9f50a8d757bfbdd67";
-List<Balance> balances = await client.CoinReadApi().GetAllBalances(address).ConfigureAwait(false);
+List<Balance> balances = await client.CoinReadApi().GetAllBalancesAsync(address).ConfigureAwait(false);
 
 // Display the results
 foreach (var balance in balances)

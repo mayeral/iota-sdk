@@ -1,6 +1,5 @@
 ﻿using iota_sdk.model.governance;
 using System.Numerics;
-using iota_sdk.model.read;
 
 namespace iota_sdk.apis.governance
 {

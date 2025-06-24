@@ -1,5 +1,6 @@
 using iota_sdk;
 using iota_sdk.apis;
+using iota_sdk.apis.coin;
 using iota_sdk.model.coin;
 using iota_sdk_tests.utils;
 
@@ -36,7 +37,7 @@ namespace iota_sdk_tests.apis
         public async Task GetAllBalances_ReturnsBalancesList()
         {
             // Act
-            var result = await target.GetAllBalances(_testAddress);
+            var result = await target.GetAllBalancesAsync(_testAddress);
 
             // Assert
             Assert.IsNotNull(result);
@@ -56,7 +57,7 @@ namespace iota_sdk_tests.apis
             // Capture the exception to check its message
             var exception = Assert.ThrowsAsync<StreamJsonRpc.RemoteMethodNotFoundException>(async () => 
             {
-                var result = await target.GetAllBalances(_testInvalidAddress);
+                var result = await target.GetAllBalancesAsync(_testInvalidAddress);
             });
 
             // Check that the exception message contains expected text
@@ -67,7 +68,7 @@ namespace iota_sdk_tests.apis
         public async Task GetBalance_WithValidAddress_ReturnsBalance()
         {
             // Act
-            var result = await target.GetBalance(_testAddress, _testCoinType);
+            var result = await target.GetBalanceAsync(_testAddress, _testCoinType);
 
             // Assert
             Assert.IsNotNull(result);
@@ -80,7 +81,7 @@ namespace iota_sdk_tests.apis
         public async Task GetBalance_WithoutCoinType_UsesDefaultCoinType()
         {
             // Act
-            var result = await target.GetBalance(_testAddress);
+            var result = await target.GetBalanceAsync(_testAddress);
 
             // Assert
             Assert.IsNotNull(result);
@@ -96,7 +97,7 @@ public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
             const int limit = 5;
 
             // Act
-            var result = await target.GetCoins(_testAddress, _testCoinType);
+            var result = await target.GetCoinsAsync(_testAddress, _testCoinType);
 
             // Assert
             Assert.IsNotNull(result);
@@ -118,7 +119,7 @@ public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
             const int limit = 5;
 
             // Act
-            var result = await target.GetAllCoins(_testAddress, null, limit);
+            var result = await target.GetAllCoinsAsync(_testAddress, null, limit);
 
             // Assert
             Assert.IsNotNull(result);
@@ -130,6 +131,9 @@ public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
                 Assert.IsNotNull(result.Data[0].CoinType);
                 Assert.IsNotNull(result.Data[0].CoinObjectId);
                 Assert.IsNotNull(result.Data[0].Balance);
+                Assert.IsNotNull(result.Data[0].PreviousTransaction);
+                Assert.IsNotNull(result.Data[0].Digest);
+                Assert.IsNotNull(result.Data[0].Version);
             }
         }
 
@@ -137,7 +141,7 @@ public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
         public async Task GetCoinMetadata_WithValidCoinType_ReturnsCoinMetadata()
         {
             // Act
-            var result = await target.GetCoinMetadata(_testCoinType);
+            var result = await target.GetCoinMetadataAsync(_testCoinType);
 
             // Assert
             Assert.IsNotNull(result);
@@ -145,6 +149,8 @@ public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
             Assert.IsNotNull(result.Symbol);
             Assert.IsNotNull(result.Description);
             Assert.GreaterOrEqual(result.Decimals, 0);
+            Assert.IsNotNull(result.IconUrl);
+            Assert.IsNotNull(result.Id);
         }
 
         [Test]
@@ -152,14 +158,14 @@ public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
         {
             // Act & Assert
             Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await target.GetCoinMetadata(null));
+                await target.GetCoinMetadataAsync(null));
         }
 
         [Test]
         public async Task GetTotalSupply_WithValidCoinType_ReturnsSupply()
         {
             // Act
-            var result = await target.GetTotalSupply(_testCoinType);
+            var result = await target.GetTotalSupplyAsync(_testCoinType);
 
             // Assert
             Assert.IsNotNull(result);
@@ -171,14 +177,14 @@ public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
         {
             // Act & Assert
             Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await target.GetTotalSupply(null));
+                await target.GetTotalSupplyAsync(null));
         }
 
         [Test]
         public async Task GetCirculatingSupply_ReturnsCirculatingSupply()
         {
             // Act
-            var result = await target.GetCirculatingSupply();
+            var result = await target.GetCirculatingSupplyAsync();
 
             // Assert
             Assert.IsNotNull(result);

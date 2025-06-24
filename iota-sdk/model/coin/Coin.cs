@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace iota_sdk.model.coin;
 
@@ -10,36 +10,36 @@ public class Coin
     /// <summary>
     /// The type of the coin.
     /// </summary>
-    [JsonPropertyName("coinType")] // TODO NEWTONSOFT JSON VS SYSTEM.TEXT.JSON
+    [JsonProperty("coinType")]
     public string CoinType { get; set; }
 
     /// <summary>
     /// The unique identifier of the coin object.
     /// </summary>
-    [JsonPropertyName("coinObjectId")]
+    [JsonProperty("coinObjectId")]
     public string CoinObjectId { get; set; }
 
     /// <summary>
     /// The version of the coin object.
     /// </summary>
-    [JsonPropertyName("version")]
+    [JsonProperty("version")]
     public string Version { get; set; }
 
     /// <summary>
     /// The digest of the coin object.
     /// </summary>
-    [JsonPropertyName("digest")]
+    [JsonProperty("digest")]
     public string Digest { get; set; }
 
     /// <summary>
     /// The balance of the coin.
     /// </summary>
-    [JsonPropertyName("balance")]
+    [JsonProperty("balance")]
     public string Balance { get; set; }
 
     /// <summary>
     /// The hash of the previous transaction.
     /// </summary>
-    [JsonPropertyName("previousTransaction")]
+    [JsonProperty("previousTransaction")]
     public string PreviousTransaction { get; set; }
 }

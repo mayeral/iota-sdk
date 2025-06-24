@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 /// <summary>
 /// Represents a dynamic field name with a type and a value.
@@ -10,14 +9,12 @@ public class DynamicFieldName
     /// Gets or sets the type of the dynamic field.
     /// </summary>
     [JsonProperty("type")]
-    [JsonPropertyName("type")]
     public string Type { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the value of the dynamic field.
     /// </summary>
     [JsonProperty("value")]
-    [JsonPropertyName("value")]
     public object? Value { get; set; }
 
     /// <summary>

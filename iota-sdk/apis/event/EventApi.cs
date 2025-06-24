@@ -20,11 +20,12 @@ public class EventApi : IEventApi
     }
 
 
-    public async Task<IAsyncEnumerable<IotaEvent>> SubscribeEventAsync(EventFilter filter)
+    public Task<IAsyncEnumerable<IotaEvent>> SubscribeEventAsync(EventFilter filter)
     {
         // :::note The subscribeEvent and subscribeTransaction methods are deprecated.
         // Please use queryEvents and queryTransactionBlocks instead.
-        throw new NotImplementedException("subscribe event is deprecated use query events method");
+        // iotax_subscribeEvent
+        throw new NotImplementedException("subscribe event method is deprecated use query events method instead.");
     }
 
     /// <summary>

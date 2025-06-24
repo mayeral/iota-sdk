@@ -1,7 +1,6 @@
-﻿using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Runtime.Serialization;
 
 namespace iota_sdk.model.read;
 
@@ -14,14 +13,12 @@ public class IotaTransactionBlockResponseQuery
     /// If null, no filter will be applied.
     /// </summary>
     [JsonProperty("filter", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonPropertyName("filter")]
     public TransactionFilter? Filter { get; set; }
 
     /// <summary>
     /// Config which fields to include in the response, by default only digest is included.
     /// </summary>
     [JsonProperty("options")]
-    [JsonPropertyName("options")]
     public IotaTransactionBlockResponseOptions? Options { get; set; }
 }
 
@@ -34,49 +31,42 @@ public class IotaTransactionBlockResponseOptions
     /// Whether to show balance_changes. Default is False.
     /// </summary>
     [JsonProperty("showBalanceChanges", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonPropertyName("showBalanceChanges")]
     public bool? ShowBalanceChanges { get; set; }
 
     /// <summary>
     /// Whether to show transaction effects. Default is False.
     /// </summary>
     [JsonProperty("showEffects", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonPropertyName("showEffects")]
     public bool? ShowEffects { get; set; }
 
     /// <summary>
     /// Whether to show transaction events. Default is False.
     /// </summary>
     [JsonProperty("showEvents", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonPropertyName("showEvents")]
     public bool? ShowEvents { get; set; }
 
     /// <summary>
     /// Whether to show transaction input data. Default is False.
     /// </summary>
     [JsonProperty("showInput", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonPropertyName("showInput")]
     public bool? ShowInput { get; set; }
 
     /// <summary>
     /// Whether to show object_changes. Default is False.
     /// </summary>
     [JsonProperty("showObjectChanges", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonPropertyName("showObjectChanges")]
     public bool? ShowObjectChanges { get; set; }
 
     /// <summary>
     /// Whether to show raw transaction effects. Default is False.
     /// </summary>
     [JsonProperty("showRawEffects", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonPropertyName("showRawEffects")]
     public bool? ShowRawEffects { get; set; }
 
     /// <summary>
     /// Whether to show bcs-encoded transaction input data.
     /// </summary>
     [JsonProperty("showRawInput", NullValueHandling = NullValueHandling.Ignore)]
-    [JsonPropertyName("showRawInput")]
     public bool? ShowRawInput { get; set; }
 }
 
@@ -90,61 +80,61 @@ public class TransactionFilter
     /// <summary>
     /// Query by checkpoint identifier.
     /// </summary>
-    [JsonPropertyName("Checkpoint")]
+    [JsonProperty("Checkpoint")]
     public string Checkpoint { get; set; }
 
     /// <summary>
     /// Query by Move function.
     /// </summary>
-    [JsonPropertyName("MoveFunction")]
+    [JsonProperty("MoveFunction")]
     public MoveFunctionFilter MoveFunction { get; set; }
 
     /// <summary>
     /// Query by input object identifier.
     /// </summary>
-    [JsonPropertyName("InputObject")]
+    [JsonProperty("InputObject")]
     public string InputObject { get; set; }
 
     /// <summary>
     /// Query by changed object identifier, including created, mutated and unwrapped objects.
     /// </summary>
-    [JsonPropertyName("ChangedObject")]
+    [JsonProperty("ChangedObject")]
     public string ChangedObject { get; set; }
 
     /// <summary>
     /// Query by sender address.
     /// </summary>
-    [JsonPropertyName("FromAddress")]
+    [JsonProperty("FromAddress")]
     public string FromAddress { get; set; }
 
     /// <summary>
     /// Query by recipient address.
     /// </summary>
-    [JsonPropertyName("ToAddress")]
+    [JsonProperty("ToAddress")]
     public string ToAddress { get; set; }
 
     /// <summary>
     /// Query by both sender and recipient address.
     /// </summary>
-    [JsonPropertyName("FromAndToAddress")]
+    [JsonProperty("FromAndToAddress")]
     public FromAndToAddressFilter FromAndToAddress { get; set; }
 
     /// <summary>
     /// Query transactions that have a given address as either sender or recipient.
     /// </summary>
-    [JsonPropertyName("FromOrToAddress")]
+    [JsonProperty("FromOrToAddress")]
     public FromOrToAddressFilter FromOrToAddress { get; set; }
 
     /// <summary>
     /// Query by transaction kind.
     /// </summary>
-    [JsonPropertyName("TransactionKind")]
+    [JsonProperty("TransactionKind")]
     public IotaTransactionKind TransactionKind { get; set; }
 
     /// <summary>
     /// Query transactions of any given kind in the input array.
     /// </summary>
-    [JsonPropertyName("TransactionKindIn")]
+    [JsonProperty("TransactionKindIn")]
     public IotaTransactionKind[] TransactionKindIn { get; set; }
 
     /// <summary>
@@ -257,19 +247,19 @@ public class MoveFunctionFilter
     /// <summary>
     /// Optional function name.
     /// </summary>
-    [JsonPropertyName("function")]
+    [JsonProperty("function")]
     public string Function { get; set; }
 
     /// <summary>
     /// Optional module name.
     /// </summary>
-    [JsonPropertyName("module")]
+    [JsonProperty("module")]
     public string Module { get; set; }
 
     /// <summary>
     /// Required package identifier.
     /// </summary>
-    [JsonPropertyName("package")]
+    [JsonProperty("package")]
     public string Package { get; set; }
 }
 
@@ -281,13 +271,13 @@ public class FromAndToAddressFilter
     /// <summary>
     /// Sender address.
     /// </summary>
-    [JsonPropertyName("from")]
+    [JsonProperty("from")]
     public string From { get; set; }
 
     /// <summary>
     /// Recipient address.
     /// </summary>
-    [JsonPropertyName("to")]
+    [JsonProperty("to")]
     public string To { get; set; }
 }
 
@@ -299,7 +289,7 @@ public class FromOrToAddressFilter
     /// <summary>
     /// Address to match as either sender or recipient.
     /// </summary>
-    [JsonPropertyName("addr")]
+    [JsonProperty("addr")]
     public string Address { get; set; }
 }
 
@@ -311,13 +301,13 @@ public class TransferObjectParams
     /// <summary>
     /// ID of the object to transfer.
     /// </summary>
-    [JsonPropertyName("objectId")]
+    [JsonProperty("objectId")]
     public string ObjectId { get; set; }
 
     /// <summary>
     /// Recipient address.
     /// </summary>
-    [JsonPropertyName("recipient")]
+    [JsonProperty("recipient")]
     public string Recipient { get; set; }
 }
 
@@ -330,23 +320,23 @@ public class TypeOrigin
     /// <summary>
     /// Name of the data type (struct).
     /// </summary>
-    [JsonPropertyName("datatype_name")]
+    [JsonProperty("datatype_name")]
     public string DatatypeName { get; set; }
 
     /// <summary>
     /// Name of the module where the type is defined.
     /// </summary>
-    [JsonPropertyName("module_name")]
+    [JsonProperty("module_name")]
     public string ModuleName { get; set; }
 
     /// <summary>
     /// Package identifier containing the module.
     /// </summary>
-    [JsonPropertyName("package")]
+    [JsonProperty("package")]
     public string Package { get; set; }
 }
 
-[System.Text.Json.Serialization.JsonConverter(typeof(StringEnumConverter))]
+[JsonConverter(typeof(StringEnumConverter))]
 public enum IotaTransactionKind
 {
     [EnumMember(Value = "ProgrammableTransaction")]

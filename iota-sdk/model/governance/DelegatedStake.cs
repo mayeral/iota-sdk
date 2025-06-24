@@ -1,29 +1,28 @@
-﻿using System.Text.Json.Serialization;
-using iota_sdk.model.read;
+﻿
+using Newtonsoft.Json;
 
-namespace iota_sdk.model.governance
+namespace iota_sdk.model.governance;
+
+/// <summary>
+/// Represents delegated stake information for a validator
+/// </summary>
+public class DelegatedStake
 {
     /// <summary>
-    /// Represents delegated stake information for a validator
+    /// Validator's Address.
     /// </summary>
-    public class DelegatedStake
-    {
-        /// <summary>
-        /// Validator's Address.
-        /// </summary>
-        [JsonPropertyName("validatorAddress")]
-        public IotaAddress ValidatorAddress { get; set; }
+    [JsonProperty("validatorAddress")]
+    public IotaAddress ValidatorAddress { get; set; }
 
-        /// <summary>
-        /// Staking pool object id.
-        /// </summary>
-        [JsonPropertyName("stakingPool")]
-        public string StakingPool { get; set; }
+    /// <summary>
+    /// Staking pool object id.
+    /// </summary>
+    [JsonProperty("stakingPool")]
+    public string StakingPool { get; set; }
 
-        /// <summary>
-        /// List of stakes for this validator
-        /// </summary>
-        [JsonPropertyName("stakes")]
-        public List<Stake> Stakes { get; set; }
-    }
+    /// <summary>
+    /// List of stakes for this validator
+    /// </summary>
+    [JsonProperty("stakes")]
+    public List<Stake> Stakes { get; set; }
 }

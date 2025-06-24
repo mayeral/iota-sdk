@@ -47,6 +47,18 @@ namespace iota_sdk_tests.apis
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);
             Assert.IsNotEmpty(result.Data);
+
+            // verify data fields of first event
+            var firstEvent = result.Data[0];
+            Assert.IsNotNull(firstEvent.Bcs);
+            Assert.IsNotNull(firstEvent.BcsEncoding);
+            Assert.IsNotNull(firstEvent.Id.EventSeq);
+            Assert.IsNotNull(firstEvent.Id.TxDigest);
+            Assert.IsNotNull(firstEvent.PackageId);
+            Assert.IsNotNull(firstEvent.Type);
+            Assert.IsNotNull(firstEvent.Sender);
+            Assert.IsNotNull(firstEvent.TransactionModule);
+            Assert.IsNotNull(firstEvent.ParsedJson);
         }
 
         [Test]

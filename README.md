@@ -96,7 +96,6 @@ var client = await new IotaClientBuilder()
     .Build("http://127.0.0.1:9000");
 
 // Or use convenience methods
-var localClient = await new IotaClientBuilder().BuildLocalnet();
 var devnetClient = await new IotaClientBuilder().BuildDevnet();
 var testnetClient = await new IotaClientBuilder().BuildTestnet();
 var mainnetClient = await new IotaClientBuilder().BuildMainnet();
@@ -121,7 +120,7 @@ public class Program
             var client = await new IotaClientBuilder().BuildTestnet();
             
             var address = IotaAddress.FromString("<YOUR IOTA ADDRESS>");
-            var balances = await client.CoinReadApi().GetAllBalances(address);
+            var balances = await client.CoinReadApi().GetAllBalancesAsync(address);
             
             Console.WriteLine($"Balances for address {address}: {string.Join(", ", balances)}");
         }
@@ -200,8 +199,8 @@ This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT)
 | iotax_iotaNamesReverseLookup | IOTA Names API | ❌ | ❌ |
 | iotax_queryEvents | Event API | ✅ | ✅ |
 | iotax_queryTransactionBlocks | Read API | ❌ | ❌ |
-| iotax_subscribeEvent | Read API | ❌ | ❌ |
-| iotax_subscribeTransaction | Read API | ❌ | ❌ |
+| iotax_subscribeEvent | Read API | - | - |
+| iotax_subscribeTransaction | Read API | - | - |
 | unsafe_batchTransaction | Transaction API | ❌ | ❌ |
 | unsafe_mergeCoins | Transaction API | ❌ | ❌ |
 | unsafe_moveCall | Transaction API | ❌ | ❌ |

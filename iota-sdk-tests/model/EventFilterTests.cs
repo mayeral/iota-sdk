@@ -1,20 +1,19 @@
-﻿using System.Text.Json;
-using iota_sdk.model.@event;
-
+﻿using iota_sdk.model.@event;
+using Newtonsoft.Json;
 
 namespace iota_sdk_tests.model
 {
     [TestFixture]
     public class EventFilterTests
     {
-        private JsonSerializerOptions _options;
+        private JsonSerializerSettings _settings;
 
         [SetUp]
         public void Setup()
         {
-            _options = new JsonSerializerOptions
+            _settings = new JsonSerializerSettings
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                Formatting = Formatting.Indented
             };
         }
 
@@ -23,11 +22,11 @@ namespace iota_sdk_tests.model
         {
             // Arrange
             var filter = new SenderFilter { Sender = "0x123456789abcdef" };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<SenderFilter>(deserializedFilter);
             var senderFilter = deserializedFilter as SenderFilter;
@@ -39,11 +38,11 @@ namespace iota_sdk_tests.model
         {
             // Arrange
             var filter = new TransactionFilter { Transaction = "txid123456789" };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<TransactionFilter>(deserializedFilter);
             var txFilter = deserializedFilter as TransactionFilter;
@@ -54,19 +53,19 @@ namespace iota_sdk_tests.model
         public void MoveModuleFilter_SerializeDeserialize_Roundtrip()
         {
             // Arrange
-            var filter = new MoveModuleFilter 
-            { 
-                MoveModule = new MoveModuleInfo 
-                { 
-                    module = "TestModule", 
-                    package = "0xabcdef123456" 
-                } 
+            var filter = new MoveModuleFilter
+            {
+                MoveModule = new MoveModuleInfo
+                {
+                    module = "TestModule",
+                    package = "0xabcdef123456"
+                }
             };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<MoveModuleFilter>(deserializedFilter);
             var moduleFilter = deserializedFilter as MoveModuleFilter;
@@ -86,11 +85,11 @@ namespace iota_sdk_tests.model
                     endTime = "1640995200000"    // 2022-01-01T00:00:00Z
                 }
             };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<TimeRangeFilter>(deserializedFilter);
             var timeRangeFilter = deserializedFilter as TimeRangeFilter;
@@ -110,11 +109,11 @@ namespace iota_sdk_tests.model
                     value = 100
                 }
             };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<MoveEventFieldFilter>(deserializedFilter);
             var fieldFilter = deserializedFilter as MoveEventFieldFilter;
@@ -134,11 +133,11 @@ namespace iota_sdk_tests.model
                     new PackageFilter { Package = "0xabc" }
                 }
             };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<EventFilterAll>(deserializedFilter);
             var allFilter = deserializedFilter as EventFilterAll;
@@ -159,11 +158,11 @@ namespace iota_sdk_tests.model
                     new TransactionFilter { Transaction = "tx456" }
                 }
             };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<EventFilterAnd>(deserializedFilter);
             var andFilter = deserializedFilter as EventFilterAnd;
@@ -177,10 +176,10 @@ namespace iota_sdk_tests.model
         {
             // Arrange
             string json = @"{""Sender"":""0xabcdef123456""}";
-            
+
             // Act
-            var filter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            var filter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<SenderFilter>(filter);
             Assert.AreEqual("0xabcdef123456", (filter as SenderFilter).Sender);
@@ -191,10 +190,10 @@ namespace iota_sdk_tests.model
         {
             // Arrange
             string json = @"{""MoveModule"":{""module"":""TestModule"",""package"":""0xabcdef123456""}}";
-            
+
             // Act
-            var filter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            var filter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<MoveModuleFilter>(filter);
             var moduleFilter = filter as MoveModuleFilter;
@@ -202,7 +201,7 @@ namespace iota_sdk_tests.model
             Assert.AreEqual("0xabcdef123456", moduleFilter.MoveModule.package);
         }
 
- [Test]
+        [Test]
         public void DeserializeFromJsonString_ComplexFilter()
         {
             // Arrange
@@ -216,10 +215,10 @@ namespace iota_sdk_tests.model
                     ]}
                 ]
             }";
-            
+
             // Act
-            var filter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            var filter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<EventFilterAll>(filter);
             var allFilter = filter as EventFilterAll;
@@ -227,7 +226,7 @@ namespace iota_sdk_tests.model
             Assert.IsInstanceOf<SenderFilter>(allFilter.All[0]);
             Assert.IsInstanceOf<TimeRangeFilter>(allFilter.All[1]);
             Assert.IsInstanceOf<EventFilterAny>(allFilter.All[2]);
-            
+
             var anyFilter = allFilter.All[2] as EventFilterAny;
             Assert.AreEqual(2, anyFilter.Any.Length);
             Assert.IsInstanceOf<MoveEventTypeFilter>(anyFilter.Any[0]);
@@ -239,9 +238,9 @@ namespace iota_sdk_tests.model
         {
             // Arrange
             string json = @"{""UnknownFilterType"":""value""}";
-            
+
             // Act & Assert
-            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<EventFilter>(json, _options));
+            Assert.Throws<Newtonsoft.Json.JsonException>(() => JsonConvert.DeserializeObject<EventFilter>(json, _settings));
         }
 
         [Test]
@@ -260,17 +259,16 @@ namespace iota_sdk_tests.model
                     }
                 }
             };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<MoveEventFieldFilter>(deserializedFilter);
             var fieldFilter = deserializedFilter as MoveEventFieldFilter;
             Assert.AreEqual(filter.MoveEventField.path, fieldFilter.MoveEventField.path);
-            
-            // Note: Complex object comparison might be more involved depending on how System.Text.Json 
+
             // deserializes the object. You might need to adjust this assertion.
             Assert.IsNotNull(fieldFilter.MoveEventField.value);
         }
@@ -292,11 +290,11 @@ namespace iota_sdk_tests.model
                     }
                 }
             };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filters, _options);
-            var deserializedFilters = JsonSerializer.Deserialize<List<EventFilter>>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filters, _settings);
+            var deserializedFilters = JsonConvert.DeserializeObject<List<EventFilter>>(json, _settings);
+
             // Assert
             Assert.AreEqual(3, deserializedFilters.Count);
             Assert.IsInstanceOf<SenderFilter>(deserializedFilters[0]);
@@ -313,31 +311,31 @@ namespace iota_sdk_tests.model
                 Or = new EventFilter[]
                 {
                     new MoveEventTypeFilter { MoveEventType = "0xabc::module::Event" },
-                    new MoveEventModuleFilter 
-                    { 
-                        MoveEventModule = new MoveModuleInfo 
-                        { 
-                            module = "TestModule", 
-                            package = "0xabcdef123456" 
-                        } 
+                    new MoveEventModuleFilter
+                    {
+                        MoveEventModule = new MoveModuleInfo
+                        {
+                            module = "TestModule",
+                            package = "0xabcdef123456"
+                        }
                     }
                 }
             };
-            
+
             // Act
-            string json = JsonSerializer.Serialize(filter, _options);
-            var deserializedFilter = JsonSerializer.Deserialize<EventFilter>(json, _options);
-            
+            string json = JsonConvert.SerializeObject(filter, _settings);
+            var deserializedFilter = JsonConvert.DeserializeObject<EventFilter>(json, _settings);
+
             // Assert
             Assert.IsInstanceOf<EventFilterOr>(deserializedFilter);
             var orFilter = deserializedFilter as EventFilterOr;
             Assert.AreEqual(2, orFilter.Or.Length);
             Assert.IsInstanceOf<MoveEventTypeFilter>(orFilter.Or[0]);
             Assert.IsInstanceOf<MoveEventModuleFilter>(orFilter.Or[1]);
-            
+
             var typeFilter = orFilter.Or[0] as MoveEventTypeFilter;
             Assert.AreEqual("0xabc::module::Event", typeFilter.MoveEventType);
-            
+
             var moduleFilter = orFilter.Or[1] as MoveEventModuleFilter;
             Assert.AreEqual("TestModule", moduleFilter.MoveEventModule.module);
             Assert.AreEqual("0xabcdef123456", moduleFilter.MoveEventModule.package);

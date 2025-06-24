@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System.Numerics;
-using System.Text.Json.Serialization;
-using JsonConverter = Newtonsoft.Json.JsonConverter;
+﻿using System.Numerics;
+using Newtonsoft.Json;
+
+namespace iota_sdk.model.governance;
 
 /// <summary>
 /// RPC representation of the Committee type.
@@ -11,15 +11,15 @@ public class IotaCommittee
     /// <summary>
     /// The epoch identifier.
     /// </summary>
-    [JsonPropertyName("epoch")]
+    [JsonProperty("epoch")]
     public BigInteger Epoch { get; set; }
 
     /// <summary>
     /// List of validators with their stake units.
     /// Each validator is represented by a tuple of (AuthorityPublicKeyBytes, StakeUnit).
     /// </summary>
-    [JsonPropertyName("validators")]
-    public List<ValidatorInfo> Validators { get; set; } = new List<ValidatorInfo>();
+    [JsonProperty("validators")]
+    public List<ValidatorInfo> Validators { get; set; }
 
     public IotaCommittee()
     {
@@ -27,13 +27,13 @@ public class IotaCommittee
     }
 }
 
-[Newtonsoft.Json.JsonConverter(typeof(ValidatorInfoConverter))]
+[JsonConverter(typeof(ValidatorInfoConverter))]
 public class ValidatorInfo
 {
-    [JsonPropertyName("AuthorityName")]
+    [JsonProperty("AuthorityName")]
     public string AuthorityName { get; set; }
 
-    [JsonPropertyName("StakeUnit")]
+    [JsonProperty("StakeUnit")]
     public BigInteger StakeUnit { get; set; }
 
     public ValidatorInfo(string authorityName, BigInteger stakeUnit)
@@ -43,6 +43,10 @@ public class ValidatorInfo
     }
 }
 
+/// <summary>
+/// ValidatorInfo JSON converter
+/// No property names for ValidatorInfo object are required.
+/// </summary>
 public class ValidatorInfoConverter : JsonConverter
 {
     public override bool CanConvert(Type objectType)

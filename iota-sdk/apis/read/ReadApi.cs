@@ -1,10 +1,7 @@
 ﻿using Iota.Sdk.Model.Read;
 using iota_sdk.model;
 using iota_sdk.model.read;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Numerics;
-using System.Text.Json;
 
 namespace iota_sdk.apis.read;
 
@@ -64,20 +61,8 @@ public class ReadApi : IReadApi
             parameters.Add(limit.Value);
         }
 
-        var response = await _client.InvokeRpcMethodAsync<JObject>("iotax_getOwnedObjects", parameters.ToArray()).ConfigureAwait(false);
-
-        // Convert JObject to string
-        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
-
-        // Use System.Text.Json to deserialize
-        var jsonSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNameCaseInsensitive = true
-        };
-
-        // Deserialize the response into an ObjectsPage
-        return JsonSerializer.Deserialize<ObjectsPage>(jsonString, jsonSerializerOptions) ?? new ObjectsPage();
+        var response = await _client.InvokeRpcMethodAsync<ObjectsPage>("iotax_getOwnedObjects", parameters.ToArray()).ConfigureAwait(false);
+        return response;
     }
 
     public async Task<DynamicFieldPage> GetDynamicFieldsAsync(ObjectId objectId, ObjectId cursor = null, int? limit = null)
@@ -115,20 +100,10 @@ public class ReadApi : IReadApi
         };
 
         // Make the RPC call to iota_getObject
-        var response = await _client.InvokeRpcMethodAsync<JObject>("iota_getObject", parameters)
+        var response = await _client.InvokeRpcMethodAsync<IotaObjectResponse>("iota_getObject", parameters)
             .ConfigureAwait(false);
 
-        // Convert JObject to string
-        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
-
-        // Use System.Text.Json to deserialize
-        var jsonSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNameCaseInsensitive = true
-        };
-
-        return JsonSerializer.Deserialize<IotaObjectResponse>(jsonString, jsonSerializerOptions)!;
+        return response;
     }
 
 
@@ -153,21 +128,9 @@ public class ReadApi : IReadApi
         // Convert object IDs to strings
         var objectIdStrings = objectIdsList.Select(id => id.ToString()).ToArray();
 
-        var response = await _client.InvokeRpcMethodAsync<JArray>("iota_multiGetObjects", new object[] { objectIdStrings, options }).ConfigureAwait(false);
+        var response = await _client.InvokeRpcMethodAsync<List<IotaObjectResponse>>("iota_multiGetObjects", new object[] { objectIdStrings, options }).ConfigureAwait(false);
 
-        // Convert JObject to string
-        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
-
-        // Use System.Text.Json to deserialize
-        var jsonSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNameCaseInsensitive = true
-        };
-
-        // Deserialize the response into a list of IotaObjectResponse objects
-        return JsonSerializer.Deserialize<List<IotaObjectResponse>>(jsonString, jsonSerializerOptions) ?? new List<IotaObjectResponse>();
-
+        return response;
     }
 
     public async Task<byte[]> GetMoveObjectBcsAsync(ObjectId objectId)
@@ -195,20 +158,10 @@ public class ReadApi : IReadApi
         };
 
         // Make the RPC call to iota_getTransactionBlock
-        var response = await _client.InvokeRpcMethodAsync<JObject>("iota_getTransactionBlock", parameters)
+        var response = await _client.InvokeRpcMethodAsync<IotaTransactionBlockResponse>("iota_getTransactionBlock", parameters)
             .ConfigureAwait(false);
 
-        // Convert JObject to string
-        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
-
-        // Use System.Text.Json to deserialize
-        var jsonSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNameCaseInsensitive = true
-        };
-
-        return JsonSerializer.Deserialize<IotaTransactionBlockResponse>(jsonString, jsonSerializerOptions)!;
+        return response;
     }
 
 
@@ -233,20 +186,8 @@ public class ReadApi : IReadApi
         // Convert digests to strings
         var digestStrings = digestsList.Select(d => d.ToString()).ToArray();
 
-        var response = await _client.InvokeRpcMethodAsync<JArray>("iota_multiGetTransactionBlocks", new object[] { digestStrings, options }).ConfigureAwait(false);
-
-        // Convert JObject to string
-        string jsonString = response.ToString(Newtonsoft.Json.Formatting.None);
-
-        // use System.Text.Json to deserialize
-        var jsonSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            PropertyNameCaseInsensitive = true
-        };
-
-        // Deserialize the response into a collection of IotaTransactionBlockResponse objects
-        return JsonSerializer.Deserialize<List<IotaTransactionBlockResponse>>(jsonString, jsonSerializerOptions) ?? new List<IotaTransactionBlockResponse>();
+        var response = await _client.InvokeRpcMethodAsync<List<IotaTransactionBlockResponse>>("iota_multiGetTransactionBlocks", new object[] { digestStrings, options }).ConfigureAwait(false);
+        return response;
     }
 
     public async Task<TransactionBlocksPage> QueryTransactionBlocksAsync(IotaTransactionBlockResponseQuery query, TransactionDigest? cursor = null, int? limit = null, bool descendingOrder = false)
@@ -330,7 +271,10 @@ public class ReadApi : IReadApi
 
     public async Task<IAsyncEnumerable<IotaTransactionBlockEffects>> SubscribeTransactionAsync(TransactionFilter filter)
     {
-        throw new NotImplementedException("Deprecated use GetTransactionsAsync instead");
+        // :::note The subscribeEvent and subscribeTransaction methods are deprecated.
+        // Please use queryEvents and queryTransactionBlocks instead.
+        // iotax_subscribeTransaction
+        throw new NotImplementedException("subscribe transaction method is deprecated use get transaction method instead.");
     }
 
     public async Task<IDictionary<string, IotaMoveNormalizedModule>> GetNormalizedMoveModulesByPackageAsync(ObjectId package)

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace iota_sdk.model.read
 {
@@ -10,15 +10,13 @@ namespace iota_sdk.model.read
         /// <summary>
         /// The checkpoint digest.
         /// </summary>
-        [JsonPropertyName("digest")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonProperty("digest", NullValueHandling = NullValueHandling.Ignore)]
         public string? Digest { get; set; }
             
         /// <summary>
         /// The checkpoint sequence number.
         /// </summary>
-        [JsonPropertyName("sequence_number")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonProperty("sequence_number", NullValueHandling = NullValueHandling.Ignore)]
         public ulong? SequenceNumber { get; set; }
 
         /// <summary>
