@@ -78,14 +78,6 @@ public class ReadApiTests
         // Additional assertions for other properties
         Assert.IsNotNull(result.NetworkTotalTransactions);
         Assert.IsNotNull(result.Transactions);
-
-        // Log some information about the checkpoint for debugging
-        Console.WriteLine($"Checkpoint {result.SequenceNumber} details:");
-        Console.WriteLine($"  Digest: {result.Digest}");
-        Console.WriteLine($"  Epoch: {result.Epoch}");
-        Console.WriteLine($"  Timestamp: {result.TimestampMs}");
-        Console.WriteLine($"  Network Total Transactions: {result.NetworkTotalTransactions}");
-        Console.WriteLine($"  Transaction Count: {result.Transactions.Count}");
     }
 
     [Test]
@@ -114,11 +106,6 @@ public class ReadApiTests
         Assert.IsNotNull(result);
         Assert.AreEqual(500, result.SequenceNumber);
         Assert.AreEqual(knownDigest, result.Digest);
-
-        // Log checkpoint details
-        Console.WriteLine($"Checkpoint {result.SequenceNumber} details:");
-        Console.WriteLine($"  Digest: {result.Digest}");
-        Console.WriteLine($"  Timestamp: {result.TimestampMs}");
     }
 
     [Test]
@@ -154,18 +141,6 @@ public class ReadApiTests
                 Assert.GreaterOrEqual(result.Data[i].SequenceNumber, result.Data[i + 1].SequenceNumber);
             }
         }
-
-        // Log basic information about the result
-        Console.WriteLine($"Checkpoint page details:");
-        Console.WriteLine($"  Total checkpoints in page: {result.Data.Count}");
-        Console.WriteLine($"  Has next page: {result.HasNextPage}");
-        Console.WriteLine($"  Next cursor: {result.NextCursor}");
-
-        if (result.Data.Count > 0)
-        {
-            Console.WriteLine($"First checkpoint in page: #{result.Data[0].SequenceNumber} (Digest: {result.Data[0].Digest})");
-            Console.WriteLine($"Last checkpoint in page: #{result.Data[^1].SequenceNumber} (Digest: {result.Data[^1].Digest})");
-        }
     }
 
     [Test]
@@ -200,10 +175,6 @@ public class ReadApiTests
 
             Assert.Greater(firstCheckpointInSecondPage.SequenceNumber, lastCheckpointInFirstPage.SequenceNumber);
         }
-
-        // Log basic information
-        Console.WriteLine($"First page - checkpoint range: {firstPage.Data[0].SequenceNumber} to {firstPage.Data[^1].SequenceNumber}");
-        Console.WriteLine($"Second page - checkpoint range: {secondPage.Data[0].SequenceNumber} to {secondPage.Data[^1].SequenceNumber}");
     }
 
     [Test]
@@ -228,12 +199,6 @@ public class ReadApiTests
                 Assert.LessOrEqual(result.Data[i].SequenceNumber, result.Data[i + 1].SequenceNumber);
             }
         }
-
-        // Log basic checkpoint sequence info
-        if (result.Data.Count > 0)
-        {
-            Console.WriteLine($"Ascending order - First checkpoint: #{result.Data[0].SequenceNumber}, Last checkpoint: #{result.Data[^1].SequenceNumber}");
-        }
     }
 
     [Test]
@@ -254,8 +219,8 @@ public class ReadApiTests
 
         Assert.IsNotNull(checkpoint);
         Assert.AreEqual(result, checkpoint.SequenceNumber);
-        Console.WriteLine($"Latest checkpoint digest: {checkpoint.Digest}");
-        Console.WriteLine($"Latest checkpoint timestamp: {checkpoint.TimestampMs}");
+        Assert.Greater(checkpoint.TimestampMs, 0);
+        Assert.IsNotNull(checkpoint.Digest);
     }
 
     [Test]
@@ -427,7 +392,6 @@ public class ReadApiTests
         }
 
         // Log the result
-        Console.WriteLine($"Successfully retrieved object data for ID: {_testObjectId}");
         Console.WriteLine($"Object Type: {result.Data.Type}");
         Console.WriteLine($"Version: {result.Data.Version}");
     }
@@ -471,9 +435,7 @@ public class ReadApiTests
         Assert.IsNull(result.Data.Display, "Display data should be null when ShowDisplay is false");
 
         // Log basic information about the object
-        Console.WriteLine($"Retrieved object with ID: {result.Data.ObjectId}");
         Console.WriteLine($"Object version: {result.Data.Version}");
-        Console.WriteLine($"Object digest: {result.Data.Digest}");
     }
 
     [Test]
@@ -487,12 +449,8 @@ public class ReadApiTests
         Assert.AreEqual(_testTransactionDigest.ToString(), result.Digest);
 
         // Log some details about the transaction
-        Console.WriteLine($"Transaction Digest: {result.Digest}");
         Console.WriteLine($"Transaction Timestamp: {result.TimestampMs}");
-        if (result.Transaction != null)
-        {
-            Console.WriteLine($"Sender: {result.Transaction.Data.Sender}");
-        }
+        Assert.IsNotNull(result.Transaction.TxSignatures);
     }
 
     [Test]
@@ -516,6 +474,8 @@ public class ReadApiTests
         // Assert
         Assert.NotNull(result);
         Assert.AreEqual(_testTransactionDigest.ToString(), result.Digest);
+            Assert.IsNotNull(result.Checkpoint);
+            Assert.IsNotNull(result.TimestampMs);   
 
         // Additional assertions based on the options
         if ((bool)options.ShowInput)
@@ -552,13 +512,6 @@ public class ReadApiTests
         {
             Assert.NotNull(result.RawEffects, "RawEffects should be included with ShowRawEffects=true");
         }
-
-        // Log some details
-        Console.WriteLine($"Transaction Digest: {result.Digest}");
-        Console.WriteLine($"Transaction has effects: {result.Effects != null}");
-        Console.WriteLine($"Transaction has events: {result.Events?.Count > 0}");
-        Console.WriteLine($"Transaction has object changes: {result.ObjectChanges?.Count > 0}");
-        Console.WriteLine($"Transaction has balance changes: {result.BalanceChanges?.Count > 0}");
     }
 
     [Test]
@@ -580,11 +533,9 @@ public class ReadApiTests
         // Assert
         Assert.NotNull(result);
         Assert.AreEqual(_testTransactionDigest.ToString(), result.Digest);
+Assert.IsNotNull(result.Checkpoint);
+Assert.IsNotNull(result.TimestampMs);
 
-        // Log minimal details
-        Console.WriteLine($"Transaction Digest: {result.Digest}");
-        Console.WriteLine($"Transaction Checkpoint: {result.Checkpoint}");
-        Console.WriteLine($"Transaction Timestamp: {result.TimestampMs}");
 
         // Note: With all options set to false, we expect minimal data
         // These assertions might fail if the API returns data regardless of options
@@ -632,7 +583,6 @@ public class ReadApiTests
         // Log some details
         foreach (var obj in result)
         {
-            Console.WriteLine($"Object ID: {obj?.Data?.ObjectId}");
             Console.WriteLine($"Object Type: {obj?.Data?.Type}");
             Console.WriteLine($"Object Owner: {obj?.Data?.Owner}");
             Console.WriteLine("---");
@@ -676,7 +626,6 @@ public class ReadApiTests
         // Log some details with more information based on the options
         foreach (var tx in resultList)
         {
-            Console.WriteLine($"Transaction Digest: {tx.Digest}");
             Console.WriteLine($"Transaction Timestamp: {tx.TimestampMs}");
 
             if (tx.Transaction != null)
@@ -727,9 +676,7 @@ public class ReadApiTests
         // Log details of returned objects
         foreach (var obj in result.Data)
         {
-            Console.WriteLine($"Object ID: {obj?.Data?.ObjectId}");
             Console.WriteLine($"Object Type: {obj?.Data?.Type}");
-            Console.WriteLine($"Object Owner: {obj?.Data?.Owner}");
             Console.WriteLine("---");
         }
     }
@@ -809,7 +756,6 @@ public class ReadApiTests
 
         // Assert
         Assert.IsNotNull(result);
-        Console.WriteLine($"Found {result.Data.Count} NFT objects owned by {address}");
 
         // Verify each returned object matches our filter criteria
         foreach (var item in result.Data)
@@ -819,7 +765,7 @@ public class ReadApiTests
 
             Assert.IsNotNull(item.Data?.Owner);
             string ownerJson = JsonConvert.SerializeObject(item.Data?.Owner);
-            Assert.IsTrue(ownerJson.Contains(address), $"Owner {ownerJson} doesn't contain expected address {address}");
+            Assert.IsTrue(ownerJson.Contains(address), $"Owner doesn't contain expected address");
         }
     }
 }

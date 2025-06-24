@@ -74,8 +74,6 @@ public class GovernanceApiTests
             .Select(stake => stake.StakedIotaId)
             .ToArray();
 
-        Console.WriteLine($"Found {stakedIotaIds.Length} staked IOTA IDs");
-
         // Call GetStakesByIdsAsync with the IDs we found
         var result = _target!.GetStakesByIdsAsync(stakedIotaIds).Result;
 
@@ -147,8 +145,6 @@ public class GovernanceApiTests
             .SelectMany(delegatedStake => delegatedStake.Stakes)
             .Select(stake => stake.TimelockedStakedIotaId)
             .ToArray();
-
-        Console.WriteLine($"Found {timelockedStakedIotaIds.Length} timelocked staked IOTA IDs");
 
         // Call GetTimelockedStakesByIdsAsync with the IDs we found
         var result = _target!.GetTimelockedStakesByIdsAsync(timelockedStakedIotaIds).Result;
