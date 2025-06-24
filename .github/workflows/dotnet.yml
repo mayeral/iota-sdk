@@ -8,7 +8,14 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+
+    env:
+      TestSettings__TransactionDigest2: ${{ secrets.TEST_TRANSACTION_DIGEST2 }}
+      TestSettings__TransactionDigest: ${{ secrets.TEST_TRANSACTION_DIGEST }}
+      TestSettings__ObjectId2: ${{ secrets.TEST_OBJECT_ID2 }}
+      TestSettings__ObjectId: ${{ secrets.TEST_OBJECT_ID }}
+      TestSettings__Address: ${{ secrets.TEST_ADDRESS }}
 
     steps:
     - uses: actions/checkout@v4

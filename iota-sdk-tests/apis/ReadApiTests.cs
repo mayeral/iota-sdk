@@ -16,8 +16,10 @@ public class ReadApiTests
     private ReadApi _target;
 
     private ObjectId _testObjectId;
-    private TransactionDigest _testDigest;
+    private TransactionDigest _testTransactionDigest;
     private IotaAddress _testAddress;
+    private ObjectId _testObjectId2;
+    private TransactionDigest _testTransactionDigest2;
 
     [SetUp]
     public async Task Setup()
@@ -33,9 +35,11 @@ public class ReadApiTests
         // Initialize the ReadApi with the client
         _target = (ReadApi)_client.ReadApi();
 
+        _testObjectId2 = TestsUtils.InitTestObjectId2();
         _testObjectId = TestsUtils.InitTestObjectId();
-        _testDigest = TestsUtils.InitTransactionDigest();
         _testAddress = TestsUtils.InitTestAddress();
+        _testTransactionDigest = TestsUtils.InitTransactionDigest();
+        _testTransactionDigest2 = TestsUtils.InitTransactionDigest2();
     }
 
     [Test]
@@ -475,15 +479,12 @@ public class ReadApiTests
     [Test]
     public async Task GetTransactionAsync_ReturnsValidTransaction()
     {
-        // Arrange
-        var transactionDigest = TestsUtils.InitTransactionDigest();
-
         // Act
-        var result = await _target!.GetTransactionAsync(transactionDigest).ConfigureAwait(false);
+        var result = await _target!.GetTransactionAsync(_testTransactionDigest).ConfigureAwait(false);
 
         // Assert
         Assert.NotNull(result);
-        Assert.AreEqual(transactionDigest.ToString(), result.Digest);
+        Assert.AreEqual(_testTransactionDigest.ToString(), result.Digest);
 
         // Log some details about the transaction
         Console.WriteLine($"Transaction Digest: {result.Digest}");
@@ -498,7 +499,6 @@ public class ReadApiTests
     public async Task GetTransactionWithOptionsAsync_AllOptionsTrue_ReturnsDetailedTransaction()
     {
         // Arrange
-        var transactionDigest = TestsUtils.InitTransactionDigest();
         var options = new IotaTransactionBlockResponseOptions
         {
             ShowInput = true,
@@ -511,11 +511,11 @@ public class ReadApiTests
         };
 
         // Act
-        var result = await _target!.GetTransactionAsync(transactionDigest, options).ConfigureAwait(false);
+        var result = await _target!.GetTransactionAsync(_testTransactionDigest, options).ConfigureAwait(false);
 
         // Assert
         Assert.NotNull(result);
-        Assert.AreEqual(transactionDigest.ToString(), result.Digest);
+        Assert.AreEqual(_testTransactionDigest.ToString(), result.Digest);
 
         // Additional assertions based on the options
         if ((bool)options.ShowInput)
@@ -565,7 +565,6 @@ public class ReadApiTests
     public async Task GetTransactionWithOptionsAsync_AllOptionsFalse_ReturnsMinimalTransaction()
     {
         // Arrange
-        var transactionDigest = TestsUtils.InitTransactionDigest();
         var options = new IotaTransactionBlockResponseOptions
         {
             ShowInput = false,
@@ -576,11 +575,11 @@ public class ReadApiTests
         };
 
         // Act
-        var result = await _target!.GetTransactionAsync(transactionDigest, options).ConfigureAwait(false);
+        var result = await _target!.GetTransactionAsync(_testTransactionDigest, options).ConfigureAwait(false);
 
         // Assert
         Assert.NotNull(result);
-        Assert.AreEqual(transactionDigest.ToString(), result.Digest);
+        Assert.AreEqual(_testTransactionDigest.ToString(), result.Digest);
 
         // Log minimal details
         Console.WriteLine($"Transaction Digest: {result.Digest}");
@@ -603,8 +602,8 @@ public class ReadApiTests
         // Arrange
         var objectIds = new List<ObjectId>
         {
-            TestsUtils.InitTestObjectId(),
-            TestsUtils.InitTestObjectId2()
+    _testObjectId,
+    _testObjectId2
         };
 
         var options = new IotaObjectDataOptions
@@ -646,8 +645,8 @@ public class ReadApiTests
         // Arrange
         var digests = new List<TransactionDigest>
         {
-            TestsUtils.InitTransactionDigest(),
-            TestsUtils.InitTransactionDigest2()
+    _testTransactionDigest,
+    _testTransactionDigest2 
         };
 
         var options = new IotaTransactionBlockResponseOptions
@@ -698,7 +697,7 @@ public class ReadApiTests
     public async Task GetOwnedObjectsAsync_ReturnsValidObjects()
     {
         // Arrange
-        var address = new IotaAddress(TestsUtils.InitTestAddress());
+        var address = new IotaAddress(_testAddress);
         var query = new IotaObjectResponseQuery
         {
             Options = new IotaObjectDataOptions
