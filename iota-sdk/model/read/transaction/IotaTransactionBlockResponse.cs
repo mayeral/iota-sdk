@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace iota_sdk.model.read;
+namespace iota_sdk.model.read.transaction;
 
 /// <summary>
 /// Represents a response for an IOTA transaction block.
@@ -249,9 +249,9 @@ public class VersionConverter : JsonConverter<string>
 /// <summary>
 /// Newtonsoft.Json converter for version fields that can be either strings or numbers.
 /// </summary>
-public class NewtonsoftVersionConverter : Newtonsoft.Json.JsonConverter<string>
+public class NewtonsoftVersionConverter : JsonConverter<string>
 {
-	public override string ReadJson(JsonReader reader, Type objectType, string existingValue, bool hasExistingValue, Newtonsoft.Json.JsonSerializer serializer)
+	public override string ReadJson(JsonReader reader, Type objectType, string existingValue, bool hasExistingValue, JsonSerializer serializer)
 	{
 		var token = JToken.Load(reader);
 
@@ -264,10 +264,10 @@ public class NewtonsoftVersionConverter : Newtonsoft.Json.JsonConverter<string>
 			return token.Value<long>().ToString();
 		}
 
-		throw new Newtonsoft.Json.JsonException($"Unexpected token type: {token.Type}");
+		throw new JsonException($"Unexpected token type: {token.Type}");
 	}
 
-	public override void WriteJson(JsonWriter writer, string value, Newtonsoft.Json.JsonSerializer serializer)
+	public override void WriteJson(JsonWriter writer, string value, JsonSerializer serializer)
 	{
 		if (long.TryParse(value, out var number))
 		{

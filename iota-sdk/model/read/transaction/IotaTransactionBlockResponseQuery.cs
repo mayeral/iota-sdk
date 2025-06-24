@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
-namespace iota_sdk.model.read;
+namespace iota_sdk.model.read.transaction;
 
 /// <summary>
 /// Query parameters for IOTA transaction block responses.

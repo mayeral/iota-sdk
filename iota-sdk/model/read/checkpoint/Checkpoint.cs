@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace iota_sdk.model.read
+namespace iota_sdk.model.read.checkpoint
 {
     /// <summary>
     /// The Checkpoint Class

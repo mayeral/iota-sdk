@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 
+namespace iota_sdk.model.read;
+
 /// <summary>
 /// Represents a dynamic field name with a type and a value.
 /// </summary>

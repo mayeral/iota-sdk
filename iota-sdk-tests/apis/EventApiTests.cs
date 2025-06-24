@@ -2,7 +2,7 @@
 using iota_sdk.apis.@event;
 using iota_sdk.model;
 using iota_sdk.model.@event;
-using iota_sdk.model.read;
+using iota_sdk.model.read.transaction;
 using iota_sdk_tests.utils;
 
 namespace iota_sdk_tests.apis

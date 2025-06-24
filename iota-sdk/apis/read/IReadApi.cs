@@ -1,8 +1,10 @@
 ﻿using iota_sdk.model;
 using iota_sdk.model.read;
 using System.Numerics;
-using Iota.Sdk.Model.Read;
-using IotaPastObjectResponse = iota_sdk.model.read.IotaPastObjectResponse;
+using IotaPastObjectResponse = iota_sdk.model.read.@object.IotaPastObjectResponse;
+using iota_sdk.model.read.checkpoint;
+using iota_sdk.model.read.@object;
+using iota_sdk.model.read.transaction;
 
 namespace iota_sdk.apis.read
 {

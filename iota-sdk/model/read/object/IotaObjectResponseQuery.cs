@@ -1,9 +1,7 @@
-﻿
-using Iota.Sdk.Model.Read;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace iota_sdk.model.read;
+namespace iota_sdk.model.read.@object;
 
 /// <summary>
 /// Represents a query for IOTA object responses.

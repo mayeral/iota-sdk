@@ -1,4 +1,4 @@
-﻿namespace iota_sdk.model.read;
+﻿namespace iota_sdk.model.read.@object;
 
 /// <summary>
 /// Represents an object identifier in the IOTA system.

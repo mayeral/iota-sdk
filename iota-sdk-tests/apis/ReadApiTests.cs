@@ -3,6 +3,8 @@ using iota_sdk;
 using iota_sdk.apis.read;
 using iota_sdk.model;
 using iota_sdk.model.read;
+using iota_sdk.model.read.@object;
+using iota_sdk.model.read.transaction;
 using iota_sdk_tests.utils;
 using Newtonsoft.Json;
 

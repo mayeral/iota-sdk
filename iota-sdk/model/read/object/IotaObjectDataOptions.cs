@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Iota.Sdk.Model.Read
+namespace iota_sdk.model.read.@object
 {
     /// <summary>
     /// Options for specifying what content to include when retrieving object data.

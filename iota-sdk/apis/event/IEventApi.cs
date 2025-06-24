@@ -1,5 +1,5 @@
 ﻿using iota_sdk.model.@event;
-using iota_sdk.model.read;
+using iota_sdk.model.read.transaction;
 
 namespace iota_sdk.apis.@event
 {

@@ -1,5 +1,4 @@
-
-using iota_sdk.model.read;
+using iota_sdk.model.read.transaction;
 using iota_sdk_tests.apis;
 using Microsoft.Extensions.Configuration;
 

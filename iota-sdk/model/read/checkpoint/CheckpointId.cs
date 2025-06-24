@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace iota_sdk.model.read
+namespace iota_sdk.model.read.checkpoint
 {
     /// <summary>
     /// Filter either by the digest, or the sequence number, or neither, to get the latest checkpoint.

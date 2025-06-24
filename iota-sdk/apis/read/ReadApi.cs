@@ -1,6 +1,8 @@
-﻿using Iota.Sdk.Model.Read;
-using iota_sdk.model;
+﻿using iota_sdk.model;
 using iota_sdk.model.read;
+using iota_sdk.model.read.checkpoint;
+using iota_sdk.model.read.@object;
+using iota_sdk.model.read.transaction;
 using System.Numerics;
 
 namespace iota_sdk.apis.read;
