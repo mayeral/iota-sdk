@@ -26,7 +26,7 @@ namespace iota_sdk_tests.apis
             _testAddress = TestsUtils.InitTestAddress();
 
             // Use the main net endpoint for testing purposes
-            _client = (IotaClient) await clientBuilder.BuildMainnet().ConfigureAwait(false);
+            _client = (IotaClient)await clientBuilder.BuildMainnet().ConfigureAwait(false);
 
             // Initialize the CoinReadApi with the client
             target = _client.CoinReadApi();
@@ -54,7 +54,7 @@ namespace iota_sdk_tests.apis
             // Act
 
             // Capture the exception to check its message
-            var exception = Assert.ThrowsAsync<StreamJsonRpc.RemoteMethodNotFoundException>(async () => 
+            var exception = Assert.ThrowsAsync<StreamJsonRpc.RemoteMethodNotFoundException>(async () =>
             {
                 var result = await target.GetAllBalancesAsync(_testInvalidAddress);
             });
@@ -90,7 +90,7 @@ namespace iota_sdk_tests.apis
         }
 
         [Test]
-public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
+        public async Task GetCoins_WithValidParameters_ReturnsCoinPage()
         {
             // Arrange
             const int limit = 5;

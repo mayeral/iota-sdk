@@ -163,8 +163,7 @@ public class ReadApi : IReadApi
         }
 
         // Make the RPC call to iota_getTransactionBlock
-        var response = await _client.InvokeRpcMethodAsync<IotaTransactionBlockResponse>("iota_getTransactionBlock", parameters)
-            .ConfigureAwait(false);
+        var response = await _client.InvokeRpcMethodAsync<IotaTransactionBlockResponse>("iota_getTransactionBlock", parameters.ToArray()).ConfigureAwait(false);
 
         return response;
     }

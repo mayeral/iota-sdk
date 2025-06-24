@@ -450,7 +450,8 @@ public class ReadApiTests
 
         // Log some details about the transaction
         Console.WriteLine($"Transaction Timestamp: {result.TimestampMs}");
-        Assert.IsNotNull(result.Transaction.TxSignatures);
+        Assert.IsNotNull(result.TimestampMs);
+            Assert.IsNotNull(result.Checkpoint);
     }
 
     [Test]
