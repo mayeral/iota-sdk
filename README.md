@@ -20,7 +20,7 @@ The following table shows the current implementation status of the various APIs:
 |-----|-------------|--------|
 | CoinReadApi | ✅ | ✅ |
 | GovernanceApi | ✅ | ✅ |
-| ReadApi | ❌ | ❌ |
+| ReadApi | ⚠️ | ⚠️ |
 | EventApi | ✅ | ✅ |
 | TransactionBuilder | ❌ | ❌ |
 | QuorumDriverApi | ❌ | ❌ |

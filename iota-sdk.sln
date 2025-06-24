@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projektmappenelemente", "Projektmappenelemente", "{84D27F74-D2BA-6C25-2661-968F101900D9}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iota-sdk", "iota-sdk\iota-sdk.csproj", "{4DB8199D-CCC4-5D5E-651C-58E31FC8BCB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iota-sdk-samples", "iota-sdk-samples\iota-sdk-samples.csproj", "{0FF8E89C-29FB-4B7D-12B1-56C994EE0F1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iota-sdk-tests", "iota-sdk-tests\iota-sdk-tests.csproj", "{014D3853-28EC-D616-CBB4-31A607CE0707}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DB8199D-CCC4-5D5E-651C-58E31FC8BCB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DB8199D-CCC4-5D5E-651C-58E31FC8BCB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DB8199D-CCC4-5D5E-651C-58E31FC8BCB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DB8199D-CCC4-5D5E-651C-58E31FC8BCB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FF8E89C-29FB-4B7D-12B1-56C994EE0F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FF8E89C-29FB-4B7D-12B1-56C994EE0F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FF8E89C-29FB-4B7D-12B1-56C994EE0F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FF8E89C-29FB-4B7D-12B1-56C994EE0F1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{014D3853-28EC-D616-CBB4-31A607CE0707}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{014D3853-28EC-D616-CBB4-31A607CE0707}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{014D3853-28EC-D616-CBB4-31A607CE0707}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{014D3853-28EC-D616-CBB4-31A607CE0707}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5125BA22-340D-4BDA-83F4-842FC1163210}
+	EndGlobalSection
+EndGlobal
