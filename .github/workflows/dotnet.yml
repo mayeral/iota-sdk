@@ -29,7 +29,7 @@ jobs:
       run: dotnet restore
       
     - name: Build solution
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore -noWarn:NUnit2005
       
     - name: Run tests
       run: dotnet test iota-sdk-tests/iota-sdk-tests.csproj --configuration Release --verbosity normal

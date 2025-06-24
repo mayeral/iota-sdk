@@ -8,7 +8,7 @@ public static class TestsUtils
     // Generic method to get a configuration value from environment variables
     private static string GetEnvironmentValue(string envKey, string errorMessage)
     {
-        string value = Environment.GetEnvironmentVariable(envKey);
+        string value = Environment.GetEnvironmentVariable(envKey) ?? string.Empty;
 
         if (string.IsNullOrEmpty(value))
         {

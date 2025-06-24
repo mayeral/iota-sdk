@@ -622,19 +622,19 @@ public class ReadApiTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.AreEqual(2, result.ToList().Count);
+        Assert.AreEqual(2, result?.ToList().Count);
 
         // Verify that the returned objects match our requested IDs
-        var returnedIds = result.Select(obj => obj.Data.ObjectId).ToList();
+        var returnedIds = result?.Select(obj => obj?.Data?.ObjectId).ToList();
         Assert.Contains(objectIds[0].ToString(), returnedIds);
         Assert.Contains(objectIds[1].ToString(), returnedIds);
 
         // Log some details
         foreach (var obj in result)
         {
-            Console.WriteLine($"Object ID: {obj.Data.ObjectId}");
-            Console.WriteLine($"Object Type: {obj.Data.Type}");
-            Console.WriteLine($"Object Owner: {obj.Data.Owner}");
+            Console.WriteLine($"Object ID: {obj?.Data?.ObjectId}");
+            Console.WriteLine($"Object Type: {obj?.Data?.Type}");
+            Console.WriteLine($"Object Owner: {obj?.Data?.Owner}");
             Console.WriteLine("---");
         }
     }
@@ -727,9 +727,9 @@ public class ReadApiTests
         // Log details of returned objects
         foreach (var obj in result.Data)
         {
-            Console.WriteLine($"Object ID: {obj.Data.ObjectId}");
-            Console.WriteLine($"Object Type: {obj.Data.Type}");
-            Console.WriteLine($"Object Owner: {obj.Data.Owner}");
+            Console.WriteLine($"Object ID: {obj?.Data?.ObjectId}");
+            Console.WriteLine($"Object Type: {obj?.Data?.Type}");
+            Console.WriteLine($"Object Owner: {obj?.Data?.Owner}");
             Console.WriteLine("---");
         }
     }
@@ -767,8 +767,8 @@ public class ReadApiTests
             Console.WriteLine($"Has next page: {secondPage.HasNextPage}");
 
             // Verify the objects from the first and second pages are different
-            var firstPageIds = firstPage.Data.Select(o => o.Data.ObjectId).ToList();
-            var secondPageIds = secondPage.Data.Select(o => o.Data.ObjectId).ToList();
+            var firstPageIds = firstPage.Data.Select(o => o?.Data?.ObjectId).ToList();
+            var secondPageIds = secondPage.Data.Select(o => o?.Data?.ObjectId).ToList();
 
             foreach (var id in secondPageIds)
             {
@@ -815,7 +815,7 @@ public class ReadApiTests
         foreach (var item in result.Data)
         {
             Assert.IsNotNull(item.Data?.Type);
-            Assert.IsTrue(item.Data?.Type.Contains("0x107a::nft::Nft"), $"Type {item.Data?.Type} doesn't match expected 0x107a::nft::Nft");
+            Assert.IsTrue(item.Data?.Type?.Contains("0x107a::nft::Nft"), $"Type {item.Data?.Type} doesn't match expected 0x107a::nft::Nft");
 
             Assert.IsNotNull(item.Data?.Owner);
             string ownerJson = JsonConvert.SerializeObject(item.Data?.Owner);

@@ -67,27 +67,27 @@ public class ReadApi : IReadApi
         return response;
     }
 
-    public async Task<DynamicFieldPage> GetDynamicFieldsAsync(ObjectId objectId, ObjectId cursor = null, int? limit = null)
+    public Task<DynamicFieldPage> GetDynamicFieldsAsync(ObjectId objectId, ObjectId cursor = null, int? limit = null)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IotaObjectResponse> GetDynamicFieldObjectAsync(ObjectId parentObjectId, DynamicFieldName name)
+    public Task<IotaObjectResponse> GetDynamicFieldObjectAsync(ObjectId parentObjectId, DynamicFieldName name)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IotaObjectResponse> GetDynamicFieldObjectV2Async(ObjectId parentObjectId, DynamicFieldName name, IotaObjectDataOptions options = null)
+    public Task<IotaObjectResponse> GetDynamicFieldObjectV2Async(ObjectId parentObjectId, DynamicFieldName name, IotaObjectDataOptions options = null)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IotaPastObjectResponse> TryGetParsedPastObjectAsync(ObjectId objectId, SequenceNumber version, IotaObjectDataOptions options)
+    public Task<IotaPastObjectResponse> TryGetParsedPastObjectAsync(ObjectId objectId, SequenceNumber version, IotaObjectDataOptions options)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<IotaPastObjectResponse>> TryMultiGetParsedPastObjectAsync(IEnumerable<IotaGetPastObjectRequest> pastObjects, IotaObjectDataOptions options)
+    public Task<IEnumerable<IotaPastObjectResponse>> TryMultiGetParsedPastObjectAsync(IEnumerable<IotaGetPastObjectRequest> pastObjects, IotaObjectDataOptions options)
     {
         throw new NotImplementedException();
     }
@@ -135,7 +135,7 @@ public class ReadApi : IReadApi
         return response;
     }
 
-    public async Task<byte[]> GetMoveObjectBcsAsync(ObjectId objectId)
+    public Task<byte[]> GetMoveObjectBcsAsync(ObjectId objectId)
     {
         throw new NotImplementedException();
     }
@@ -149,15 +149,18 @@ public class ReadApi : IReadApi
         return response;
     }
 
-    //TODO NULL FOR OPTIONS / AS WELL FOR GET OBJECT
     public async Task<IotaTransactionBlockResponse> GetTransactionAsync(TransactionDigest digest, IotaTransactionBlockResponseOptions? options = null)
     {
         // Create parameters array for the RPC call
-        var parameters = new object[]
+        var parameters = new List<object>
         {
             digest.ToString(),  // First parameter: transaction digest (required)
-            options             // Second parameter: options (optional)
         };
+
+        if (options != null)
+        {
+            parameters.Add(options);
+        }
 
         // Make the RPC call to iota_getTransactionBlock
         var response = await _client.InvokeRpcMethodAsync<IotaTransactionBlockResponse>("iota_getTransactionBlock", parameters)
@@ -192,7 +195,7 @@ public class ReadApi : IReadApi
         return response;
     }
 
-    public async Task<TransactionBlocksPage> QueryTransactionBlocksAsync(IotaTransactionBlockResponseQuery query, TransactionDigest? cursor = null, int? limit = null, bool descendingOrder = false)
+    public Task<TransactionBlocksPage> QueryTransactionBlocksAsync(IotaTransactionBlockResponseQuery query, TransactionDigest? cursor = null, int? limit = null, bool descendingOrder = false)
     {
         throw new NotImplementedException();
     }
@@ -279,7 +282,7 @@ public class ReadApi : IReadApi
         throw new NotImplementedException("subscribe transaction method is deprecated use get transaction method instead.");
     }
 
-    public async Task<IDictionary<string, IotaMoveNormalizedModule>> GetNormalizedMoveModulesByPackageAsync(ObjectId package)
+    public Task<IDictionary<string, IotaMoveNormalizedModule>> GetNormalizedMoveModulesByPackageAsync(ObjectId package)
     {
         throw new NotImplementedException();
     }
@@ -291,13 +294,12 @@ public class ReadApi : IReadApi
         return response;
     }
 
-    public async Task<DryRunTransactionBlockResponse> DryRunTransactionBlockAsync(TransactionData tx)
+    public Task<DryRunTransactionBlockResponse> DryRunTransactionBlockAsync(TransactionData tx)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<DevInspectResults> DevInspectTransactionBlockAsync(IotaAddress senderAddress, TransactionKind tx, BigInteger? gasPrice = null,
-        BigInteger? epoch = null, DevInspectArgs additionalArgs = null)
+    public Task<DevInspectResults> DevInspectTransactionBlockAsync(IotaAddress senderAddress, TransactionKind tx, BigInteger? gasPrice = null, BigInteger? epoch = null, DevInspectArgs additionalArgs = null)
     {
         throw new NotImplementedException();
     }
