@@ -1,3 +1,4 @@
+using iota_sdk.model.read.@object;
 using iota_sdk.model.read.transaction;
 using iota_sdk_tests.apis;
 using Microsoft.Extensions.Configuration;
@@ -90,6 +91,4 @@ public static class TestsUtils
 
         return new ObjectId(objectId);
     }
-
-
 }

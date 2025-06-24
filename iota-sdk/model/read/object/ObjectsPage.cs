@@ -1,5 +1,4 @@
-﻿using iota_sdk.model.read.@object;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace iota_sdk.model.read.@object;
 
