@@ -1,4 +1,5 @@
 ﻿using iota_sdk.model.@event;
+using iota_sdk.model.read.@object;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
