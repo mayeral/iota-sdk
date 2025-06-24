@@ -1,0 +1,33 @@
+name: .NET Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      run: |
+        dotnet restore iota-sdk.sln
+        dotnet restore iota-sdk-samples.sln
+      
+    - name: Build iota-sdk
+      run: dotnet build iota-sdk.sln --configuration Release --no-restore
+      
+    - name: Build iota-sdk-samples
+      run: dotnet build iota-sdk-samples.sln --configuration Release --no-restore
+      
+    - name: Run tests
+      run: dotnet test iota-sdk-tests.csproj --configuration Release --no-build --verbosity normal
