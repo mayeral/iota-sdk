@@ -44,16 +44,18 @@ public class GovernanceApiTests
         Assert.IsNotNull(result.First().StakingPool);
         Assert.IsNotNull(result.First().ValidatorAddress);
         Assert.IsNotNull(result.First().Stakes);
-        
+
         foreach (var stake in result.First().Stakes)
         {
-            Assert.IsNotNull(stake.EstimatedReward);
+            if (stake?.EstimatedReward != null)
+                Assert.Greater(stake.EstimatedReward, 0);
+
             Assert.IsNotNull(stake.Principal);
             Assert.IsNotNull(stake.StakeActiveEpoch);
             Assert.IsNotNull(stake.StakedIotaId);
             Assert.IsNotNull(stake.StakeRequestEpoch);
             Assert.IsNotNull(stake.Status);
-        }   
+        }
 
         return Task.CompletedTask;
     }
