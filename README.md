@@ -8,7 +8,7 @@ The IOTA .NET SDK enables developers to build applications that interact with th
 
 ## Implementation Status
 
-**⚠️ This implementation is Work in Progress ⚠️**
+**⚠️ This is an alpha version release and is Work in Progress ⚠️**
 
 The IOTA .NET SDK is currently under active development. Its a private project.
 

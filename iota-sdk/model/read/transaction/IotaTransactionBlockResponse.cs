@@ -53,11 +53,11 @@ public class IotaTransactionBlockResponse
 	[JsonProperty("events", NullValueHandling = NullValueHandling.Ignore)]
 	public List<IotaEvent>? Events { get; set; }
 
-	/// <summary>
-	/// Object changes caused by the transaction.
-	/// </summary>
-	[JsonProperty("objectChanges", NullValueHandling = NullValueHandling.Ignore)]
-	public List<IotaObjectChange>? ObjectChanges { get; set; }
+	///// <summary>
+	///// Object changes caused by the transaction.
+	///// </summary>
+	//[JsonProperty("objectChanges", NullValueHandling = NullValueHandling.Ignore)]
+	//public List<IotaObjectChange>? ObjectChanges { get; set; } // TODO SERIALIZATON FAILS
 
 	/// <summary>
 	/// Raw effects data.
@@ -232,40 +232,6 @@ public class VersionConverter : JsonConverter<string>
 		}
 
 		throw new JsonSerializationException($"Unexpected token type: {token.Type}");
-	}
-
-	public override void WriteJson(JsonWriter writer, string value, JsonSerializer serializer)
-	{
-		if (long.TryParse(value, out var number))
-		{
-			writer.WriteValue(number);
-		}
-		else
-		{
-			writer.WriteValue(value);
-		}
-	}
-}
-
-/// <summary>
-/// Newtonsoft.Json converter for version fields that can be either strings or numbers.
-/// </summary>
-public class NewtonsoftVersionConverter : JsonConverter<string>
-{
-	public override string ReadJson(JsonReader reader, Type objectType, string existingValue, bool hasExistingValue, JsonSerializer serializer)
-	{
-		var token = JToken.Load(reader);
-
-		if (token.Type == JTokenType.String)
-		{
-			return token.Value<string>() ?? string.Empty;
-		}
-		else if (token.Type == JTokenType.Integer)
-		{
-			return token.Value<long>().ToString();
-		}
-
-		throw new JsonException($"Unexpected token type: {token.Type}");
 	}
 
 	public override void WriteJson(JsonWriter writer, string value, JsonSerializer serializer)
