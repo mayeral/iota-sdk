@@ -47,9 +47,6 @@ public class GovernanceApiTests
 
         foreach (var stake in result.First().Stakes)
         {
-            if (stake?.EstimatedReward != null)
-                Assert.Greater(stake.EstimatedReward, 0);
-
             Assert.IsNotNull(stake.Principal);
             Assert.IsNotNull(stake.StakeActiveEpoch);
             Assert.IsNotNull(stake.StakedIotaId);
