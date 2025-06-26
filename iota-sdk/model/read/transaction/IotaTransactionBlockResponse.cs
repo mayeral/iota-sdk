@@ -56,8 +56,8 @@ public class IotaTransactionBlockResponse
 	///// <summary>
 	///// Object changes caused by the transaction.
 	///// </summary>
-	//[JsonProperty("objectChanges", NullValueHandling = NullValueHandling.Ignore)]
-	//public List<IotaObjectChange>? ObjectChanges { get; set; } // TODO SERIALIZATON FAILS
+	[JsonProperty("objectChanges", NullValueHandling = NullValueHandling.Ignore)]
+	public List<IotaObjectChange>? ObjectChanges { get; set; }
 
 	/// <summary>
 	/// Raw effects data.
@@ -514,48 +514,48 @@ public class CreatedObjectChange : IotaObjectChange
 	[JsonProperty("version")]
 	public string Version { get; set; } = string.Empty;
 }
-/// <summary>
-/// JSON converter for IotaObjectChange to handle the different types of object changes.
-/// </summary>
-public class IotaObjectChangeConverter : JsonConverter
+
+public class IotaObjectChangeConverter : JsonConverter<IotaObjectChange>
 {
-	public override bool CanConvert(Type objectType)
-	{
-		return typeof(IotaObjectChange).IsAssignableFrom(objectType);
-	}
+    public override IotaObjectChange ReadJson(JsonReader reader, Type objectType, IotaObjectChange existingValue, bool hasExistingValue, JsonSerializer serializer)
+    {
+        JObject jo = JObject.Load(reader);
+        
+        string type = jo["type"].Value<string>();
+        IotaObjectChange change = null;
+        
+        switch (type)
+        {
+            case "published":
+                change = new PublishedObjectChange();
+                break;
+            case "transferred":
+                change = new TransferredObjectChange();
+                break;
+            case "mutated":
+                change = new MutatedObjectChange();
+                break;
+            case "deleted":
+                change = new DeletedObjectChange();
+                break;
+            case "wrapped":
+                change = new WrappedObjectChange();
+                break;
+            case "created":
+                change = new CreatedObjectChange();
+                break;
+            default:
+                throw new JsonSerializationException($"Unknown object change type: {type}");
+        }
+        
+        serializer.Populate(jo.CreateReader(), change);
+        return change;
+    }
 
-	public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-	{
-		if (reader.TokenType != JsonToken.StartObject)
-		{
-			throw new JsonSerializationException("Expected start of object");
-		}
-
-		JObject jsonObject = JObject.Load(reader);
-
-		if (!jsonObject.TryGetValue("type", out var typeToken))
-		{
-			throw new JsonSerializationException("Cannot determine the type of IotaObjectChange: missing 'type' property");
-		}
-
-		var type = typeToken.Value<string>();
-
-		// Create the appropriate concrete class based on the type
-		return type switch
-		{
-			"published" => jsonObject.ToObject<PublishedObjectChange>(serializer)!,
-			"transferred" => jsonObject.ToObject<TransferredObjectChange>(serializer)!,
-			"mutated" => jsonObject.ToObject<MutatedObjectChange>(serializer)!,
-			"deleted" => jsonObject.ToObject<DeletedObjectChange>(serializer)!,
-			"wrapped" => jsonObject.ToObject<WrappedObjectChange>(serializer)!,
-			"created" => jsonObject.ToObject<CreatedObjectChange>(serializer)!,
-			_ => throw new JsonSerializationException($"Unknown IotaObjectChange type: {type}")
-		};
-	}
-
-	public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-	{
-		// Simply serialize the object as-is since each derived type has its own properties
-		serializer.Serialize(writer, value);
-	}
+    public override void WriteJson(JsonWriter writer, IotaObjectChange value, JsonSerializer serializer)
+    {
+        // Let the default serializer handle it
+        JObject jo = JObject.FromObject(value, serializer);
+        jo.WriteTo(writer);
+    }
 }

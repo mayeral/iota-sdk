@@ -40,5 +40,5 @@ public class Stake
     /// The estimated reward for the stake (if applicable)
     /// </summary>
     [JsonProperty("estimatedReward", NullValueHandling = NullValueHandling.Ignore)]
-    public string EstimatedReward { get; set; }
+    public string? EstimatedReward { get; set; }
 }

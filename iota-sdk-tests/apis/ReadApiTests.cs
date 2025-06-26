@@ -451,7 +451,7 @@ public class ReadApiTests
         // Log some details about the transaction
         Console.WriteLine($"Transaction Timestamp: {result.TimestampMs}");
         Assert.IsNotNull(result.TimestampMs);
-            Assert.IsNotNull(result.Checkpoint);
+        Assert.IsNotNull(result.Checkpoint);
     }
 
     [Test]
@@ -475,11 +475,11 @@ public class ReadApiTests
         // Assert
         Assert.NotNull(result);
         Assert.AreEqual(_testTransactionDigest.ToString(), result.Digest);
-            Assert.IsNotNull(result.Checkpoint);
-            Assert.IsNotNull(result.TimestampMs);   
+        Assert.IsNotNull(result.Checkpoint);
+        Assert.IsNotNull(result.TimestampMs);
 
         // Additional assertions based on the options
-        if ((bool) options.ShowInput)
+        if ((bool)options.ShowInput)
         {
             Assert.NotNull(result.Transaction, "Transaction should be included with ShowInput=true");
         }
@@ -496,7 +496,7 @@ public class ReadApiTests
 
         if ((bool)options.ShowObjectChanges)
         {
-            //Assert.NotNull(result.ObjectChanges, "ObjectChanges should be included with ShowObjectChanges=true"); // TODO: fix SERIALIZATION
+            Assert.NotNull(result.ObjectChanges, "ObjectChanges should be included with ShowObjectChanges=true");
         }
 
         if ((bool)options.ShowBalanceChanges)
@@ -534,8 +534,8 @@ public class ReadApiTests
         // Assert
         Assert.NotNull(result);
         Assert.AreEqual(_testTransactionDigest.ToString(), result.Digest);
-Assert.IsNotNull(result.Checkpoint);
-Assert.IsNotNull(result.TimestampMs);
+        Assert.IsNotNull(result.Checkpoint);
+        Assert.IsNotNull(result.TimestampMs);
 
 
         // Note: With all options set to false, we expect minimal data
@@ -544,7 +544,7 @@ Assert.IsNotNull(result.TimestampMs);
         Assert.Null(result.Transaction, "Transaction should not be included with ShowInput=false");
         Assert.Null(result.Effects, "Effects should not be included with ShowEffects=false");
         Assert.Null(result.Events, "Events should not be included with ShowEvents=false");
-        //Assert.Null(result.ObjectChanges, "Object changes should not be included with ShowObjectChanges=false"); // TODO FIX SERIALIZATION
+        Assert.Null(result.ObjectChanges, "Object changes should not be included with ShowObjectChanges=false");
         Assert.Null(result.BalanceChanges, "Balance changes should not be included with ShowBalanceChanges=false");
     }
 
@@ -597,7 +597,7 @@ Assert.IsNotNull(result.TimestampMs);
         var digests = new List<TransactionDigest>
         {
     _testTransactionDigest,
-    _testTransactionDigest2 
+    _testTransactionDigest2
         };
 
         var options = new IotaTransactionBlockResponseOptions
