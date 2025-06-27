@@ -79,6 +79,8 @@ namespace iota_sdk_tests.apis
             foreach (var eventItem in result.Data)
             {
                 Assert.IsTrue(string.Equals(_testAddress, eventItem.Sender, StringComparison.OrdinalIgnoreCase));
+                //timestampMs string != null
+                Assert.IsNotNull(eventItem.TimestampMs);
             }
 
             // Verify some specific event data from the first event (based on the provided example)

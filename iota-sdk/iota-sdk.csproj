@@ -5,8 +5,8 @@
     <RootNamespace>iota_sdk</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyVersion>1.2.3.1</AssemblyVersion>
-    <FileVersion>1.2.3.1</FileVersion>
+    <AssemblyVersion>1.2.3.2</AssemblyVersion>
+    <FileVersion>1.2.3.2</FileVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Iota.Rebased.Sdk</Title>
     <Authors>Alexander Mayer</Authors>
@@ -20,7 +20,7 @@ Implements RPC-APIs to interact with the IOTA network. </Description>
     <RepositoryType>git</RepositoryType>
     <PackageTags>iota iota-sdk iota-rebased tangle rpc-api iota-protocol iota-client iota-network</PackageTags>
     <PackageReleaseNotes>Initial Package Relase</PackageReleaseNotes>
-    <Version>1.2.0.1-alpha</Version>
+    <Version>1.2.0.2-alpha</Version>
     <PackageIcon>favicon192x192.png</PackageIcon>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

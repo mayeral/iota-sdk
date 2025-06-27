@@ -54,4 +54,7 @@ public class IotaEvent
     /// </summary>
     [JsonProperty("bcs")]
     public string Bcs { get; set; }
+
+    [JsonProperty("timestampMs")]
+    public string TimestampMs { get; set; }
 }
