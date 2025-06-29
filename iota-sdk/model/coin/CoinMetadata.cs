@@ -23,13 +23,13 @@ public class CoinMetadata
     /// URL for the token logo.
     /// </summary>
     [JsonProperty("iconUrl")]
-    public string IconUrl { get; set; }
+    public string? IconUrl { get; set; }
 
     /// <summary>
     /// Object id for the CoinMetadata object.
     /// </summary>
     [JsonProperty("id")]
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     /// <summary>
     /// Name for the token.

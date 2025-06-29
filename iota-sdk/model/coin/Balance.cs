@@ -8,7 +8,7 @@ public class Balance
     public string CoinType { get; set; }
 
     [JsonProperty("coinObjectCount")]
-    public int CoinObjectCount { get; set; }
+    public decimal CoinObjectCount { get; set; }
 
     [JsonProperty("totalBalance")]
     public string TotalBalance { get; set; }

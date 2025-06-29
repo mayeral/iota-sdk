@@ -55,6 +55,9 @@ public class IotaEvent
     [JsonProperty("bcs")]
     public string Bcs { get; set; }
 
+    /// <summary>
+    /// UTC timestamp in milliseconds since epoch (1/1/1970) */
+    /// </summary>
     [JsonProperty("timestampMs")]
-    public string TimestampMs { get; set; }
+    public string? TimestampMs { get; set; }
 }

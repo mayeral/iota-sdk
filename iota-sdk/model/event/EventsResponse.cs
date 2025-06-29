@@ -14,14 +14,14 @@ public class EventsResponse
     public List<IotaEvent>? Data { get; set; }
 
     /// <summary>
-    /// Cursor for pagination
-    /// </summary>
-    [JsonProperty("nextCursor")]
-    public EventCursor NextCursor { get; set; }
-
-    /// <summary>
     /// Indicates if there are more pages available
     /// </summary>
     [JsonProperty("hasNextPage")]
     public bool HasNextPage { get; set; }
+
+    /// <summary>
+    /// Cursor for pagination
+    /// </summary>
+    [JsonProperty("nextCursor")]
+    public EventId NextCursor { get; set; }
 }

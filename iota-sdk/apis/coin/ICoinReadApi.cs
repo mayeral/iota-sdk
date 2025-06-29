@@ -61,6 +61,6 @@ public interface ICoinReadApi
     /// Get the total supply for a given coin type.
     /// </summary>
     /// <param name="coinType">The coin type</param>
-    /// <returns>Supply information</returns>
-    Task<Supply> GetTotalSupplyAsync(string coinType);
+    /// <returns>CoinSupply information</returns>
+    Task<CoinSupply> GetTotalSupplyAsync(string coinType);
 }

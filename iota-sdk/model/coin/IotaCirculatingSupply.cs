@@ -17,7 +17,7 @@ public class IotaCirculatingSupply
     /// Percentage of total supply that is currently circulating (range: 0.0 to 1.0).
     /// </summary>
     [JsonProperty("circulatingSupplyPercentage")]
-    public double CirculatingSupplyPercentage { get; set; }
+    public decimal CirculatingSupplyPercentage { get; set; }
 
     /// <summary>
     /// Circulating supply in NANOS at the given timestamp.

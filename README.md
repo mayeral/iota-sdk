@@ -10,7 +10,7 @@ The IOTA .NET SDK enables developers to build applications that interact with th
 
 **⚠️ This is an alpha version release and is Work in Progress ⚠️**
 
-The IOTA .NET SDK is currently under active development. Its a private project.
+The IOTA .NET SDK is currently under active development. Its a private non commercial project.
 
 ### Implementation Overview
 
@@ -196,7 +196,7 @@ This project is licensed under the [MIT Licence](https://licenses.nuget.org/MIT)
 | iotax_getValidatorsApy | Governance Read API | ✅ | ✅ |
 | iotax_iotaNamesFindAllRegistrationNFTs | Read API | ❌ | ❌ |
 | iotax_iotaNamesLookup | Read API | ❌ | ❌ |
-| iotax_iotaNamesReverseLookup | IOTA Names API | ❌ | ❌ |
+| iotax_iotaNamesReverseLookup | Read API | ❌ | ❌ |
 | iotax_queryEvents | Event API | ✅ | ✅ |
 | iotax_queryTransactionBlocks | Read API | ❌ | ❌ |
 | iotax_subscribeEvent | Read API | - | - |

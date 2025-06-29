@@ -108,7 +108,7 @@ public class CoinReadApi : ICoinReadApi
     }
 
     /// <inheritdoc />
-    public Task<Supply> GetTotalSupplyAsync(string coinType)
+    public Task<CoinSupply> GetTotalSupplyAsync(string coinType)
     {
         // The coinType parameter is required
         if (string.IsNullOrEmpty(coinType))
@@ -117,6 +117,6 @@ public class CoinReadApi : ICoinReadApi
         }
 
         // Invoke the RPC method with the coinType parameter
-        return _client.InvokeRpcMethodAsync<Supply>("iotax_getTotalSupply", coinType);
+        return _client.InvokeRpcMethodAsync<CoinSupply>("iotax_getTotalSupply", coinType);
     }
 }

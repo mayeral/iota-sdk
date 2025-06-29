@@ -24,5 +24,5 @@ public class CoinPage
     /// Reading with this cursor will start from the next item after it.
     /// </summary>
     [JsonProperty("nextCursor")]
-    public string NextCursor { get; set; }
+    public string? NextCursor { get; set; }
 }
