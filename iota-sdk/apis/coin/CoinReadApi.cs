@@ -42,7 +42,7 @@ public class CoinReadApi : ICoinReadApi
         return _client.InvokeRpcMethodAsync<CoinPage>("iotax_getAllCoins", parameters.ToArray());
     }
 
-
+    /// <inheritdoc />
     public Task<Balance> GetBalanceAsync(string address, string? coinType = null)
     {
         // Create the parameters array for the RPC call
