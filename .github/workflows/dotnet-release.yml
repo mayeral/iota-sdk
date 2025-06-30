@@ -81,7 +81,7 @@ jobs:
         $packagePath = Get-ChildItem -Path . -Filter *.nupkg -Recurse | Select-Object -First 1 -ExpandProperty FullName
         if ($packagePath) {
           Write-Host "Found package: $packagePath"
-          dotnet nuget push $packagePath --api-key ${{ secrets.NUGET_API_KEY }} --source [https://api.nuget.org/v3/index.json](https://api.nuget.org/v3/index.json)
+          dotnet nuget push $packagePath --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
         } else {
           Write-Error "No NuGet package found"
           exit 1
