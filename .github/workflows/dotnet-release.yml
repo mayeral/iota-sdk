@@ -32,27 +32,32 @@ jobs:
       run: |
         VERSION=$(echo ${GITHUB_REF#refs/tags/v})
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+    
         # Extract base version without prerelease identifiers for assembly version
         BASE_VERSION=$(echo $VERSION | cut -d '-' -f 1)
         echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_OUTPUT
       shell: bash
-    
+
     - name: Update project version
       if: startsWith(github.ref, 'refs/tags/v')
       run: |
-        $version = "${{ steps.get_version.outputs.VERSION }}"
+        $version = "${{ steps.get_version.outputs.VERSION }}"        # Full version with -alpha
+        $baseVersion = "${{ steps.get_version.outputs.BASE_VERSION }}" # Just numeric part
+    
         $csprojFile = Get-ChildItem -Path . -Filter "*.csproj" -Recurse | Where-Object { Select-String -Path $_.FullName -Pattern "<Title>Iota.Rebased.Sdk</Title>" -Quiet } | Select-Object -First 1
     
         if ($csprojFile) {
-          Write-Host "Updating version in $($csprojFile.FullName) to $version"
+          Write-Host "Updating version in $($csprojFile.FullName)"
+          Write-Host "Package Version: $version"
+          Write-Host "Assembly Version: $baseVersion"
       
           $xml = [xml](Get-Content $csprojFile.FullName)
           $propertyGroup = $xml.Project.PropertyGroup
       
-          # Update all version-related properties
-          $propertyGroup.Version = $version
-          $propertyGroup.AssemblyVersion = $version
-          $propertyGroup.FileVersion = $version
+          # Update version properties
+          $propertyGroup.Version = $version                # NuGet package version with -alpha
+          $propertyGroup.AssemblyVersion = $baseVersion    # Assembly version without -alpha
+          $propertyGroup.FileVersion = $baseVersion        # File version without -alpha
       
           $xml.Save($csprojFile.FullName)
         } else {
