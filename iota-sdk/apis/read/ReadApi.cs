@@ -29,7 +29,7 @@ public class ReadApi : IReadApi
         }
 
         // Prepare the parameters
-        var parameters = new List<object?> { address.ToString() };
+        var parameters = new List<object> { address.ToString() };
 
         if (query != null)
         {
@@ -41,7 +41,7 @@ public class ReadApi : IReadApi
             // Add null placeholders if needed
             if (query == null)
             {
-                parameters.Add(null);
+                parameters.Add(null!);
             }
 
             parameters.Add(cursor.ToString());
@@ -215,7 +215,7 @@ public class ReadApi : IReadApi
             // Use digest if provided
             id.Digest;
 
-        var response = await _client.InvokeRpcMethodAsync<Checkpoint>("iota_getCheckpoint", requestParam).ConfigureAwait(false);
+        var response = await _client.InvokeRpcMethodAsync<Checkpoint>("iota_getCheckpoint", requestParam ?? string.Empty).ConfigureAwait(false);
         return response;
     }
 
@@ -273,7 +273,7 @@ public class ReadApi : IReadApi
         throw new NotImplementedException();
     }
 
-    public async Task<IAsyncEnumerable<IotaTransactionBlockEffects>> SubscribeTransactionAsync(TransactionFilter filter)
+    public Task<IAsyncEnumerable<IotaTransactionBlockEffects>> SubscribeTransactionAsync(TransactionFilter filter)
     {
         // :::note The subscribeEvent and subscribeTransaction methods are deprecated.
         // Please use queryEvents and queryTransactionBlocks instead.
@@ -313,7 +313,7 @@ public class ReadApi : IReadApi
         return response;
     }
 
-    public async Task<IotaPastObjectResponse> TryGetObjectBeforeVersionAsync(ObjectId objectId, SequenceNumber version)
+    public Task<IotaPastObjectResponse> TryGetObjectBeforeVersionAsync(ObjectId objectId, SequenceNumber version)
     {
         throw new NotImplementedException();
     }

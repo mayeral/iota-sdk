@@ -1,0 +1,70 @@
+name: .NET Release
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+
+    env:
+      TestSettings__TransactionDigest2: ${{ secrets.TEST_TRANSACTION_DIGEST2 }}
+      TestSettings__TransactionDigest: ${{ secrets.TEST_TRANSACTION_DIGEST }}
+      TestSettings__ObjectId2: ${{ secrets.TEST_OBJECT_ID2 }}
+      TestSettings__ObjectId: ${{ secrets.TEST_OBJECT_ID }}
+      TestSettings__Address: ${{ secrets.TEST_ADDRESS }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Extract version from tag
+      if: startsWith(github.ref, 'refs/tags/v')
+      id: get_version
+      run: |
+        VERSION=$(echo ${GITHUB_REF#refs/tags/v})
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+        # Extract base version without prerelease identifiers for assembly version
+        BASE_VERSION=$(echo $VERSION | cut -d '-' -f 1)
+        echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_OUTPUT
+      shell: bash
+    
+    - name: Update Assembly Version
+      if: startsWith(github.ref, 'refs/tags/v')
+      run: |
+        $baseVersion = "${{ steps.get_version.outputs.BASE_VERSION }}"
+        $files = Get-ChildItem -Path . -Filter "AssemblyInfo.cs" -Recurse
+        foreach ($file in $files) {
+          (Get-Content $file.FullName) -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', "AssemblyVersion(""$baseVersion"")" | Set-Content $file.FullName
+          (Get-Content $file.FullName) -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', "AssemblyFileVersion(""$baseVersion"")" | Set-Content $file.FullName
+        }
+      shell: pwsh
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build solution
+      run: dotnet build --configuration Release --no-restore -noWarn:NUnit2005
+      
+    - name: Run tests
+      run: dotnet test iota-sdk-tests/iota-sdk-tests.csproj --configuration Release --verbosity normal
+
+    - name: Pack NuGet package
+      if: success() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+      run: |
+        $version = if ("${{ github.ref }}" -like "refs/tags/v*") { "${{ steps.get_version.outputs.VERSION }}" } else { "1.0.0-ci-${{ github.run_number }}" }
+        dotnet pack --configuration Release --output nupkgs /p:PackageVersion=$version
+      shell: pwsh
+    
+    - name: Push to NuGet
+      if: success() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+      run: dotnet nuget push nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source [https://api.nuget.org/v3/index.json](https://api.nuget.org/v3/index.json)
