@@ -13,9 +13,11 @@ The IOTA .NET SDK enables developers to build applications that interact with th
 The IOTA .NET SDK is currently under active development. 
 Its a private and non commercial project. Feel free to contribute.
 
+[![Build Status](https://github.com/mayeral/iota-sdk/actions/workflows/dotnet.yml/badge.svg?tag=v1.2.3.1-alpha)](https://github.com/mayeral/iota-sdk/actions/workflows/dotnet.yml)
 [![Latest Release](https://img.shields.io/github/v/release/mayeral/iota-sdk?include_prereleases&label=Latest%20Release)](https://github.com/mayeral/iota-sdk/releases)
-[![Build Status](https://github.com/mayeral/iota-sdk/actions/workflows/dotnet-release.yml/badge.svg)](https://github.com/mayeral/iota-sdk/actions/workflows/dotnet-release.yml)
-Released under the [MIT License](https://licenses.nuget.org/MIT).
+[![NuGet](https://img.shields.io/nuget/v/iota-sdk.svg)](https://www.nuget.org/packages/iota-sdk/)
+
+Released with [MIT License](https://licenses.nuget.org/MIT).
 
 ### Implementation Overview
 
