@@ -67,4 +67,4 @@ jobs:
     
     - name: Push to NuGet
       if: success() && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
-      run: dotnet nuget push nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source [https://api.nuget.org/v3/index.json](https://api.nuget.org/v3/index.json)
+      run: dotnet nuget push nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
