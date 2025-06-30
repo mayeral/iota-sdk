@@ -27,7 +27,7 @@ Implements RPC-APIs to interact with the IOTA network. </Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="res\favicon192x192.png" />
+  <None Include="res\favicon192x192.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
