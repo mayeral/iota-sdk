@@ -39,7 +39,7 @@ The following table shows the current implementation status of the various APIs:
 Add the IOTA .NET SDK NuGet package to your project:
 
 ```bash
-dotnet add package IOTA.SDK
+dotnet add package iota-sdk
 ```
 
 ### Basic Usage
